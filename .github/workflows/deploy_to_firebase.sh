@@ -17,10 +17,7 @@ SA_KEY="$1"
 # cat gac.json
 # echo; echo; echo
 
-cd frontend/app
-npm install
-yarn build
-rm -rf node_modules
+cd app
 
 export GOOGLE_APPLICATION_CREDENTIALS="gac.json"
 echo "$SA_KEY" > "$GOOGLE_APPLICATION_CREDENTIALS"
