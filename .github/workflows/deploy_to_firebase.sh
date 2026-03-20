@@ -4,8 +4,6 @@ set -euo pipefail
 
 SA_KEY="$1"
 
-# npm create vite@latest app -- --template react-ts
-
 # set -e
 # gcloud billing projects unlink $GOOGLE_CLOUD_PROJECT
 # gcloud services enable firebase.googleapis.com
