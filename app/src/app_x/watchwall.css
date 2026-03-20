@@ -1,0 +1,253 @@
+.watchwall,
+.password-shell {
+  min-height: 100svh;
+  box-sizing: border-box;
+}
+
+.watchwall {
+  padding: 32px;
+  background:
+    radial-gradient(circle at top left, rgba(255, 180, 112, 0.18), transparent 28%),
+    radial-gradient(circle at top right, rgba(94, 211, 255, 0.16), transparent 32%),
+    linear-gradient(180deg, #0f1720 0%, #081018 100%);
+  color: #edf4ff;
+}
+
+.password-shell {
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background:
+    radial-gradient(circle at top, rgba(255, 180, 112, 0.18), transparent 30%),
+    linear-gradient(180deg, #111827 0%, #09111b 100%);
+}
+
+.hero,
+.layout,
+.password-card {
+  width: min(1400px, 100%);
+  margin: 0 auto;
+}
+
+.hero,
+.panel-header,
+.stream-toggle,
+.screen-card,
+.password-card {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.25);
+}
+
+.hero {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 28px;
+  border-radius: 28px;
+  background: rgba(8, 16, 24, 0.72);
+  backdrop-filter: blur(18px);
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  color: #ffb470;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.password-card h1,
+.panel-header h2 {
+  margin: 0;
+  color: #f7fbff;
+}
+
+.password-card h1 {
+  font-size: clamp(2.4rem, 4vw, 4.8rem);
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr);
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.control-panel,
+.wall {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.panel-header,
+.log-panel {
+  padding: 18px 20px;
+  border-radius: 22px;
+  background: rgba(8, 16, 24, 0.78);
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.panel-header span {
+  color: #8da2b8;
+}
+
+.stream-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.stream-toggle,
+.screen-card,
+.primary-button {
+  appearance: none;
+  cursor: pointer;
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    background 160ms ease;
+}
+
+.stream-toggle,
+.screen-card {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.stream-toggle:hover,
+.screen-card:hover,
+.primary-button:hover {
+  transform: translateY(-1px);
+}
+
+.stream-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px;
+  border-radius: 20px;
+  color: inherit;
+}
+
+.stream-toggle.is-selected,
+.screen-card.is-focused {
+  border-color: rgba(255, 180, 112, 0.72);
+  background: linear-gradient(135deg, rgba(255, 180, 112, 0.18), rgba(94, 211, 255, 0.12));
+}
+
+.stream-name,
+.screen-letter {
+  font-size: clamp(2rem, 4vw, 4rem);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.stream-log,
+.screen-index {
+  color: #8da2b8;
+  font-family: "IBM Plex Mono", "SFMono-Regular", monospace;
+  font-size: 0.95rem;
+  text-transform: lowercase;
+}
+
+.screen-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: 16px;
+}
+
+.screen-card {
+  min-height: clamp(220px, 32vw, 380px);
+  padding: 22px;
+  border-radius: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  color: inherit;
+}
+
+.log-panel {
+  min-height: 140px;
+}
+
+.log-entry {
+  margin-top: 18px;
+  padding: 16px 18px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #f7fbff;
+  font-family: "IBM Plex Mono", "SFMono-Regular", monospace;
+  font-size: 1.25rem;
+}
+
+.primary-button {
+  border-radius: 999px;
+  padding: 12px 18px;
+  font: inherit;
+}
+
+.primary-button {
+  border: 1px solid rgba(255, 180, 112, 0.5);
+  background: #ffb470;
+  color: #081018;
+  font-weight: 700;
+}
+
+.password-card {
+  max-width: 520px;
+  padding: 32px;
+  border-radius: 28px;
+  background: rgba(8, 16, 24, 0.84);
+}
+
+.password-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.password-input {
+  width: 100%;
+  min-width: 0;
+  padding: 14px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #f7fbff;
+  font: inherit;
+}
+
+.error-text {
+  margin: 10px 0 0;
+  color: #ff8d8d;
+}
+
+@media (max-width: 960px) {
+  .watchwall {
+    padding: 20px;
+  }
+
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .hero {
+    padding: 20px;
+  }
+
+  .password-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
