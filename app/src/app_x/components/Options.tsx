@@ -1,18 +1,28 @@
-import { clearProxyCache, getApproximateProxyCacheSizeBytes } from "../lib/proxy420";
 import { Categories, type Category } from "../config/types";
+import {
+  clearProxyCache,
+  getApproximateProxyCacheSizeBytes,
+} from "../lib/proxy420";
 
 export const DEFAULT_CATEGORY: Category = "NCAAB";
 
 async function clearCache() {
-  const approximateSizeBytes = await getApproximateProxyCacheSizeBytes().catch(() => 0);
+  const approximateSizeBytes = await getApproximateProxyCacheSizeBytes().catch(
+    () => 0,
+  );
   const approximateSizeLabel = formatApproximateSize(approximateSizeBytes);
 
-  if (!window.confirm(`Are you sure? This will clear about ${approximateSizeLabel} from IndexedDB.`)) {
+  if (
+    !window.confirm(
+      `Are you sure? This will clear about ${approximateSizeLabel} from IndexedDB.`,
+    )
+  ) {
     return;
   }
 
   await clearProxyCache().catch(() => undefined);
   localStorage.clear();
+  alert("x");
   window.location.reload();
 }
 
@@ -36,7 +46,9 @@ export default function Options(props: {
           aria-label="categories"
           className="option-input option-input-inline"
           value={props.category}
-          onChange={(event) => props.onCategoryChange(event.target.value as Category)}
+          onChange={(event) =>
+            props.onCategoryChange(event.target.value as Category)
+          }
         >
           {Categories.map((category) => (
             <option key={category} value={category}>
@@ -85,7 +97,11 @@ function OptionCheckbox(props: {
           checked={props.checked}
           defaultChecked={props.defaultChecked}
           type="checkbox"
-          onChange={props.onChange ? (event) => props.onChange?.(event.target.checked) : undefined}
+          onChange={
+            props.onChange
+              ? (event) => props.onChange?.(event.target.checked)
+              : undefined
+          }
         />
         <span> {props.label}</span>
       </label>
