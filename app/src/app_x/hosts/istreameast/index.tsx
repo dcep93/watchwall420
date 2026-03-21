@@ -35,9 +35,9 @@ export const istreameastHost: Host<IframeParams> = {
 
     const iframeParams = {
       fid: "",
-      _rawUrl: stream.raw_url,
-      _embedPageUrl: watchPage.embedPageUrl,
-      _iframeSourcePageUrl: "",
+      _1_rawUrl: stream.raw_url,
+      _2_embedPageUrl: watchPage.embedPageUrl,
+      _3_iframeSourcePageUrl: "",
     };
 
     const resolvedPlayback = watchPage.embedPageUrl
@@ -45,7 +45,7 @@ export const istreameastHost: Host<IframeParams> = {
       : { fid: "", iframeSourcePageUrl: "" };
 
     iframeParams.fid = resolvedPlayback.fid;
-    iframeParams._iframeSourcePageUrl = resolvedPlayback.iframeSourcePageUrl;
+    iframeParams._3_iframeSourcePageUrl = resolvedPlayback.iframeSourcePageUrl;
 
     if (!resolvedPlayback.fid) {
       throw new Error(

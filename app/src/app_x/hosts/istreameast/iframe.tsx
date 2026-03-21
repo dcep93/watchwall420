@@ -5,7 +5,7 @@ export function renderIstreameastPlayerDocument(iframeParams: IframeParams): Rea
   return (
     <html lang="en">
       <head>
-        <base href={iframeParams._embedPageUrl} />
+        <base href={iframeParams._2_embedPageUrl} />
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
       </head>
@@ -18,7 +18,7 @@ export function renderIstreameastPlayerDocument(iframeParams: IframeParams): Rea
         }}
       >
         <iframe
-          src={iframeParams._iframeSourcePageUrl}
+          src={iframeParams._3_iframeSourcePageUrl}
           frameBorder="0"
           style={{
             overflow: "hidden",
