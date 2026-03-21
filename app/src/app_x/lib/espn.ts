@@ -1,4 +1,4 @@
-import { LeagueCategories, type Category, type StreamCategory } from "../config/types";
+import type { Category, StreamCategory } from "../config/types";
 
 const ESPN_MATCH_WINDOW_MS = 12 * 60 * 60 * 1000;
 const ESPN_DATE_OFFSETS = [-1, 0, 1] as const;
@@ -9,6 +9,19 @@ type EspnScoreboardEndpoint = {
   sport: string;
   league: string;
 };
+
+type EspnSupportedCategory =
+  | "NFL"
+  | "NBA"
+  | "MLB"
+  | "NHL"
+  | "CFL"
+  | "CFB"
+  | "NCAAB"
+  | "UFC"
+  | "BOXING"
+  | "SOCCER"
+  | "F1";
 
 type EspnTeam = {
   displayName?: string;
@@ -42,7 +55,7 @@ export type EspnScheduleEvent = {
   normalizedCompetitors: string[];
 };
 
-export const ESPN_SCOREBOARD_ENDPOINTS: Record<StreamCategory, EspnScoreboardEndpoint> = {
+export const ESPN_SCOREBOARD_ENDPOINTS: Record<EspnSupportedCategory, EspnScoreboardEndpoint> = {
   NFL: { sport: "football", league: "nfl" },
   NBA: { sport: "basketball", league: "nba" },
   MLB: { sport: "baseball", league: "mlb" },
@@ -57,14 +70,25 @@ export const ESPN_SCOREBOARD_ENDPOINTS: Record<StreamCategory, EspnScoreboardEnd
 };
 
 export async function fetchEspnScheduleEvents(category: Category): Promise<EspnScheduleEvent[]> {
+  return fetchEspnScheduleEventsForCategories(category);
+}
+
+export async function fetchEspnScheduleEventsForCategories(
+  category: Category,
+  leagueCategories: readonly StreamCategory[] = [],
+): Promise<EspnScheduleEvent[]> {
   if (category === "ALL") {
     const events = await Promise.all(
-      LeagueCategories.map((leagueCategory) => fetchEspnScheduleEvents(leagueCategory)),
+      leagueCategories.map((leagueCategory) => fetchEspnScheduleEventsForCategories(leagueCategory)),
     );
     return dedupeEventsById(events.flat());
   }
 
-  const endpoint = ESPN_SCOREBOARD_ENDPOINTS[category];
+  const endpoint = getEspnScoreboardEndpoint(category);
+  if (!endpoint) {
+    return [];
+  }
+
   const payloads = await Promise.all(
     getEspnDateCandidates().map((date) =>
       fetch(
@@ -90,6 +114,10 @@ export async function fetchEspnScheduleEvents(category: Category): Promise<EspnS
   );
 
   return parseEspnScoreboardEvents(payloads);
+}
+
+function getEspnScoreboardEndpoint(category: string) {
+  return ESPN_SCOREBOARD_ENDPOINTS[category as EspnSupportedCategory] ?? null;
 }
 
 export function resolveEspnEventId(

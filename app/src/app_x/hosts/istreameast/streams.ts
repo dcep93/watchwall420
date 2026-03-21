@@ -1,4 +1,4 @@
-import { LeagueCategories, type Category, type Stream, type StreamCategory } from "../../config/types";
+import type { Category, Stream, StreamCategory } from "../../config/types";
 import { ISTREAMEAST_URL, LIVE_WINDOW_SECONDS, UPCOMING_WINDOW_SECONDS } from "./constants";
 import { resolveEspnEventId, type EspnScheduleEvent } from "../../lib/espn";
 import { buildStreamSlug, escapeForRegex, resolveUrl } from "./utils";
@@ -7,6 +7,7 @@ export function parseStreamsFromHtml(
   html: string,
   category: Category,
   espnEvents: EspnScheduleEvent[],
+  leagueCategories: readonly StreamCategory[],
 ): Stream[] {
   const document = new DOMParser().parseFromString(html, "text/html");
   const seenRawUrls = new Set<string>();
@@ -21,7 +22,7 @@ export function parseStreamsFromHtml(
       }
 
       const strippedLeague = leagueElement.textContent?.trim() ?? "";
-      const resolvedCategory = resolveCategory(strippedLeague, category);
+      const resolvedCategory = resolveCategory(strippedLeague, category, leagueCategories);
       if (!resolvedCategory) {
         return null;
       }
@@ -70,12 +71,16 @@ export function parseStreamPage(rawHtml: string) {
   };
 }
 
-function resolveCategory(leagueLabel: string, selectedCategory: Category): StreamCategory | null {
+function resolveCategory(
+  leagueLabel: string,
+  selectedCategory: Category,
+  leagueCategories: readonly StreamCategory[],
+): StreamCategory | null {
   if (selectedCategory !== "ALL") {
     return hasLeagueMatch(leagueLabel, selectedCategory) ? selectedCategory : null;
   }
 
-  for (const category of LeagueCategories) {
+  for (const category of leagueCategories) {
     if (hasLeagueMatch(leagueLabel, category)) {
       return category;
     }

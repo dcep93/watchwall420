@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, react-refresh/only-export-components */
 import { useEffect, useMemo, useState, type ReactNode } from "react";
-import type { Category, Stream } from "../config/types";
+import type { Stream } from "../config/types";
 import Autoscroller from "./Autoscroller";
 
 type PlayType = {
@@ -92,7 +92,7 @@ type BasketballLeagueConfig = LeagueConfig & {
   playType: "basketball";
 };
 
-const leagueConfigs: Partial<Record<Category, LeagueConfig>> = {
+const leagueConfigs: Record<string, LeagueConfig> = {
   NFL: {
     sport: "football",
     espnLeague: "nfl",

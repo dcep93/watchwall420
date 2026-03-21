@@ -1,5 +1,5 @@
-import { LeagueCategories, type Host } from "../../config/types";
-import { fetchEspnScheduleEvents } from "../../lib/espn";
+import type { Host } from "../../config/types";
+import { fetchEspnScheduleEventsForCategories } from "../../lib/espn";
 import { ISTREAMEAST_URL } from "./constants";
 import { renderIstreameastDocElement } from "./iframe";
 import { resolvePlayableSourceUrl } from "./playback";
@@ -7,19 +7,22 @@ import { fetchIstreameastHtml, fetchProxyText } from "./proxy";
 import { parseStreamPage, parseStreamsFromHtml } from "./streams";
 import type { IframeParams } from "./types";
 
-export const istreameastHost = {
-  getLeagueCategories() {
-    return LeagueCategories;
-  },
+function getLeagueCategories() {
+  return ["NFL", "NBA", "MLB", "NHL", "CFL", "CFB", "NCAAB", "UFC", "BOXING", "SOCCER", "F1"] as const;
+}
+
+export const istreameastHost: Host<IframeParams> = {
+  getLeagueCategories,
   async getStreams(category) {
     const html = await fetchIstreameastHtml();
-    const espnEvents = await fetchEspnScheduleEvents(category).catch(
+    const leagueCategories = getLeagueCategories();
+    const espnEvents = await fetchEspnScheduleEventsForCategories(category, leagueCategories).catch(
       (error: unknown) => {
         console.error("istreameast:fetchEspnScheduleEvents", error);
         return [];
       },
     );
-    return parseStreamsFromHtml(html, category, espnEvents);
+    return parseStreamsFromHtml(html, category, espnEvents, leagueCategories);
   },
   async getIframeParams(stream) {
     if (!stream.raw_url) {
@@ -55,4 +58,4 @@ export const istreameastHost = {
   getIframeDocStrElement(params) {
     return renderIstreameastDocElement(params);
   },
-} satisfies Host<IframeParams>;
+};
