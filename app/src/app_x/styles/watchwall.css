@@ -111,6 +111,15 @@
   overflow: hidden;
 }
 
+.screen-layout {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-content: flex-start;
+}
+
 .resume-column {
   align-items: center;
   justify-content: center;
@@ -281,14 +290,19 @@
 }
 
 .screen-card-spotlight {
-  flex: 1 1 auto;
+  order: 0;
+  width: 100%;
+  flex: 0 0 auto;
+  height: calc(100% - clamp(140px, 24vh, 220px) - 16px);
   min-height: 0;
   padding-top: 22px;
 }
 
 .screen-card-spotlight-solo {
-  flex: 1;
+  flex: 1 1 auto;
+  height: 100%;
   min-height: 0;
+  max-height: 100%;
 }
 
 .screen-spotlight-body {
@@ -311,20 +325,12 @@
   background: rgba(255, 255, 255, 0.03);
 }
 
-.screen-strip {
-  flex: 0 0 clamp(140px, 24vh, 220px);
-  min-height: 0;
-  display: flex;
-  gap: 16px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding-bottom: 4px;
-}
-
 .screen-card-secondary {
+  order: 1;
   flex: 1 1 0;
   min-width: 0;
-  min-height: 0;
+  min-height: clamp(140px, 24vh, 220px);
+  height: clamp(140px, 24vh, 220px);
   padding: 0;
 }
 
@@ -350,8 +356,19 @@
 
 .screen-focus-secondary,
 .screen-focus-spotlight {
+  position: relative;
   margin: 0;
   padding: 0;
+}
+
+.screen-focus-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
 }
 
 .screen-iframe {

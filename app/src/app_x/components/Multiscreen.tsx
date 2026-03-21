@@ -1,4 +1,4 @@
-import type { Ref } from "react";
+import { useEffect, useState, type Ref } from "react";
 import type { Host, Stream, StreamSlug } from "../config/types";
 import { renderLog } from "../lib/renderStream";
 
@@ -13,7 +13,36 @@ export default function Multiscreen(props: {
 }) {
   const focusedStream =
     props.streams.find((stream) => stream.slug === props.focusedSlug) ?? props.streams[0];
-  const secondaryStreams = props.streams.filter((stream) => stream.slug !== focusedStream?.slug);
+
+  return (
+    <section ref={props.containerRef} className="multiscreen-column">
+      <div className="screen-layout">
+        {props.streams.map((stream) => (
+          <ScreenCard
+            key={stream.slug}
+            host={props.host}
+            stream={stream}
+            displayLogs={props.displayLogs}
+            isFocused={stream.slug === focusedStream?.slug}
+            isSolo={props.streams.length === 1}
+            onFocus={() => props.onFocus(stream.slug)}
+            onRemove={() => props.onRemove(stream.slug)}
+          />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function ScreenCard(props: {
+  host: Host;
+  stream: Stream;
+  displayLogs: boolean;
+  isFocused: boolean;
+  isSolo: boolean;
+  onFocus: () => void;
+  onRemove: () => void;
+}) {
   const spotlightBodyClassName = [
     "screen-spotlight-body",
     props.displayLogs ? "" : "screen-spotlight-body-no-log",
@@ -22,74 +51,41 @@ export default function Multiscreen(props: {
     .join(" ");
 
   return (
-    <section ref={props.containerRef} className="multiscreen-column">
-      {focusedStream ? (
-        <article
-          className={[
-            "screen-card",
-            "screen-card-spotlight",
-            "is-focused",
-            secondaryStreams.length === 0 ? "screen-card-spotlight-solo" : "",
-          ]
-            .filter(Boolean)
-            .join(" ")}
-        >
-          <ScreenTitleBar
-            className="spotlight-title-bar"
-            label={focusedStream.title}
-            onClick={() => props.onRemove(focusedStream.slug)}
-          />
-          <div className={spotlightBodyClassName}>
-            {props.displayLogs ? (
-              <div className="log-panel log-panel-spotlight">
-                <div className="log-entry">{renderLog(focusedStream)}</div>
-              </div>
-            ) : null}
-            <ScreenContent
-              host={props.host}
-              className="screen-focus screen-focus-spotlight"
-              stream={focusedStream}
-            />
-          </div>
-        </article>
-      ) : null}
-
-      {secondaryStreams.length > 0 ? (
-        <div className="screen-strip">
-          {secondaryStreams.map((stream) => (
-            <SecondaryScreenCard
-              host={props.host}
-              key={stream.slug}
-              stream={stream}
-              onFocus={() => props.onFocus(stream.slug)}
-              onRemove={() => props.onRemove(stream.slug)}
-            />
-          ))}
-        </div>
-      ) : null}
-    </section>
-  );
-}
-
-function SecondaryScreenCard(props: {
-  host: Host;
-  stream: Stream;
-  onFocus: () => void;
-  onRemove: () => void;
-}) {
-  return (
-    <article className="screen-card screen-card-secondary">
+    <article
+      className={[
+        "screen-card",
+        props.isFocused ? "screen-card-spotlight is-focused" : "screen-card-secondary",
+        props.isFocused && props.isSolo ? "screen-card-spotlight-solo" : "",
+      ]
+        .filter(Boolean)
+        .join(" ")}
+    >
       <ScreenTitleBar
-        className="spotlight-title-bar spotlight-title-bar-secondary"
+        className={[
+          "spotlight-title-bar",
+          props.isFocused ? "" : "spotlight-title-bar-secondary",
+        ]
+          .filter(Boolean)
+          .join(" ")}
         label={props.stream.title}
         onClick={props.onRemove}
       />
-      <ScreenContent
-        host={props.host}
-        className="screen-focus screen-focus-secondary"
-        stream={props.stream}
-        onClick={props.onFocus}
-      />
+      <div className={spotlightBodyClassName}>
+        {props.isFocused && props.displayLogs ? (
+          <div className="log-panel log-panel-spotlight">
+            <div className="log-entry">{renderLog(props.stream)}</div>
+          </div>
+        ) : null}
+        <ScreenContent
+          host={props.host}
+          className={[
+            "screen-focus",
+            props.isFocused ? "screen-focus-spotlight" : "screen-focus-secondary",
+          ].join(" ")}
+          stream={props.stream}
+          onClick={props.isFocused ? undefined : props.onFocus}
+        />
+      </div>
     </article>
   );
 }
@@ -123,26 +119,43 @@ function ScreenContent(props: {
   className: string;
   onClick?: () => void;
 }) {
-  const iframe = (
-    <iframe
-      className="screen-iframe"
-      title={props.stream.title}
-      srcDoc={props.host.getIframeDocStr(props.stream)}
-    />
-  );
+  const [srcDoc, setSrcDoc] = useState("");
 
-  if (!props.onClick) {
-    return <div className={props.className}>{iframe}</div>;
-  }
+  useEffect(() => {
+    let isActive = true;
+
+    props.host
+      .getIframeDocStr(props.stream)
+      .then((nextSrcDoc) => {
+        if (!isActive) return;
+        setSrcDoc(nextSrcDoc);
+      })
+      .catch((error) => {
+        console.error(error);
+        if (!isActive) return;
+        setSrcDoc("");
+      });
+
+    return () => {
+      isActive = false;
+    };
+  }, [props.host, props.stream]);
 
   return (
-    <button
-      type="button"
-      className={props.className}
-      aria-label={`Focus screen ${props.stream.title}`}
-      onClick={props.onClick}
-    >
-      {iframe}
-    </button>
+    <div className={props.className}>
+      {props.onClick ? (
+        <button
+          type="button"
+          className="screen-focus-overlay"
+          aria-label={`Focus screen ${props.stream.title}`}
+          onClick={props.onClick}
+        />
+      ) : null}
+      <iframe
+        className="screen-iframe"
+        title={props.stream.title}
+        srcDoc={srcDoc}
+      />
+    </div>
   );
 }

@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import type { Stream } from "../config/types";
 
 export function renderLog(stream: Stream): ReactNode {
-  return <pre>{JSON.stringify(stream)}</pre>;
+  return <pre>{JSON.stringify(stream, null, 2)}</pre>;
 }
 
 export function renderStreamJsonHtml(stream: Stream) {
@@ -27,7 +27,7 @@ export function renderStreamJsonHtml(stream: Stream) {
         margin-top: 16px;
       }
     </style>
-    <pre>${escapeHtml(JSON.stringify(stream))}</pre>
+    <pre>${escapeHtml(JSON.stringify(stream, null, 2))}</pre>
     <video
       controls
       src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"

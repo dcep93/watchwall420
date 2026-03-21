@@ -15,6 +15,8 @@ export const Categories = [
 export type Category = (typeof Categories)[number];
 
 export type Stream = {
+  espn_id: number;
+  raw_url: string;
   title: string;
   slug: string;
 };
@@ -23,5 +25,5 @@ export type StreamSlug = Stream["slug"];
 
 export type Host = {
   getStreams: (category: Category) => Promise<Stream[]>;
-  getIframeDocStr: (stream: Stream) => string;
+  getIframeDocStr: (stream: Stream) => Promise<string>;
 };
