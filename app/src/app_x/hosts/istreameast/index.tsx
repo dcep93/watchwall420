@@ -45,6 +45,7 @@ export const istreameastHost: Host<IframeParams> = {
 
     const iframeParams = {
       fid: resolvedPlayback.fid,
+      _rawUrl: stream.raw_url,
       _embedPageUrl: watchPage.embedPageUrl,
       _iframeSourcePageUrl: resolvedPlayback.iframeSourcePageUrl,
     };
