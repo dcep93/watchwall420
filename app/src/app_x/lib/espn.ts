@@ -1,10 +1,39 @@
 import { LeagueCategories, type Category, type StreamCategory } from "../config/types";
 
 const ESPN_MATCH_WINDOW_MS = 12 * 60 * 60 * 1000;
+const ESPN_DATE_OFFSETS = [-1, 0, 1] as const;
+const TITLE_TEAM_SEPARATORS = [/\s+vs\s+/i, /\s+@\s+/i, /\s+at\s+/i] as const;
+const INVALID_EVENT_ID = -1;
 
 type EspnScoreboardEndpoint = {
   sport: string;
   league: string;
+};
+
+type EspnTeam = {
+  displayName?: string;
+  shortDisplayName?: string;
+  shortName?: string;
+  abbreviation?: string;
+  location?: string;
+  name?: string;
+};
+
+type EspnScoreboardEvent = {
+  id?: string | number;
+  date?: string;
+  competitions?: Array<{
+    date?: string;
+    competitors?: Array<{
+      team?: EspnTeam;
+    }>;
+  }>;
+};
+
+type EspnScoredEvent = {
+  espnEvent: EspnScheduleEvent;
+  teamScore: number;
+  timeDeltaMs: number;
 };
 
 export type EspnScheduleEvent = {
@@ -32,7 +61,7 @@ export async function fetchEspnScheduleEvents(category: Category): Promise<EspnS
     const events = await Promise.all(
       LeagueCategories.map((leagueCategory) => fetchEspnScheduleEvents(leagueCategory)),
     );
-    return events.flat();
+    return dedupeEventsById(events.flat());
   }
 
   const endpoint = ESPN_SCOREBOARD_ENDPOINTS[category];
@@ -70,22 +99,17 @@ export function resolveEspnEventId(
 ) {
   const eventTeams = parseTitleTeams(title);
   if (eventTeams.length === 0) {
-    return -1;
+    return INVALID_EVENT_ID;
   }
 
   const normalizedEventTeams = eventTeams.map(normalizeTeamName).filter(Boolean);
   if (normalizedEventTeams.length === 0) {
-    return -1;
+    return INVALID_EVENT_ID;
   }
 
   const matchedEvent = espnEvents
-    .map((espnEvent) => ({
-      espnEvent,
-      teamScore: scoreEspnEventMatch(normalizedEventTeams, espnEvent.normalizedCompetitors),
-      timeDeltaMs:
-        startTimeMs === null ? Number.POSITIVE_INFINITY : Math.abs(espnEvent.startTimeMs - startTimeMs),
-    }))
-    .filter(({ teamScore, timeDeltaMs }) => teamScore > 0 && timeDeltaMs <= ESPN_MATCH_WINDOW_MS)
+    .map((espnEvent) => scoreEspnEvent(normalizedEventTeams, startTimeMs, espnEvent))
+    .filter(isMatchingEspnEvent)
     .sort((left, right) => {
       if (right.teamScore !== left.teamScore) {
         return right.teamScore - left.teamScore;
@@ -93,28 +117,10 @@ export function resolveEspnEventId(
       return left.timeDeltaMs - right.timeDeltaMs;
     })[0];
 
-  return matchedEvent?.espnEvent.id ?? -1;
+  return matchedEvent?.espnEvent.id ?? INVALID_EVENT_ID;
 }
 
 function parseEspnScoreboardEvents(payloads: unknown[]): EspnScheduleEvent[] {
-  type EspnScoreboardEvent = {
-    id?: string | number;
-    date?: string;
-    competitions?: Array<{
-      date?: string;
-      competitors?: Array<{
-        team?: {
-          displayName?: string;
-          shortDisplayName?: string;
-          shortName?: string;
-          abbreviation?: string;
-          location?: string;
-          name?: string;
-        };
-      }>;
-    }>;
-  };
-
   return payloads
     .flatMap((payload) => {
       const events = (payload as { events?: EspnScoreboardEvent[] } | null)?.events;
@@ -149,10 +155,20 @@ function parseEspnScoreboardEvents(payloads: unknown[]): EspnScheduleEvent[] {
     .filter((event): event is EspnScheduleEvent => event !== null);
 }
 
+function dedupeEventsById(events: EspnScheduleEvent[]) {
+  const eventsById = new Map<number, EspnScheduleEvent>();
+
+  for (const event of events) {
+    eventsById.set(event.id, event);
+  }
+
+  return Array.from(eventsById.values());
+}
+
 function getEspnDateCandidates() {
   const today = new Date();
 
-  return [-1, 0, 1].map((offsetDays) => {
+  return ESPN_DATE_OFFSETS.map((offsetDays) => {
     const nextDate = new Date(today);
     nextDate.setDate(today.getDate() + offsetDays);
     return formatEspnDate(nextDate);
@@ -166,14 +182,7 @@ function formatEspnDate(date: Date) {
   return `${year}${month}${day}`;
 }
 
-function getEspnTeamNames(team: {
-  displayName?: string;
-  shortDisplayName?: string;
-  shortName?: string;
-  abbreviation?: string;
-  location?: string;
-  name?: string;
-} | null | undefined) {
+function getEspnTeamNames(team: EspnTeam | null | undefined) {
   if (!team) {
     return [];
   }
@@ -196,20 +205,31 @@ function getEspnTeamNames(team: {
 }
 
 function parseTitleTeams(title: string) {
-  const separators = [" vs ", " @ ", " at "];
-
-  for (const separator of separators) {
-    if (!title.toLowerCase().includes(separator.trim())) {
-      continue;
-    }
-
-    const parts = title.split(new RegExp(separator, "i")).map((part) => part.trim()).filter(Boolean);
+  for (const separator of TITLE_TEAM_SEPARATORS) {
+    const parts = title.split(separator).map((part) => part.trim()).filter(Boolean);
     if (parts.length >= 2) {
       return parts.slice(0, 2);
     }
   }
 
   return [title];
+}
+
+function scoreEspnEvent(
+  normalizedEventTeams: string[],
+  startTimeMs: number | null,
+  espnEvent: EspnScheduleEvent,
+): EspnScoredEvent {
+  return {
+    espnEvent,
+    teamScore: scoreEspnEventMatch(normalizedEventTeams, espnEvent.normalizedCompetitors),
+    timeDeltaMs:
+      startTimeMs === null ? Number.POSITIVE_INFINITY : Math.abs(espnEvent.startTimeMs - startTimeMs),
+  };
+}
+
+function isMatchingEspnEvent({ teamScore, timeDeltaMs }: EspnScoredEvent) {
+  return teamScore > 0 && timeDeltaMs <= ESPN_MATCH_WINDOW_MS;
 }
 
 function normalizeTeamName(value: string) {
