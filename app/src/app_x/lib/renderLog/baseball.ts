@@ -2,6 +2,15 @@
 import { buildTeamSummaries, fetchJson, findStatIndex } from "./shared";
 import type { BaseballLeagueConfig, DriveType, LogType } from "./types";
 
+type BaseballRenderedPlay = {
+  atBatId: string;
+  playType: string;
+  team: string;
+  meta: string;
+  text: string;
+  score: string;
+};
+
 export async function getBaseballLog(
   espnId: number,
   config: BaseballLeagueConfig,
@@ -23,7 +32,87 @@ export async function getBaseballLog(
         "",
     ) || Date.now();
 
-  const teamsById = Object.fromEntries(
+  const teamsById = buildBaseballTeamsById(summaryObj);
+
+  return {
+    timestamp,
+    teams: buildTeamSummaries(summaryObj).slice().reverse(),
+    playByPlay: buildBaseballPlayByPlay(plays, teamsById),
+    boxScore: buildBaseballBoxScore((summaryObj as any).boxscore?.players ?? [], config.boxScoreKeys),
+  };
+}
+
+function buildBaseballPlayByPlay(plays: any[], teamsById: Record<string, string>) {
+  const normalizedPlays = plays
+    .map((play) => normalizeBaseballPlay(play, teamsById))
+    .filter((play) => play.atBatId && play.text);
+
+  const groups = new Map<string, typeof normalizedPlays>();
+  normalizedPlays.forEach((play) => {
+    const atBatId = play.atBatId;
+    if (!atBatId) return;
+    const currentGroup = groups.get(atBatId) ?? [];
+    currentGroup.push(play);
+    groups.set(atBatId, currentGroup);
+  });
+
+  return Array.from(groups.values())
+    .map(buildBaseballGroup)
+    .filter((group): group is DriveType => group !== null);
+}
+
+function buildBaseballGroup(plays: BaseballRenderedPlay[]): DriveType | null {
+  const visiblePlays = filterBaseballGroupPlays(plays);
+  if (visiblePlays.length === 0) {
+    return null;
+  }
+
+  const renderedOrderPlays = visiblePlays.slice().reverse();
+  const summaryPlay =
+    renderedOrderPlays.find((play) => isPrimaryBaseballSummaryPlay(play.playType)) || renderedOrderPlays[0];
+  const latestPlay = renderedOrderPlays[0];
+
+  return {
+    team: plays[0]?.team || summaryPlay.team || latestPlay.team,
+    meta: latestPlay.meta || plays[0]?.meta || undefined,
+    plays: visiblePlays.map((play) => ({
+      down: "",
+      text: play.text,
+      clock: "",
+    })),
+    description: summaryPlay.text,
+    score: latestPlay.score,
+  } satisfies DriveType;
+}
+
+function normalizeBaseballPlay(play: any, teamsById: Record<string, string>): BaseballRenderedPlay {
+  const awayScore = play.awayScore ?? play.scoreValue?.away;
+  const homeScore = play.homeScore ?? play.scoreValue?.home;
+
+  return {
+    atBatId: String(play.atBatId ?? ""),
+    playType: play.type?.type || "",
+    team:
+      teamsById[play.team?.id] ||
+      play.team?.shortDisplayName ||
+      play.team?.displayName ||
+      play.team?.abbreviation ||
+      play.team?.name ||
+      "",
+    meta: formatBaseballStateMeta(play),
+    text: play.text || play.shortText || "",
+    score:
+      awayScore !== undefined || homeScore !== undefined ? `${awayScore ?? ""} - ${homeScore ?? ""}` : "",
+  };
+}
+
+function filterBaseballGroupPlays(plays: BaseballRenderedPlay[]) {
+  const meaningfulPlays = plays.filter((play) => !isAdministrativeBaseballPlay(play.playType) && play.text);
+  return meaningfulPlays.length > 0 ? meaningfulPlays : plays.filter((play) => play.text);
+}
+
+function buildBaseballTeamsById(summaryObj: any): Record<string, string> {
+  return Object.fromEntries(
     [
       ...(((summaryObj as any).header?.competitions?.[0]?.competitors ?? []).map((competitor: any) => [
         competitor.team?.id,
@@ -42,116 +131,6 @@ export async function getBaseballLog(
       ])),
     ].filter(([teamId]) => Boolean(teamId)),
   );
-
-  return {
-    timestamp,
-    teams: buildTeamSummaries(summaryObj).slice().reverse(),
-    playByPlay: buildBaseballPlayByPlay(plays, teamsById),
-    boxScore: buildBaseballBoxScore((summaryObj as any).boxscore?.players ?? [], config.boxScoreKeys),
-  };
-}
-
-function buildBaseballPlayByPlay(plays: any[], teamsById: Record<string, string>) {
-  const normalizedPlays = plays
-    .map((play) => normalizeBaseballPlay(play, teamsById))
-    .filter((play) => play.text);
-
-  const groups: typeof normalizedPlays[] = [];
-  let currentGroup: typeof normalizedPlays = [];
-
-  normalizedPlays.forEach((play, index) => {
-    if (currentGroup.length === 0) {
-      currentGroup.push(play);
-    } else {
-      currentGroup.push(play);
-    }
-
-    const nextPlay = normalizedPlays[index + 1];
-    if (!nextPlay || play.stateKey !== nextPlay.stateKey) {
-      groups.push(currentGroup);
-      currentGroup = [];
-    }
-  });
-
-  return groups
-    .map(buildBaseballGroup)
-    .filter((group): group is DriveType => Boolean(group));
-}
-
-function buildBaseballGroup(
-  plays: {
-    playType: string;
-    stateKey: string;
-    team: string;
-    result?: string;
-    meta: string;
-    down: string;
-    text: string;
-    clock: string;
-    score: string;
-  }[],
-) {
-  const visiblePlays = filterBaseballGroupPlays(plays);
-  if (visiblePlays.length === 0) {
-    return null;
-  }
-
-  const renderedOrderPlays = visiblePlays.slice().reverse();
-  const summaryPlay =
-    renderedOrderPlays.find((play) => isPrimaryBaseballSummaryPlay(play.playType)) || renderedOrderPlays[0];
-  const latestPlay = renderedOrderPlays[0];
-
-  return {
-    team: plays[0]?.team || summaryPlay.team || latestPlay.team,
-    result: renderedOrderPlays.find((play) => play.result === "SCORE") ? "SCORE" : undefined,
-    meta: plays[0]?.meta || "",
-    plays: visiblePlays.map((play) => ({
-      down: "",
-      text: play.text,
-      clock: play.clock,
-    })),
-    description: summaryPlay.text,
-    score: latestPlay.score,
-  } satisfies DriveType;
-}
-
-function normalizeBaseballPlay(play: any, teamsById: Record<string, string>) {
-  const awayScore = play.awayScore ?? play.scoreValue?.away;
-  const homeScore = play.homeScore ?? play.scoreValue?.home;
-
-  return {
-    playType: play.type?.type || "",
-    stateKey: buildBaseballStateKey(play, awayScore, homeScore),
-    team:
-      teamsById[play.team?.id] ||
-      play.team?.shortDisplayName ||
-      play.team?.displayName ||
-      play.team?.abbreviation ||
-      play.team?.name ||
-      "",
-    result: play.scoringPlay ? "SCORE" : undefined,
-    meta: formatBaseballStateMeta(play),
-    down: "",
-    text: play.text || play.shortText || "",
-    clock: "",
-    score:
-      awayScore !== undefined || homeScore !== undefined ? `${awayScore ?? ""} - ${homeScore ?? ""}` : "",
-  };
-}
-
-function filterBaseballGroupPlays(
-  plays: {
-    playType: string;
-    text: string;
-    down: string;
-    clock: string;
-    score: string;
-    team: string;
-    result?: string;
-  }[],
-) {
-  const meaningfulPlays = plays.filter((play) => !isAdministrativeBaseballPlay(play.playType) && play.text);
-  return meaningfulPlays.length > 0 ? meaningfulPlays : plays.filter((play) => play.text);
 }
 
 function isPrimaryBaseballSummaryPlay(playType: string) {
@@ -163,17 +142,29 @@ function isAdministrativeBaseballPlay(playType: string) {
 }
 
 function formatBaseballStateMeta(play: any) {
+  const inning = formatBaseballInning(play);
   const bases = formatBaseballBases(play);
   const outs = formatBaseballOuts(play);
-  return [bases, outs].filter(Boolean).join(" | ");
+  return [inning, bases, outs].filter(Boolean).join(" | ");
 }
 
-function buildBaseballStateKey(play: any, awayScore: unknown, homeScore: unknown) {
-  const bases = formatBaseballBases(play);
-  const outs = formatBaseballOuts(play);
-  const score =
-    awayScore !== undefined || homeScore !== undefined ? `${awayScore ?? ""} - ${homeScore ?? ""}` : "";
-  return [bases, outs, score].join(" :: ");
+function formatBaseballInning(play: any) {
+  const inning = play.period?.number ?? play.period ?? play.inning;
+  const halfInning =
+    play.homeAway ||
+    play.period?.type ||
+    play.period?.displayValue ||
+    play.clock?.displayValue ||
+    play.inningHalf;
+  const normalizedHalfInning = String(halfInning || "").trim().toLowerCase();
+  const inningLabel =
+    normalizedHalfInning === "top" || normalizedHalfInning === "top of the inning"
+      ? "Top"
+      : normalizedHalfInning === "bottom" || normalizedHalfInning === "bottom of the inning"
+        ? "Bot"
+        : normalizedHalfInning;
+
+  return [inningLabel, inning ? String(inning) : ""].filter(Boolean).join(" ").trim();
 }
 
 function formatBaseballBases(play: any) {

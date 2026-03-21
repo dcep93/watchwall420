@@ -103,17 +103,12 @@ function LogView(props: { log: LogType }) {
             <div className="watchwall-log-header">
               <div className="watchwall-log-event-meta">
                 <span>{drive.team || "Update"}</span>
-                {drive.result ? (
-                  <span className="watchwall-log-event-result">{drive.result}</span>
-                ) : null}
                 {drive.score ? (
                   <span className="watchwall-log-topbar-muted">{drive.score}</span>
                 ) : null}
-                {drive.meta ? (
-                  <span className="watchwall-log-topbar-muted">{drive.meta}</span>
-                ) : null}
               </div>
               <div className="watchwall-log-event-description">{drive.description}</div>
+              {drive.meta ? <div className="watchwall-log-topbar-muted">{drive.meta}</div> : null}
             </div>
             <div>
               {(drive.plays || []).slice().reverse().map((play, playIndex) => {
