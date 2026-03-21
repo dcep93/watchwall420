@@ -8,7 +8,6 @@ const REMOTE_PROXY_CACHE_MAX_AGE_MS = 5 * 60 * 1000;
 const UPCOMING_WINDOW_SECONDS = 60 * 60;
 const LIVE_WINDOW_SECONDS = 10_600;
 const ESPN_MATCH_WINDOW_MS = 12 * 60 * 60 * 1000;
-const HLS_JS_CDN_URL = "https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js";
 const STREAM_SOURCE_PATTERN = /\.(?:m3u8|mp4)(?:$|[?#])/i;
 const WATCHWALL_USER_AGENT =
   "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36";
@@ -607,7 +606,8 @@ function bootIstreameastPlayer(params: IframeParams) {
   const sourceUrl = params.source_url;
   const video = document.getElementById("player") as HTMLVideoElement | null;
   const status = document.getElementById("status") as HTMLDivElement | null;
-  const sourceIsHls = isHlsSource(sourceUrl);
+  const HLS_JS_CDN_URL = "https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js";
+  const sourceIsHls = /\.m3u8(?:$|[?#])/i.test(sourceUrl);
   let hasStartedPlayback = false;
 
   function log(event: string, details: Record<string, unknown> = {}) {
@@ -684,7 +684,7 @@ function bootIstreameastPlayer(params: IframeParams) {
         return;
       }
 
-      loadHlsScript(log)
+      loadHlsScript()
         .then(() => {
         const HlsConstructor = (window as Window & {
           Hls?: {
@@ -731,6 +731,51 @@ function bootIstreameastPlayer(params: IframeParams) {
     video.src = sourceUrl;
     showStatus("Loading stream...");
     attemptPlayback();
+  }
+
+  function loadHlsScript() {
+    const windowWithHls = window as Window & {
+      Hls?: unknown;
+      __watchwallHlsScriptPromise__?: Promise<void>;
+    };
+
+    if (windowWithHls.Hls) {
+      return Promise.resolve();
+    }
+
+    if (windowWithHls.__watchwallHlsScriptPromise__) {
+      return windowWithHls.__watchwallHlsScriptPromise__;
+    }
+
+    windowWithHls.__watchwallHlsScriptPromise__ = new Promise<void>((resolve, reject) => {
+      const existingScript = document.querySelector<HTMLScriptElement>(
+        `script[data-watchwall-hls="true"]`,
+      );
+
+      if (existingScript) {
+        existingScript.addEventListener("load", () => resolve(), { once: true });
+        existingScript.addEventListener("error", () => reject(new Error("HLS script failed.")), {
+          once: true,
+        });
+        return;
+      }
+
+      const script = document.createElement("script");
+      script.src = HLS_JS_CDN_URL;
+      script.async = true;
+      script.dataset.watchwallHls = "true";
+      script.onload = () => resolve();
+      script.onerror = () => reject(new Error("HLS script failed."));
+      document.head.appendChild(script);
+    }).catch((error) => {
+      delete windowWithHls.__watchwallHlsScriptPromise__;
+      log("hls:script-load-failed", {
+        error: error instanceof Error ? error.message : String(error),
+      });
+      throw error;
+    });
+
+    return windowWithHls.__watchwallHlsScriptPromise__;
   }
 
   if (!video) {
@@ -789,53 +834,4 @@ function bootIstreameastPlayer(params: IframeParams) {
 
   log("init");
   attachSource();
-}
-
-function isHlsSource(value: string) {
-  return /\.m3u8(?:$|[?#])/i.test(value);
-}
-
-function loadHlsScript(log: (event: string, details?: Record<string, unknown>) => void) {
-  const windowWithHls = window as Window & {
-    Hls?: unknown;
-    __watchwallHlsScriptPromise__?: Promise<void>;
-  };
-
-  if (windowWithHls.Hls) {
-    return Promise.resolve();
-  }
-
-  if (windowWithHls.__watchwallHlsScriptPromise__) {
-    return windowWithHls.__watchwallHlsScriptPromise__;
-  }
-
-  windowWithHls.__watchwallHlsScriptPromise__ = new Promise<void>((resolve, reject) => {
-    const existingScript = document.querySelector<HTMLScriptElement>(
-      `script[data-watchwall-hls="true"]`,
-    );
-
-    if (existingScript) {
-      existingScript.addEventListener("load", () => resolve(), { once: true });
-      existingScript.addEventListener("error", () => reject(new Error("HLS script failed.")), {
-        once: true,
-      });
-      return;
-    }
-
-    const script = document.createElement("script");
-    script.src = HLS_JS_CDN_URL;
-    script.async = true;
-    script.dataset.watchwallHls = "true";
-    script.onload = () => resolve();
-    script.onerror = () => reject(new Error("HLS script failed."));
-    document.head.appendChild(script);
-  }).catch((error) => {
-    delete windowWithHls.__watchwallHlsScriptPromise__;
-    log("hls:script-load-failed", {
-      error: error instanceof Error ? error.message : String(error),
-    });
-    throw error;
-  });
-
-  return windowWithHls.__watchwallHlsScriptPromise__;
 }
