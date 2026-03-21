@@ -43,11 +43,13 @@ export const istreameastHost: Host<IframeParams> = {
       );
     }
 
-    return {
+    const iframeParams = {
       fid: resolvedPlayback.fid,
       _embedPageUrl: watchPage.embedPageUrl,
       _iframeSourcePageUrl: resolvedPlayback.iframeSourcePageUrl,
     };
+
+    return iframeParams;
   },
   getIframeDocStrElement(iframeParams) {
     return renderIstreameastPlayerDocument(iframeParams);

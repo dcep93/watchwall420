@@ -137,9 +137,16 @@ function ScreenContent<T>(props: {
 
     props.host
       .getIframeParams(props.stream)
-      .then((params) =>
-        ReactDomServer.renderToStaticMarkup(props.host.getIframeDocStrElement(params)),
-      )
+      .then((iframeParams) => {
+        console.log("watchwall:getIframeParams", {
+          streamTitle: props.stream.title,
+          iframeParams,
+        });
+
+        return ReactDomServer.renderToStaticMarkup(
+          props.host.getIframeDocStrElement(iframeParams),
+        );
+      })
       .then((renderedSrcDoc) => {
         if (!isActive) return;
         setSrcDoc(renderedSrcDoc);
