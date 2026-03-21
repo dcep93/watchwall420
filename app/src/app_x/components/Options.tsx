@@ -4,6 +4,20 @@ function clearCache() {
   window.location.reload();
 }
 
+const CATEGORY_OPTIONS = [
+  "NFL",
+  "NBA",
+  "MLB",
+  "NHL",
+  "CFL",
+  "CFB",
+  "NCAAB",
+  "UFC",
+  "BOXING",
+  "SOCCER",
+  "F1",
+] as const;
+
 export default function Options(props: {
   displayLogs: boolean;
   onDisplayLogsChange: (value: boolean) => void;
@@ -12,6 +26,13 @@ export default function Options(props: {
     <section className="menu-card">
       <div className="menu-card-header">
         <h2>Options</h2>
+        <select aria-label="categories" className="option-input option-input-inline" defaultValue="NCAAB">
+          {CATEGORY_OPTIONS.map((category) => (
+            <option key={category} value={category}>
+              {category}
+            </option>
+          ))}
+        </select>
         <button
           className="secondary-button secondary-button-inline"
           type="button"

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import PasswordGate from "./PasswordGate";
 import Menu from "./Menu";
 import Multiscreen from "./Multiscreen";
@@ -15,10 +15,40 @@ export default function WatchwallApp() {
   const [isAuthorized, setIsAuthorized] = useState(getInitialAuthorized);
   const [focusedSlug, setFocusedSlug] = useState(STREAMS[0]?.slug ?? "");
   const [displayLogs, setDisplayLogs] = useState(true);
-  const { selectedSlugs, selectedStreams, setSelectedSlugs } = useSelectedStreamIds();
+  const { hadHashSelectionOnLoad, selectedSlugs, selectedStreams, setSelectedSlugs } =
+    useSelectedStreamIds();
+  const [hasResumedFromHashSelection, setHasResumedFromHashSelection] = useState(
+    !hadHashSelectionOnLoad,
+  );
+  const multiscreenRef = useRef<HTMLElement | null>(null);
 
   const resolvedFocusedSlug =
     selectedStreams.find((stream) => stream.slug === focusedSlug)?.slug ?? selectedStreams[0]?.slug;
+  const shouldShowResumePrompt =
+    isAuthorized &&
+    !hasResumedFromHashSelection &&
+    hadHashSelectionOnLoad &&
+    selectedStreams.length > 0;
+
+  useEffect(() => {
+    if (!shouldShowResumePrompt) return;
+
+    multiscreenRef.current?.scrollIntoView({
+      behavior: "auto",
+      block: "start",
+      inline: "start",
+    });
+
+    const resume = () => setHasResumedFromHashSelection(true);
+
+    window.addEventListener("keydown", resume, { once: true });
+    window.addEventListener("click", resume, { once: true });
+
+    return () => {
+      window.removeEventListener("keydown", resume);
+      window.removeEventListener("click", resume);
+    };
+  }, [shouldShowResumePrompt]);
 
   function handleToggle(streamSlug: StreamSlug) {
     if (selectedSlugs.includes(streamSlug)) {
@@ -64,13 +94,22 @@ export default function WatchwallApp() {
         onDisplayLogsChange={setDisplayLogs}
       />
       {selectedStreams.length > 0 ? (
-        <Multiscreen
-          streams={selectedStreams}
-          displayLogs={displayLogs}
-          focusedSlug={resolvedFocusedSlug}
-          onRemove={handleRemove}
-          onFocus={setFocusedSlug}
-        />
+        shouldShowResumePrompt ? (
+          <section ref={multiscreenRef} className="multiscreen-column resume-column">
+            <div className="resume-message">
+              <p>Press any key or click to resume.</p>
+            </div>
+          </section>
+        ) : (
+          <Multiscreen
+            containerRef={multiscreenRef}
+            streams={selectedStreams}
+            displayLogs={displayLogs}
+            focusedSlug={resolvedFocusedSlug}
+            onRemove={handleRemove}
+            onFocus={setFocusedSlug}
+          />
+        )
       ) : null}
     </main>
   );

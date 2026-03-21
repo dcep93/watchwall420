@@ -1,6 +1,8 @@
+import type { Ref } from "react";
 import type { Stream, StreamSlug } from "../config/types";
 
 export default function Multiscreen(props: {
+  containerRef?: Ref<HTMLElement>;
   streams: Stream[];
   displayLogs: boolean;
   focusedSlug?: StreamSlug;
@@ -18,7 +20,7 @@ export default function Multiscreen(props: {
     .join(" ");
 
   return (
-    <section className="multiscreen-column">
+    <section ref={props.containerRef} className="multiscreen-column">
       {focusedStream ? (
         <article
           className={[
@@ -58,7 +60,8 @@ export default function Multiscreen(props: {
               key={stream.slug}
               content={stream.content}
               label={stream.label}
-              onClick={() => props.onFocus(stream.slug)}
+              onFocus={() => props.onFocus(stream.slug)}
+              onRemove={() => props.onRemove(stream.slug)}
             />
           ))}
         </div>
@@ -70,24 +73,22 @@ export default function Multiscreen(props: {
 function SecondaryScreenCard(props: {
   label: string;
   content: string;
-  onClick: () => void;
+  onFocus: () => void;
+  onRemove: () => void;
 }) {
   return (
     <article className="screen-card screen-card-secondary">
-      <button
-        type="button"
-        className="screen-card-secondary-button"
-        aria-label={`Focus screen ${props.label}`}
-        onClick={props.onClick}
-      >
-        <ScreenTitleBar
-          className="spotlight-title-bar spotlight-title-bar-secondary"
-          label={props.label}
-        />
-        <span className="screen-focus screen-focus-secondary">
-          <span className="screen-focus-label">{props.content}</span>
-        </span>
-      </button>
+      <ScreenTitleBar
+        className="spotlight-title-bar spotlight-title-bar-secondary"
+        label={props.label}
+        onClick={props.onRemove}
+      />
+      <ScreenContent
+        className="screen-focus screen-focus-secondary"
+        label={props.label}
+        content={props.content}
+        onClick={props.onFocus}
+      />
     </article>
   );
 }

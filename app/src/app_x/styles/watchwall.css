@@ -111,6 +111,27 @@
   overflow: hidden;
 }
 
+.resume-column {
+  align-items: center;
+  justify-content: center;
+}
+
+.resume-message {
+  width: min(32rem, 100%);
+  padding: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 28px;
+  background: rgba(8, 16, 24, 0.84);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.25);
+  text-align: center;
+}
+
+.resume-message p {
+  margin: 0;
+  color: #f7fbff;
+  font-size: clamp(1.2rem, 2vw, 1.8rem);
+}
+
 .panel-header {
   display: flex;
   align-items: center;
@@ -318,30 +339,15 @@
   padding: 0;
 }
 
-.screen-card-secondary-button {
-  appearance: none;
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: inherit;
-  font: inherit;
-  display: flex;
-  flex-direction: column;
-  cursor: pointer;
-}
-
 .screen-card-secondary .screen-letter {
   font-size: clamp(0.95rem, 1.5vw, 1.2rem);
 }
 
-.screen-card-secondary-button .spotlight-title-bar-secondary {
+.screen-card-secondary .spotlight-title-bar-secondary {
   flex-shrink: 0;
 }
 
-.screen-card-secondary-button .screen-focus-secondary {
+.screen-card-secondary .screen-focus-secondary {
   flex: 1;
 }
 
@@ -417,6 +423,10 @@
   background: rgba(255, 255, 255, 0.04);
   color: #f7fbff;
   font: inherit;
+}
+
+.option-input-inline {
+  width: 7.5rem;
 }
 
 .secondary-button,

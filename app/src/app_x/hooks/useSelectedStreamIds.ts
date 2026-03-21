@@ -38,8 +38,9 @@ function haveSameOrder(left: StreamSlug[], right: StreamSlug[]) {
 }
 
 export default function useSelectedStreamIds() {
+  const [initialHash] = useState(() => window.location.hash);
   const [selectedSlugs, setSelectedSlugs] = useState<StreamSlug[]>(() =>
-    parseHash(window.location.hash),
+    parseHash(initialHash),
   );
 
   useEffect(() => {
@@ -63,6 +64,7 @@ export default function useSelectedStreamIds() {
   );
 
   return {
+    hadHashSelectionOnLoad: parseHash(initialHash).length > 0,
     selectedSlugs,
     selectedStreams,
     setSelectedSlugs,
