@@ -27,9 +27,9 @@ export async function getBaseballLog(
   const timestamp =
     Date.parse(
       (summaryObj as any).meta?.lastPlayWallClock ||
-        plays[plays.length - 1]?.wallclock ||
-        (summaryObj as any).header?.competitions?.[0]?.date ||
-        "",
+      plays[plays.length - 1]?.wallclock ||
+      (summaryObj as any).header?.competitions?.[0]?.date ||
+      "",
     ) || Date.now();
 
   const teamsById = buildBaseballTeamsById(summaryObj);
@@ -117,9 +117,9 @@ function buildBaseballTeamsById(summaryObj: any): Record<string, string> {
       ...(((summaryObj as any).header?.competitions?.[0]?.competitors ?? []).map((competitor: any) => [
         competitor.team?.id,
         competitor.team?.shortDisplayName ||
-          competitor.team?.displayName ||
-          competitor.team?.name ||
-          "",
+        competitor.team?.displayName ||
+        competitor.team?.name ||
+        "",
       ])),
       ...((((summaryObj as any).boxscore?.teams as any[]) ?? []).map((teamObj: any) => [
         teamObj.team?.id,
