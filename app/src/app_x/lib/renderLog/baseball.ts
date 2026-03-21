@@ -36,7 +36,7 @@ export async function getBaseballLog(
 
   return {
     timestamp,
-    teams: buildTeamSummaries(summaryObj).slice().reverse(),
+    teams: buildTeamSummaries(summaryObj),
     playByPlay: buildBaseballPlayByPlay(plays, teamsById),
     boxScore: buildBaseballBoxScore((summaryObj as any).boxscore?.players ?? [], config.boxScoreKeys),
   };

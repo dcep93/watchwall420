@@ -16,18 +16,20 @@ export async function fetchJson(url: string) {
 }
 
 export function buildTeamSummaries(summaryObj: any) {
-  return (((summaryObj as any).boxscore?.teams as any[]) ?? []).map((teamObj: any) => ({
-    name: teamObj.team?.name ?? "",
-    statistics: Object.fromEntries(
-      ((teamObj.statistics as any[]) ?? []).flatMap((stat) => {
-        if (Array.isArray(stat?.stats)) {
-          return stat.stats.map((nestedStat: any) => [nestedStat.name, nestedStat.displayValue]);
-        }
+  return ((((summaryObj as any).boxscore?.teams as any[]) ?? []).slice().reverse()).map(
+    (teamObj: any) => ({
+      name: teamObj.team?.name ?? "",
+      statistics: Object.fromEntries(
+        ((teamObj.statistics as any[]) ?? []).flatMap((stat) => {
+          if (Array.isArray(stat?.stats)) {
+            return stat.stats.map((nestedStat: any) => [nestedStat.name, nestedStat.displayValue]);
+          }
 
-        return stat?.name ? [[stat.name, stat.displayValue]] : [];
-      }),
-    ),
-  }));
+          return stat?.name ? [[stat.name, stat.displayValue]] : [];
+        }),
+      ),
+    }),
+  );
 }
 
 export function buildDefaultBoxScore(players: any[], keys: readonly string[]): BoxScoreType[] {
