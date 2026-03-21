@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "priority": 1,
+    "action": {
+      "type": "modifyHeaders",
+      "requestHeaders": [
+        {
+          "header": "referer",
+          "operation": "set",
+          "value": "https://embedsports.top/"
+        }
+      ]
+    },
+    "condition": {
+      "initiatorDomains": [
+        "localhost",
+        "watchwall420.web.app"
+      ],
+      "requestDomains": [
+        "pooembed.eu"
+      ],
+      "resourceTypes": [
+        "main_frame",
+        "sub_frame",
+        "xmlhttprequest",
+        "media",
+        "other"
+      ]
+    }
+  }
+]
