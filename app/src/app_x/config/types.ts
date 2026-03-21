@@ -15,7 +15,7 @@ export type StreamSlug = Stream["slug"];
 
 export type Host<T> = {
   getLeagueCategories: () => readonly string[];
-  getStreams: (category: Category) => Promise<Stream[]>;
+  getStreams: () => Promise<Stream[]>;
   getIframeParams: (stream: Stream) => Promise<T>;
   getIframeDocStrElement: (params: T) => ReactElement;
 };

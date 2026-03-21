@@ -1,11 +1,10 @@
-import type { Category, Stream, StreamCategory } from "../../config/types";
+import type { Stream, StreamCategory } from "../../config/types";
 import { resolveEspnEventId, type EspnScheduleEvent } from "../../lib/espn";
 import { ISTREAMEAST_URL, LIVE_WINDOW_SECONDS, UPCOMING_WINDOW_SECONDS } from "./constants";
 import { buildStreamSlug, escapeForRegex, resolveUrl } from "./utils";
 
 export function parseStreamsFromHtml(
   streamListHtml: string,
-  selectedCategory: Category,
   espnEvents: EspnScheduleEvent[],
   supportedLeagueCategories: readonly StreamCategory[],
 ): Stream[] {
@@ -22,11 +21,7 @@ export function parseStreamsFromHtml(
       }
 
       const strippedLeague = leagueElement.textContent?.trim() ?? "";
-      const resolvedCategory = resolveCategory(
-        strippedLeague,
-        selectedCategory,
-        supportedLeagueCategories,
-      );
+      const resolvedCategory = resolveCategory(strippedLeague, supportedLeagueCategories);
       if (!resolvedCategory) {
         return null;
       }
@@ -72,13 +67,8 @@ export function parseStreamWatchPage(streamWatchPageHtml: string) {
 
 function resolveCategory(
   leagueLabel: string,
-  selectedCategory: Category,
   supportedLeagueCategories: readonly StreamCategory[],
 ): StreamCategory | null {
-  if (selectedCategory !== "ALL") {
-    return hasLeagueMatch(leagueLabel, selectedCategory) ? selectedCategory : null;
-  }
-
   for (const supportedCategory of supportedLeagueCategories) {
     if (hasLeagueMatch(leagueLabel, supportedCategory)) {
       return supportedCategory;

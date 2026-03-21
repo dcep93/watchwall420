@@ -1,4 +1,4 @@
-import type { Category, StreamCategory } from "../config/types";
+import type { Category, Stream, StreamCategory } from "../config/types";
 
 const PREFERRED_DEFAULT_CATEGORY: StreamCategory = "NCAAB";
 
@@ -8,4 +8,19 @@ export function getDefaultCategory(categories: readonly StreamCategory[]): Categ
   }
 
   return categories[0] ?? "ALL";
+}
+
+export function filterStreamsByCategory(
+  streams: Stream[] | null,
+  category: Category,
+): Stream[] | null {
+  if (!streams) {
+    return null;
+  }
+
+  if (category === "ALL") {
+    return streams;
+  }
+
+  return streams.filter((stream) => stream.category === category);
 }

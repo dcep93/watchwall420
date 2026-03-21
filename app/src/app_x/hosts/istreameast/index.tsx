@@ -13,16 +13,16 @@ function getSupportedIstreameastCategories() {
 
 export const istreameastHost: Host<IframeParams> = {
   getLeagueCategories: getSupportedIstreameastCategories,
-  async getStreams(category) {
+  async getStreams() {
     const streamListHtml = await fetchIstreameastHtml();
     const supportedCategories = getSupportedIstreameastCategories();
-    const espnEvents = await fetchEspnScheduleEventsForCategories(category, supportedCategories).catch(
+    const espnEvents = await fetchEspnScheduleEventsForCategories("ALL", supportedCategories).catch(
       (error: unknown) => {
         console.error("istreameast:fetchEspnScheduleEvents", error);
         return [];
       },
     );
-    return parseStreamsFromHtml(streamListHtml, category, espnEvents, supportedCategories);
+    return parseStreamsFromHtml(streamListHtml, espnEvents, supportedCategories);
   },
   async getIframeParams(stream) {
     if (!stream.raw_url) {

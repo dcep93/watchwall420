@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import PasswordGate from "./PasswordGate";
 import Menu from "./Menu";
 import Multiscreen from "./Multiscreen";
-import { getDefaultCategory } from "./optionsShared";
+import { filterStreamsByCategory, getDefaultCategory } from "./optionsShared";
 import { getInitialAuthorized, unlock } from "../lib/auth";
 import useSelectedStreamIds from "../hooks/useSelectedStreamIds";
 import { HOST } from "../config/data";
@@ -19,18 +19,13 @@ export default function WatchwallApp() {
   const defaultCategory = getDefaultCategory(hostCategories);
   const [isAuthorized, setIsAuthorized] = useState(() => (IS_DEV ? true : getInitialAuthorized()));
   const [category, setCategory] = useState<Category>(defaultCategory);
-  const [streamResults, setStreamResults] = useState<{
-    category: Category;
-    streams: Stream[] | null;
-  }>({
-    category: defaultCategory,
-    streams: null,
-  });
+  const [allStreams, setAllStreams] = useState<Stream[] | null>(null);
+  const [streamReloadKey, setStreamReloadKey] = useState(0);
   const [focusedSlug, setFocusedSlug] = useState<StreamSlug>("");
   const [displayLogs, setDisplayLogs] = useState(true);
-  const streams = streamResults.category === category ? streamResults.streams : null;
+  const streams = filterStreamsByCategory(allStreams, category);
   const { hadHashSelectionOnLoad, selectedSlugs, selectedStreams, setSelectedSlugs } =
-    useSelectedStreamIds(streams);
+    useSelectedStreamIds(allStreams);
   const [hasResumedFromHashSelection, setHasResumedFromHashSelection] = useState(
     !hadHashSelectionOnLoad,
   );
@@ -40,21 +35,21 @@ export default function WatchwallApp() {
   useEffect(() => {
     let isActive = true;
 
-    HOST.getStreams(category)
+    HOST.getStreams()
       .then((fetchedStreams) => {
         if (!isActive) return;
-        setStreamResults({ category, streams: fetchedStreams });
+        setAllStreams(fetchedStreams);
       })
       .catch((error) => {
         console.error(error);
         if (!isActive) return;
-        setStreamResults({ category, streams: [] });
+        setAllStreams([]);
       });
 
     return () => {
       isActive = false;
     };
-  }, [category]);
+  }, [streamReloadKey]);
 
   const resolvedFocusedSlug =
     selectedStreams.find((stream) => stream.slug === focusedSlug)?.slug ?? selectedStreams[0]?.slug;
@@ -128,10 +123,8 @@ export default function WatchwallApp() {
 
     setIsAuthorized(IS_DEV);
     setCategory(defaultCategory);
-    setStreamResults({
-      category: defaultCategory,
-      streams: null,
-    });
+    setAllStreams(null);
+    setStreamReloadKey((current) => current + 1);
     setFocusedSlug("");
     setDisplayLogs(true);
     setSelectedSlugs([]);
