@@ -1,15 +1,11 @@
 import shaDetailsRaw from "../config/sha.json?raw";
-import { STREAMS } from "../config/data";
-import type { StreamSlug } from "../config/types";
-import { fetchTextThroughProxy } from "../lib/proxy420";
+import type { Stream, StreamSlug } from "../config/types";
+import { fetchIstreameastHtml } from "../hosts/istreameast";
 import Guide from "./Guide";
 import Options from "./Options";
 
-const ISTREAMEAST_URL = "https://istreameast.is/";
-const WATCHWALL_USER_AGENT =
-  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36";
-
 export default function Menu(props: {
+  streams: Stream[];
   selectedSlugs: StreamSlug[];
   onToggle: (streamSlug: StreamSlug) => void;
   displayLogs: boolean;
@@ -26,11 +22,11 @@ export default function Menu(props: {
       </h1>
 
       <div className="stream-list">
-        {STREAMS.map((stream) => (
+        {props.streams.map((stream) => (
           <StreamToggle
             key={stream.slug}
             isSelected={props.selectedSlugs.includes(stream.slug)}
-            label={stream.label}
+            label={stream.title}
             onClick={() => props.onToggle(stream.slug)}
           />
         ))}
@@ -71,14 +67,7 @@ function formatShaTooltip(raw: string) {
 
 async function handleTitleClick() {
   try {
-    const text = await fetchTextThroughProxy({
-      url: ISTREAMEAST_URL,
-      options: {
-        headers: {
-          "user-agent": WATCHWALL_USER_AGENT,
-        },
-      },
-    });
+    const text = await fetchIstreameastHtml();
     console.log(text);
   } catch (error) {
     console.error(error);

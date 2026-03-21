@@ -12,12 +12,6 @@ export default function Multiscreen(props: {
   const focusedStream =
     props.streams.find((stream) => stream.slug === props.focusedSlug) ?? props.streams[0];
   const secondaryStreams = props.streams.filter((stream) => stream.slug !== focusedStream?.slug);
-  const spotlightBodyClassName = [
-    "screen-spotlight-body",
-    props.displayLogs ? "" : "screen-spotlight-body-no-log",
-  ]
-    .filter(Boolean)
-    .join(" ");
 
   return (
     <section ref={props.containerRef} className="multiscreen-column">
@@ -34,19 +28,14 @@ export default function Multiscreen(props: {
         >
           <ScreenTitleBar
             className="spotlight-title-bar"
-            label={focusedStream.label}
+            label={focusedStream.title}
             onClick={() => props.onRemove(focusedStream.slug)}
           />
-          <div className={spotlightBodyClassName}>
-            {props.displayLogs ? (
-              <div className="log-panel log-panel-spotlight">
-                <div className="log-entry">{focusedStream.log}</div>
-              </div>
-            ) : null}
+          <div className="screen-spotlight-body screen-spotlight-body-no-log">
             <ScreenContent
               className="screen-focus screen-focus-spotlight"
-              label={focusedStream.label}
-              content={focusedStream.content}
+              label={focusedStream.title}
+              renderContent={focusedStream.renderContent}
             />
           </div>
         </article>
@@ -57,8 +46,8 @@ export default function Multiscreen(props: {
           {secondaryStreams.map((stream) => (
             <SecondaryScreenCard
               key={stream.slug}
-              content={stream.content}
-              label={stream.label}
+              renderContent={stream.renderContent}
+              label={stream.title}
               onFocus={() => props.onFocus(stream.slug)}
               onRemove={() => props.onRemove(stream.slug)}
             />
@@ -71,7 +60,7 @@ export default function Multiscreen(props: {
 
 function SecondaryScreenCard(props: {
   label: string;
-  content: string;
+  renderContent: string;
   onFocus: () => void;
   onRemove: () => void;
 }) {
@@ -85,7 +74,7 @@ function SecondaryScreenCard(props: {
       <ScreenContent
         className="screen-focus screen-focus-secondary"
         label={props.label}
-        content={props.content}
+        renderContent={props.renderContent}
         onClick={props.onFocus}
       />
     </article>
@@ -117,14 +106,17 @@ function ScreenTitleBar(props: {
 
 function ScreenContent(props: {
   label: string;
-  content: string;
+  renderContent: string;
   className: string;
   onClick?: () => void;
 }) {
   if (!props.onClick) {
     return (
       <div className={props.className}>
-        <div className="screen-focus-label">{props.content}</div>
+        <div
+          className="screen-focus-label"
+          dangerouslySetInnerHTML={{ __html: props.renderContent }}
+        />
       </div>
     );
   }
@@ -136,7 +128,10 @@ function ScreenContent(props: {
       aria-label={`Focus screen ${props.label}`}
       onClick={props.onClick}
     >
-      <div className="screen-focus-label">{props.content}</div>
+      <div
+        className="screen-focus-label"
+        dangerouslySetInnerHTML={{ __html: props.renderContent }}
+      />
     </button>
   );
 }

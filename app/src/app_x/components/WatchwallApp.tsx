@@ -4,11 +4,10 @@ import Menu from "./Menu";
 import Multiscreen from "./Multiscreen";
 import { getInitialAuthorized, unlock } from "../lib/auth";
 import useSelectedStreamIds from "../hooks/useSelectedStreamIds";
-import { STREAMS } from "../config/data";
-import type { StreamSlug } from "../config/types";
+import { HOST } from "../config/data";
+import type { Stream, StreamSlug } from "../config/types";
 
 const IS_DEV = import.meta.env.DEV;
-const DEFAULT_FOCUSED_SLUG = STREAMS[0]?.slug ?? "";
 
 function removeSlug(slugs: StreamSlug[], streamSlug: StreamSlug) {
   return slugs.filter((slug) => slug !== streamSlug);
@@ -16,14 +15,34 @@ function removeSlug(slugs: StreamSlug[], streamSlug: StreamSlug) {
 
 export default function WatchwallApp() {
   const [isAuthorized, setIsAuthorized] = useState(() => (IS_DEV ? true : getInitialAuthorized()));
-  const [focusedSlug, setFocusedSlug] = useState(DEFAULT_FOCUSED_SLUG);
+  const [streams, setStreams] = useState<Stream[]>([]);
+  const [focusedSlug, setFocusedSlug] = useState<StreamSlug>("");
   const [displayLogs, setDisplayLogs] = useState(true);
   const { hadHashSelectionOnLoad, selectedSlugs, selectedStreams, setSelectedSlugs } =
-    useSelectedStreamIds();
+    useSelectedStreamIds(streams);
   const [hasResumedFromHashSelection, setHasResumedFromHashSelection] = useState(
     !hadHashSelectionOnLoad,
   );
   const multiscreenRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    let isActive = true;
+
+    HOST.getStreams()
+      .then((nextStreams) => {
+        if (!isActive) return;
+        setStreams(nextStreams);
+      })
+      .catch((error) => {
+        console.error(error);
+        if (!isActive) return;
+        setStreams([]);
+      });
+
+    return () => {
+      isActive = false;
+    };
+  }, []);
 
   const resolvedFocusedSlug =
     selectedStreams.find((stream) => stream.slug === focusedSlug)?.slug ?? selectedStreams[0]?.slug;
@@ -67,7 +86,7 @@ export default function WatchwallApp() {
       return;
     }
 
-    setFocusedSlug(selectedStreams[0]?.slug ?? DEFAULT_FOCUSED_SLUG);
+    setFocusedSlug(selectedStreams[0]?.slug ?? "");
   }, [resolvedFocusedSlug, selectedStreams]);
 
   function handleToggle(streamSlug: StreamSlug) {
@@ -109,6 +128,7 @@ export default function WatchwallApp() {
     <main className="watchwall-shell">
       <Menu
         displayLogs={displayLogs}
+        streams={streams}
         selectedSlugs={selectedSlugs}
         onToggle={handleToggle}
         onDisplayLogsChange={setDisplayLogs}

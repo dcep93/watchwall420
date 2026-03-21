@@ -6,18 +6,18 @@ const CACHE_STORE_NAME = "responses";
 type ProxyFetchTextArgs = {
   url: string;
   options?: RequestInit;
-  ttlMs?: number | null;
+  maxAgeMs?: number;
 };
 
 type CacheEntry = {
   key: string;
   text: string;
-  expiresAt: number | null;
+  fetchedAt: number;
 };
 
 export async function fetchTextThroughProxy(args: ProxyFetchTextArgs) {
   const cacheKey = getCacheKey(args);
-  const cachedText = await getCachedText(cacheKey).catch(() => undefined);
+  const cachedText = await getCachedText(cacheKey, args.maxAgeMs).catch(() => undefined);
   if (cachedText !== undefined) {
     return cachedText;
   }
@@ -39,7 +39,7 @@ export async function fetchTextThroughProxy(args: ProxyFetchTextArgs) {
 
   const text = await response.text();
 
-  await putCachedText(cacheKey, text, args.ttlMs ?? null).catch(() => undefined);
+  await putCachedText(cacheKey, text).catch(() => undefined);
 
   return text;
 }
@@ -95,28 +95,24 @@ function normalizeOptions(options: RequestInit | undefined) {
   };
 }
 
-async function getCachedText(key: string) {
+async function getCachedText(key: string, maxAgeMs: number = Number.POSITIVE_INFINITY) {
   const entry = await withStore("readonly", (store) => requestToPromise(store.get(key)));
   if (!entry) return undefined;
 
-  if (entry.expiresAt !== null && entry.expiresAt <= Date.now()) {
-    await withStore("readwrite", (store) => requestToPromise(store.delete(key)));
+  if (Date.now() - entry.fetchedAt > maxAgeMs) {
     return undefined;
   }
 
   return entry.text;
 }
 
-async function putCachedText(key: string, text: string, ttlMs: number | null) {
-  const expiresAt =
-    ttlMs === null || ttlMs === undefined ? null : Date.now() + Math.max(ttlMs, 0);
-
+async function putCachedText(key: string, text: string) {
   await withStore("readwrite", (store) =>
     requestToPromise(
       store.put({
         key,
         text,
-        expiresAt,
+        fetchedAt: Date.now(),
       } satisfies CacheEntry),
     ),
   );
