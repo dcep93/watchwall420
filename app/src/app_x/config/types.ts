@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 export type Stream = {
   slug: string;
   label: string;
@@ -6,3 +8,8 @@ export type Stream = {
 };
 
 export type StreamSlug = Stream["slug"];
+
+export type Host = {
+  getStreams: () => Promise<Stream[]>;
+  renderContent: (stream: Stream) => ReactNode;
+};
