@@ -7,6 +7,8 @@ const LOCAL_PROXY_CACHE_MAX_AGE_MS = 24 * 60 * 60 * 1000;
 const REMOTE_PROXY_CACHE_MAX_AGE_MS = 5 * 60 * 1000;
 const UPCOMING_WINDOW_SECONDS = 60 * 60;
 const LIVE_WINDOW_SECONDS = 10_600;
+const ESPN_PROXY_CACHE_MAX_AGE_MS = 10 * 60 * 1000;
+const ESPN_MATCH_WINDOW_MS = 12 * 60 * 60 * 1000;
 const HLS_JS_CDN_URL = "https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js";
 const STREAM_SOURCE_PATTERN = /\.(?:m3u8|mp4)(?:$|[?#])/i;
 const WATCHWALL_USER_AGENT =
@@ -31,7 +33,11 @@ export async function fetchIstreameastHtml(
 export const istreameastHost = {
   async getStreams(category) {
     const html = await fetchIstreameastHtml();
-    return parseStreamsFromHtml(html, category);
+    const espnEvents = await fetchEspnScheduleEvents(category).catch((error) => {
+      console.error("istreameast:fetchEspnScheduleEvents", error);
+      return [];
+    });
+    return parseStreamsFromHtml(html, category, espnEvents);
   },
   async getIframeParams(stream) {
     if (!stream.raw_url) {
@@ -79,7 +85,18 @@ export const istreameastHost = {
   },
 } satisfies Host<{ source_url: string; title: string }>;
 
-function parseStreamsFromHtml(html: string, category: Category): Stream[] {
+type EspnScheduleEvent = {
+  id: number;
+  startTimeMs: number;
+  competitors: string[];
+  normalizedCompetitors: string[];
+};
+
+function parseStreamsFromHtml(
+  html: string,
+  category: Category,
+  espnEvents: EspnScheduleEvent[],
+): Stream[] {
   const document = new DOMParser().parseFromString(html, "text/html");
   const leaguePattern = new RegExp(`\\b${escapeForRegex(category)}\\b`);
   const seenRawUrls = new Set<string>();
@@ -109,8 +126,10 @@ function parseStreamsFromHtml(html: string, category: Category): Stream[] {
       }
       seenRawUrls.add(rawUrl);
 
+      const startTimeMs = getEventStartTimeMs(eventCard);
+
       return {
-        espn_id: -1,
+        espn_id: resolveEspnEventId(title, startTimeMs, espnEvents),
         raw_url: rawUrl,
         title,
         slug: buildStreamSlug(title, rawUrl),
@@ -148,6 +167,15 @@ function hasRelevantStatus(eventCard: Element) {
   }
 
   return false;
+}
+
+function getEventStartTimeMs(eventCard: Element) {
+  const startTs = parseInt(eventCard.getAttribute("data-start-ts") ?? "", 10);
+  if (!Number.isFinite(startTs)) {
+    return null;
+  }
+
+  return startTs * 1000;
 }
 
 function parseStreamPage(rawHtml: string) {
@@ -268,6 +296,250 @@ function buildStreamSlug(title: string, rawUrl: string) {
   }
 
   return rawUrl.replace(/[^a-z0-9]+/gi, "-").replace(/^-+|-+$/g, "").toLowerCase();
+}
+
+async function fetchEspnScheduleEvents(category: Category) {
+  const schedulePath = ESPN_SCHEDULE_PATHS[category];
+  if (!schedulePath) {
+    return [];
+  }
+
+  const scheduleHtml = await fetchTextThroughProxy({
+    url: `https://www.espn.com/${schedulePath}/schedule`,
+    localMaxAgeMs: ESPN_PROXY_CACHE_MAX_AGE_MS,
+    remoteMaxAgeMs: ESPN_PROXY_CACHE_MAX_AGE_MS,
+    options: {
+      headers: {
+        "user-agent": WATCHWALL_USER_AGENT,
+      },
+      referrer: "https://www.espn.com/",
+    },
+  });
+
+  return parseEspnScheduleEvents(scheduleHtml);
+}
+
+const ESPN_SCHEDULE_PATHS: Partial<Record<Category, string>> = {
+  NFL: "nfl",
+  NBA: "nba",
+  MLB: "mlb",
+  NHL: "nhl",
+  CFL: "cfl",
+  CFB: "college-football",
+  NCAAB: "mens-college-basketball",
+  UFC: "mma",
+  BOXING: "boxing",
+  SOCCER: "soccer",
+  F1: "f1",
+};
+
+function parseEspnScheduleEvents(scheduleHtml: string): EspnScheduleEvent[] {
+  const fittPayload =
+    matchSingleString(scheduleHtml, /window\['__espnfitt__'\]=(.+?);<\/script>/s) ||
+    matchSingleString(scheduleHtml, /window\.__espnfitt__\s*=\s*(.+?);<\/script>/s);
+
+  if (!fittPayload) {
+    return [];
+  }
+
+  type EspnFittEvent = {
+    id?: string | number;
+    date?: string;
+    competitions?: Array<{
+      date?: string;
+      competitors?: Array<{
+        team?: {
+          displayName?: string;
+          shortDisplayName?: string;
+          shortName?: string;
+          abbreviation?: string;
+          location?: string;
+          name?: string;
+        };
+      }>;
+      competitorsData?: never;
+    }>;
+    teams?: Array<{
+      displayName?: string;
+      shortDisplayName?: string;
+      shortName?: string;
+      abbreviation?: string;
+      location?: string;
+      name?: string;
+    }>;
+  };
+
+  let parsed: {
+    page?: {
+      content?: {
+        events?: Record<string, EspnFittEvent[]>;
+      };
+    };
+  } | null = null;
+
+  try {
+    parsed = JSON.parse(fittPayload);
+  } catch (error) {
+    console.error("istreameast:parseEspnScheduleEvents", error);
+    return [];
+  }
+
+  return Object.values(parsed?.page?.content?.events ?? {})
+    .flatMap((events) => events)
+    .map((event) => {
+      const eventId = parseInt(String(event.id ?? ""), 10);
+      const competitors =
+        event.competitions?.[0]?.competitors
+          ?.map((competitor) => getEspnTeamNames(competitor.team))
+          .flat() ??
+        event.teams?.map((team) => getEspnTeamNames(team)).flat() ??
+        [];
+      const startTimeMs = Date.parse(event.competitions?.[0]?.date ?? event.date ?? "");
+
+      if (!Number.isFinite(eventId) || !Number.isFinite(startTimeMs) || competitors.length === 0) {
+        return null;
+      }
+
+      const normalizedCompetitors = Array.from(
+        new Set(competitors.map(normalizeTeamName).filter(Boolean)),
+      );
+
+      if (normalizedCompetitors.length === 0) {
+        return null;
+      }
+
+      return {
+        id: eventId,
+        startTimeMs,
+        competitors: Array.from(new Set(competitors)),
+        normalizedCompetitors,
+      } satisfies EspnScheduleEvent;
+    })
+    .filter((event): event is EspnScheduleEvent => event !== null);
+}
+
+function getEspnTeamNames(team: {
+  displayName?: string;
+  shortDisplayName?: string;
+  shortName?: string;
+  abbreviation?: string;
+  location?: string;
+  name?: string;
+} | null | undefined) {
+  if (!team) {
+    return [];
+  }
+
+  return Array.from(
+    new Set(
+      [
+        team.displayName,
+        team.shortDisplayName,
+        team.shortName,
+        team.abbreviation,
+        [team.location, team.name].filter(Boolean).join(" "),
+        team.location,
+        team.name,
+      ]
+        .map((value) => value?.trim() ?? "")
+        .filter(Boolean),
+    ),
+  );
+}
+
+function resolveEspnEventId(
+  title: string,
+  startTimeMs: number | null,
+  espnEvents: EspnScheduleEvent[],
+) {
+  const eventTeams = parseTitleTeams(title);
+  if (eventTeams.length === 0) {
+    return -1;
+  }
+
+  const normalizedEventTeams = eventTeams.map(normalizeTeamName).filter(Boolean);
+  if (normalizedEventTeams.length === 0) {
+    return -1;
+  }
+
+  const matchedEvent = espnEvents
+    .map((espnEvent) => ({
+      espnEvent,
+      teamScore: scoreEspnEventMatch(normalizedEventTeams, espnEvent.normalizedCompetitors),
+      timeDeltaMs:
+        startTimeMs === null ? Number.POSITIVE_INFINITY : Math.abs(espnEvent.startTimeMs - startTimeMs),
+    }))
+    .filter(({ teamScore, timeDeltaMs }) => teamScore > 0 && timeDeltaMs <= ESPN_MATCH_WINDOW_MS)
+    .sort((left, right) => {
+      if (right.teamScore !== left.teamScore) {
+        return right.teamScore - left.teamScore;
+      }
+      return left.timeDeltaMs - right.timeDeltaMs;
+    })[0];
+
+  return matchedEvent?.espnEvent.id ?? -1;
+}
+
+function parseTitleTeams(title: string) {
+  const separators = [" vs ", " @ ", " at "];
+
+  for (const separator of separators) {
+    if (!title.toLowerCase().includes(separator.trim())) {
+      continue;
+    }
+
+    const parts = title.split(new RegExp(separator, "i")).map((part) => part.trim()).filter(Boolean);
+    if (parts.length >= 2) {
+      return parts.slice(0, 2);
+    }
+  }
+
+  return [title];
+}
+
+function normalizeTeamName(value: string) {
+  return value
+    .toLowerCase()
+    .replace(/&/g, " and ")
+    .replace(/[^a-z0-9]+/g, " ")
+    .replace(/\bsaint\b/g, "st")
+    .replace(/\bstate\b/g, "st")
+    .replace(/\buniversity\b/g, "")
+    .replace(/\bfc\b/g, "")
+    .replace(/\bcf\b/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function scoreEspnEventMatch(streamTeams: string[], espnTeams: string[]) {
+  let score = 0;
+
+  for (const streamTeam of streamTeams) {
+    if (espnTeams.some((espnTeam) => teamNamesMatch(streamTeam, espnTeam))) {
+      score += 1;
+    }
+  }
+
+  return score;
+}
+
+function teamNamesMatch(left: string, right: string) {
+  if (left === right) {
+    return true;
+  }
+
+  const leftCompact = left.replaceAll(" ", "");
+  const rightCompact = right.replaceAll(" ", "");
+
+  if (leftCompact === rightCompact) {
+    return true;
+  }
+
+  return leftCompact.includes(rightCompact) || rightCompact.includes(leftCompact);
+}
+
+function matchSingleString(value: string, pattern: RegExp) {
+  return value.match(pattern)?.[1]?.trim() ?? "";
 }
 
 type IframeParams = {
