@@ -4,6 +4,7 @@ import type { BoxScoreType, DriveType, HockeyLeagueConfig, LogType } from "./typ
 
 type HockeyRenderedPlay = {
   team: string;
+  type: string;
   down: string;
   text: string;
   clock: string;
@@ -66,33 +67,194 @@ function buildHockeyTeamsById(summaryObj: any): Record<string, string> {
 }
 
 function buildHockeyPlayByPlay(plays: any[], teamsById: Record<string, string>) {
-  return plays
+  const normalizedPlays = plays
     .map((play) => normalizeHockeyPlay(play, teamsById))
-    .filter((play) => play.text)
-    .map((play) => {
-      const description = play.text;
+    .filter((play) => play.text && !isAdministrativeHockeyPlay(play.type));
 
-      return {
-        team: play.team,
-        result: play.result,
-        meta: play.meta,
-        plays: [
-          {
-            down: play.down,
-            text: play.text,
-            clock: play.clock,
-          },
-        ],
-        description,
-        score: play.score,
-      } satisfies DriveType;
-    });
+  const groups: HockeyRenderedPlay[][] = [];
+  let currentGroup: HockeyRenderedPlay[] = [];
+
+  const pushCurrentGroup = () => {
+    if (currentGroup.length === 0) return;
+    groups.push(currentGroup);
+    currentGroup = [];
+  };
+
+  for (const play of normalizedPlays) {
+    if (currentGroup.length === 0) {
+      currentGroup.push(play);
+      if (shouldCloseHockeyGroup(play)) {
+        pushCurrentGroup();
+      }
+      continue;
+    }
+
+    const previousPlay = currentGroup[currentGroup.length - 1];
+    if (shouldStartNewHockeyGroup(previousPlay, play)) {
+      pushCurrentGroup();
+    }
+
+    currentGroup.push(play);
+
+    if (shouldCloseHockeyGroup(play)) {
+      pushCurrentGroup();
+    }
+  }
+
+  pushCurrentGroup();
+
+  return groups
+    .map(buildHockeyGroup)
+    .filter((group): group is DriveType => group !== null);
+}
+
+function buildHockeyGroup(plays: HockeyRenderedPlay[]): DriveType | null {
+  const visiblePlays = filterHockeyGroupPlays(plays);
+  if (visiblePlays.length === 0) {
+    return null;
+  }
+
+  const renderedOrderPlays = visiblePlays.slice().reverse();
+  const summaryPlay =
+    renderedOrderPlays.find((play) => isPrimaryHockeySummaryPlay(play.type)) ||
+    renderedOrderPlays[0] ||
+    visiblePlays[visiblePlays.length - 1];
+  const latestPlay = renderedOrderPlays[0] || visiblePlays[0];
+  const team =
+    summaryPlay.team ||
+    latestPlay.team ||
+    plays.find((play) => play.team)?.team ||
+    "";
+  const meta = Array.from(
+    new Set(
+      [latestPlay.meta, summaryPlay.meta, plays[0]?.meta]
+        .filter((value): value is string => Boolean(value)),
+    ),
+  ).join(" | ");
+
+  return {
+    team,
+    result: plays.find((play) => play.result === "SCORE") ? "SCORE" : undefined,
+    meta: meta || undefined,
+    plays: visiblePlays.map((play) => ({
+      down: play.down,
+      text: play.text,
+      clock: play.clock,
+    })),
+    description: summaryPlay.text,
+    score: latestPlay.score,
+  } satisfies DriveType;
+}
+
+function shouldStartNewHockeyGroup(previousPlay: HockeyRenderedPlay, nextPlay: HockeyRenderedPlay) {
+  if (!previousPlay || !nextPlay) {
+    return false;
+  }
+
+  if (extractPeriodFromClock(previousPlay.clock) !== extractPeriodFromClock(nextPlay.clock)) {
+    return true;
+  }
+
+  if (isStrongBoundaryHockeyPlay(nextPlay.type)) {
+    return true;
+  }
+
+  if (isStrongBoundaryHockeyPlay(previousPlay.type)) {
+    return true;
+  }
+
+  if (previousPlay.team && nextPlay.team && previousPlay.team !== nextPlay.team) {
+    return true;
+  }
+
+  if (previousPlay.clock !== nextPlay.clock && isAttackSequenceHockeyPlay(previousPlay.type)) {
+    return true;
+  }
+
+  return false;
+}
+
+function shouldCloseHockeyGroup(play: HockeyRenderedPlay) {
+  return isTerminalHockeyPlay(play.type) || play.result === "SCORE";
+}
+
+function filterHockeyGroupPlays(plays: HockeyRenderedPlay[]) {
+  const meaningfulPlays = plays.filter(
+    (play) => play.text && !isMinorAdministrativeHockeyPlay(play.type),
+  );
+  return meaningfulPlays.length > 0 ? meaningfulPlays : plays.filter((play) => play.text);
+}
+
+function isPrimaryHockeySummaryPlay(playType: string) {
+  const normalized = playType.toLowerCase();
+  return [
+    "goal",
+    "penalty",
+    "shot",
+    "missed shot",
+    "blocked shot",
+    "saved shot",
+    "shot on goal",
+    "takeaway",
+    "giveaway",
+    "hit",
+  ].includes(normalized);
+}
+
+function isAdministrativeHockeyPlay(playType: string) {
+  const normalized = playType.toLowerCase();
+  return [
+    "game start",
+    "period start",
+    "period end",
+    "overtime start",
+    "shootout start",
+    "game end",
+    "star of the game",
+  ].includes(normalized);
+}
+
+function isMinorAdministrativeHockeyPlay(playType: string) {
+  const normalized = playType.toLowerCase();
+  return ["stoppage", "tv timeout", "timeout"].includes(normalized);
+}
+
+function isStrongBoundaryHockeyPlay(playType: string) {
+  const normalized = playType.toLowerCase();
+  return ["faceoff", "penalty", "goal", "period start", "period end"].includes(normalized);
+}
+
+function isTerminalHockeyPlay(playType: string) {
+  const normalized = playType.toLowerCase();
+  return ["goal", "penalty", "saved shot", "shot", "shot on goal", "missed shot", "blocked shot"].includes(
+    normalized,
+  );
+}
+
+function isAttackSequenceHockeyPlay(playType: string) {
+  const normalized = playType.toLowerCase();
+  return [
+    "goal",
+    "saved shot",
+    "shot",
+    "shot on goal",
+    "missed shot",
+    "blocked shot",
+    "takeaway",
+    "giveaway",
+    "hit",
+  ].includes(normalized);
+}
+
+function extractPeriodFromClock(clock: string) {
+  return clock.split(" ")[0] || "";
 }
 
 function normalizeHockeyPlay(play: any, teamsById: Record<string, string>): HockeyRenderedPlay {
   const period = parseInt(String(play.period?.number || "0"), 10) || 0;
   const awayScore = play.awayScore ?? play.scoreValue?.away;
   const homeScore = play.homeScore ?? play.scoreValue?.home;
+  const type = String(play.type?.text || play.type?.name || play.type?.abbreviation || "").trim();
 
   return {
     team:
@@ -102,8 +264,9 @@ function normalizeHockeyPlay(play: any, teamsById: Record<string, string>): Hock
       play.team?.abbreviation ||
       play.team?.name ||
       "",
+    type,
     result: play.scoringPlay ? "SCORE" : undefined,
-    down: play.type?.text || "",
+    down: formatHockeyPlayLabel(play),
     text: play.text || play.shortText || "",
     clock: `P${period || ""} ${play.clock?.displayValue || ""}`.trim(),
     score:
@@ -112,16 +275,31 @@ function normalizeHockeyPlay(play: any, teamsById: Record<string, string>): Hock
   };
 }
 
+function formatHockeyPlayLabel(play: any) {
+  const parts = [
+    play.type?.text || "",
+    play.shotType?.displayName || play.shotType?.name || "",
+  ].filter(Boolean);
+
+  return Array.from(new Set(parts)).join(" | ");
+}
+
 function formatHockeyPlayMeta(play: any) {
   const strength =
     play.strength?.displayName ||
     play.strength?.name ||
     play.situation?.strength ||
     "";
+  const manpower =
+    play.situation?.manPowerSituation ||
+    play.situation?.manpowerSituation ||
+    play.situation?.situation ||
+    "";
+  const zone = play.zone?.displayName || play.zone?.name || "";
   const shootout =
     play.shootout ? "Shootout" : "";
 
-  return [strength, shootout].filter(Boolean).join(" | ") || undefined;
+  return [strength, manpower, zone, shootout].filter(Boolean).join(" | ") || undefined;
 }
 
 function buildHockeyBoxScore(players: any[], keys: readonly string[]): BoxScoreType[] {
