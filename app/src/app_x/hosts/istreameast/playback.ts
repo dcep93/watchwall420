@@ -1,26 +1,29 @@
 import { fetchProxyText } from "./proxy";
 import { resolveUrl } from "./utils";
 
-export async function resolvePlayableSourceUrl(
-  initialUrl: string,
+export async function resolveStreamFid(
+  embedPageUrl: string,
 ): Promise<string> {
-  if (!initialUrl) {
+  if (!embedPageUrl) {
     return "";
   }
 
-  const embedPageUrl = initialUrl.trim();
-  const embedHtml = await fetchProxyText(embedPageUrl).catch(() => "");
-  if (!embedHtml) {
+  const normalizedEmbedPageUrl = embedPageUrl.trim();
+  const embedPageHtml = await fetchProxyText(normalizedEmbedPageUrl).catch(() => "");
+  if (!embedPageHtml) {
     return "";
   }
 
-  const iframeSourcePageUrl = extractIframeSourcePageUrl(embedHtml, embedPageUrl);
+  const iframeSourcePageUrl = extractIframeSourcePageUrl(
+    embedPageHtml,
+    normalizedEmbedPageUrl,
+  );
   if (!iframeSourcePageUrl) {
     return "";
   }
 
   const iframeSourceHtml = await fetchProxyText(iframeSourcePageUrl).catch(() => "");
-  return extractFid(iframeSourceHtml);
+  return extractStreamFid(iframeSourceHtml);
 }
 
 function extractIframeSourcePageUrl(html: string, baseUrl: string) {
@@ -32,7 +35,7 @@ function extractIframeSourcePageUrl(html: string, baseUrl: string) {
   return resolveUrl(iframeSrc, baseUrl);
 }
 
-function extractFid(html: string) {
+function extractStreamFid(html: string) {
   if (!html) return "";
 
   const document = new DOMParser().parseFromString(html, "text/html");

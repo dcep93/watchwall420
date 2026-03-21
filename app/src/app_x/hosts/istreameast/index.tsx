@@ -2,27 +2,27 @@ import type { Host } from "../../config/types";
 import { fetchEspnScheduleEventsForCategories } from "../../lib/espn";
 import { ISTREAMEAST_URL } from "./constants";
 import { renderIstreameastDocElement } from "./iframe";
-import { resolvePlayableSourceUrl } from "./playback";
+import { resolveStreamFid } from "./playback";
 import { fetchIstreameastHtml, fetchProxyText } from "./proxy";
-import { parseStreamPage, parseStreamsFromHtml } from "./streams";
+import { parseStreamPageDetails, parseStreamsFromHtml } from "./streams";
 import type { IframeParams } from "./types";
 
-function getLeagueCategories() {
+function getIstreameastLeagueCategories() {
   return ["NFL", "NBA", "MLB", "NHL", "CFL", "CFB", "NCAAB", "UFC", "BOXING", "SOCCER", "F1"] as const;
 }
 
 export const istreameastHost: Host<IframeParams> = {
-  getLeagueCategories,
+  getLeagueCategories: getIstreameastLeagueCategories,
   async getStreams(category) {
-    const html = await fetchIstreameastHtml();
-    const leagueCategories = getLeagueCategories();
+    const streamListHtml = await fetchIstreameastHtml();
+    const leagueCategories = getIstreameastLeagueCategories();
     const espnEvents = await fetchEspnScheduleEventsForCategories(category, leagueCategories).catch(
       (error: unknown) => {
         console.error("istreameast:fetchEspnScheduleEvents", error);
         return [];
       },
     );
-    return parseStreamsFromHtml(html, category, espnEvents, leagueCategories);
+    return parseStreamsFromHtml(streamListHtml, category, espnEvents, leagueCategories);
   },
   async getIframeParams(stream) {
     if (!stream.raw_url) {
@@ -30,11 +30,11 @@ export const istreameastHost: Host<IframeParams> = {
     }
 
     const streamPageUrl = new URL(stream.raw_url, ISTREAMEAST_URL).toString();
-    const rawHtml = await fetchProxyText(streamPageUrl);
-    const streamPage = parseStreamPage(rawHtml);
+    const streamPageHtml = await fetchProxyText(streamPageUrl);
+    const streamPageDetails = parseStreamPageDetails(streamPageHtml);
 
-    const fid = streamPage.embed_page_url
-      ? await resolvePlayableSourceUrl(streamPage.embed_page_url)
+    const fid = streamPageDetails.embedPageUrl
+      ? await resolveStreamFid(streamPageDetails.embedPageUrl)
       : "";
 
     if (!fid) {

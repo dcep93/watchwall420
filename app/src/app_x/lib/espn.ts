@@ -116,8 +116,8 @@ export async function fetchEspnScheduleEventsForCategories(
   return parseEspnScoreboardEvents(payloads);
 }
 
-function getEspnScoreboardEndpoint(category: string) {
-  return ESPN_SCOREBOARD_ENDPOINTS[category as EspnSupportedCategory] ?? null;
+function getEspnScoreboardEndpoint(categoryName: string) {
+  return ESPN_SCOREBOARD_ENDPOINTS[categoryName as EspnSupportedCategory] ?? null;
 }
 
 export function resolveEspnEventId(
@@ -197,9 +197,9 @@ function getEspnDateCandidates() {
   const today = new Date();
 
   return ESPN_DATE_OFFSETS.map((offsetDays) => {
-    const nextDate = new Date(today);
-    nextDate.setDate(today.getDate() + offsetDays);
-    return formatEspnDate(nextDate);
+    const candidateDate = new Date(today);
+    candidateDate.setDate(today.getDate() + offsetDays);
+    return formatEspnDate(candidateDate);
   });
 }
 

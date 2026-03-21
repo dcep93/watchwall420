@@ -1,31 +1,34 @@
 import { useEffect, useMemo, useState } from "react";
 import type { Stream, StreamSlug } from "../config/types";
 
-function parseHash(hash: string, validSlugs: Set<StreamSlug> | null): StreamSlug[] {
+function parseSelectedSlugsFromHash(
+  hash: string,
+  allowedSlugs: Set<StreamSlug> | null,
+): StreamSlug[] {
   return hash
     .replace(/^#/, "")
     .split(",")
     .map((slug) => slug.trim())
     .filter((slug, index, array): slug is StreamSlug =>
-      isUniqueValidSlug(slug, index, array, validSlugs),
+      isAllowedUniqueSlug(slug, index, array, allowedSlugs),
     );
 }
 
-function isUniqueValidSlug(
+function isAllowedUniqueSlug(
   slug: string,
   index: number,
   array: string[],
-  validSlugs: Set<StreamSlug> | null,
+  allowedSlugs: Set<StreamSlug> | null,
 ): slug is StreamSlug {
   if (!slug || array.indexOf(slug) !== index) {
     return false;
   }
 
-  return validSlugs ? validSlugs.has(slug as StreamSlug) : true;
+  return allowedSlugs ? allowedSlugs.has(slug as StreamSlug) : true;
 }
 
-function writeHash(slugs: StreamSlug[]) {
-  const hash = getHashValue(slugs);
+function writeSelectedSlugsToHash(slugs: StreamSlug[]) {
+  const hash = serializeSelectedSlugs(slugs);
   const url = new URL(window.location.href);
 
   if (hash) {
@@ -37,47 +40,47 @@ function writeHash(slugs: StreamSlug[]) {
   window.history.replaceState(null, "", url);
 }
 
-function getHashValue(slugs: StreamSlug[]) {
+function serializeSelectedSlugs(slugs: StreamSlug[]) {
   return slugs.join(",");
 }
 
-function hasCanonicalHash(slugs: StreamSlug[]) {
-  return window.location.hash.replace(/^#/, "") === getHashValue(slugs);
+function hashMatchesSelectedSlugs(slugs: StreamSlug[]) {
+  return window.location.hash.replace(/^#/, "") === serializeSelectedSlugs(slugs);
 }
 
 export default function useSelectedStreamIds(streams: Stream[] | null) {
-  const validSlugs = useMemo(
+  const allowedSlugs = useMemo(
     () => (streams ? new Set<StreamSlug>(streams.map((stream) => stream.slug)) : null),
     [streams],
   );
   const [initialHash] = useState(() => window.location.hash);
   const initialSelectedSlugs = useMemo(
-    () => parseHash(initialHash, validSlugs),
-    [initialHash, validSlugs],
+    () => parseSelectedSlugsFromHash(initialHash, allowedSlugs),
+    [initialHash, allowedSlugs],
   );
   const [selectedSlugs, setSelectedSlugs] = useState<StreamSlug[]>(() =>
-    parseHash(window.location.hash, validSlugs),
+    parseSelectedSlugsFromHash(window.location.hash, allowedSlugs),
   );
 
   useEffect(() => {
     const onHashChange = () => {
-      setSelectedSlugs(parseHash(window.location.hash, validSlugs));
+      setSelectedSlugs(parseSelectedSlugsFromHash(window.location.hash, allowedSlugs));
     };
 
     window.addEventListener("hashchange", onHashChange);
     return () => window.removeEventListener("hashchange", onHashChange);
-  }, [validSlugs]);
+  }, [allowedSlugs]);
 
   useEffect(() => {
-    setSelectedSlugs(parseHash(window.location.hash, validSlugs));
-  }, [validSlugs]);
+    setSelectedSlugs(parseSelectedSlugsFromHash(window.location.hash, allowedSlugs));
+  }, [allowedSlugs]);
 
   useEffect(() => {
-    if (!validSlugs) return;
-    if (!hasCanonicalHash(selectedSlugs)) {
-      writeHash(selectedSlugs);
+    if (!allowedSlugs) return;
+    if (!hashMatchesSelectedSlugs(selectedSlugs)) {
+      writeSelectedSlugsToHash(selectedSlugs);
     }
-  }, [selectedSlugs, validSlugs]);
+  }, [selectedSlugs, allowedSlugs]);
 
   const selectedStreams = useMemo(
     () => {

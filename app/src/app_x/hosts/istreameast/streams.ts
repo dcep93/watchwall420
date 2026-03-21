@@ -4,12 +4,12 @@ import { resolveEspnEventId, type EspnScheduleEvent } from "../../lib/espn";
 import { buildStreamSlug, escapeForRegex, resolveUrl } from "./utils";
 
 export function parseStreamsFromHtml(
-  html: string,
-  category: Category,
+  streamListHtml: string,
+  selectedCategory: Category,
   espnEvents: EspnScheduleEvent[],
   leagueCategories: readonly StreamCategory[],
 ): Stream[] {
-  const document = new DOMParser().parseFromString(html, "text/html");
+  const document = new DOMParser().parseFromString(streamListHtml, "text/html");
   const seenRawUrls = new Set<string>();
 
   return Array.from(document.querySelectorAll(".events-list .event-card"))
@@ -22,7 +22,11 @@ export function parseStreamsFromHtml(
       }
 
       const strippedLeague = leagueElement.textContent?.trim() ?? "";
-      const resolvedCategory = resolveCategory(strippedLeague, category, leagueCategories);
+      const resolvedCategory = resolveCategory(
+        strippedLeague,
+        selectedCategory,
+        leagueCategories,
+      );
       if (!resolvedCategory) {
         return null;
       }
@@ -51,23 +55,18 @@ export function parseStreamsFromHtml(
     .filter((stream): stream is Stream => stream !== null);
 }
 
-export function parseStreamPage(rawHtml: string) {
-  const document = new DOMParser().parseFromString(rawHtml, "text/html");
-  const embed_page_url = [
+export function parseStreamPageDetails(streamPageHtml: string) {
+  const document = new DOMParser().parseFromString(streamPageHtml, "text/html");
+  const embedPageUrlCandidate = [
     document.querySelector("#main-player")?.getAttribute("src"),
     document.querySelector(".server-btn.active")?.getAttribute("data-src"),
     document.querySelector(".server-btn")?.getAttribute("data-src"),
   ]
     .map((value) => value?.trim() ?? "")
     .find(Boolean);
-  const title =
-    document.querySelector(".hero-title")?.textContent?.trim() ??
-    document.title ??
-    "Streameast Stream";
 
   return {
-    embed_page_url: resolveUrl(embed_page_url ?? "", ISTREAMEAST_URL),
-    title,
+    embedPageUrl: resolveUrl(embedPageUrlCandidate ?? "", ISTREAMEAST_URL),
   };
 }
 

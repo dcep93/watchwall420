@@ -16,11 +16,11 @@ export function getDefaultCategory(
   return categories[0] ?? "ALL";
 }
 
-function getCategories(categories: readonly StreamCategory[]): Category[] {
+function getCategoryOptions(categories: readonly StreamCategory[]): Category[] {
   return ["ALL", ...categories];
 }
 
-async function clearCache() {
+async function clearAppCache() {
   const approximateSizeBytes = await getApproximateProxyCacheSizeBytes().catch(
     () => 0,
   );
@@ -65,7 +65,7 @@ export default function Options(props: {
             props.onCategoryChange(event.target.value as Category)
           }
         >
-          {getCategories(props.categories).map((category) => (
+          {getCategoryOptions(props.categories).map((category) => (
             <option key={category} value={category}>
               {category}
             </option>
@@ -75,7 +75,7 @@ export default function Options(props: {
           className="secondary-button secondary-button-inline"
           type="button"
           onClick={async () => {
-            const didClearCache = await clearCache();
+            const didClearCache = await clearAppCache();
             if (!didClearCache) return;
             props.onClearCache();
           }}

@@ -16,9 +16,9 @@ type CacheEntry = {
   fetchedAt: number;
 };
 
-export async function fetchTextThroughProxy(args: ProxyFetchTextArgs) {
-  const cacheKey = getCacheKey(args);
-  const cachedText = await getCachedText(cacheKey, args.localMaxAgeMs).catch(() => undefined);
+export async function fetchTextThroughProxy(request: ProxyFetchTextArgs) {
+  const cacheKey = getCacheKey(request);
+  const cachedText = await getCachedText(cacheKey, request.localMaxAgeMs).catch(() => undefined);
   if (cachedText !== undefined) {
     return cachedText;
   }
@@ -29,9 +29,9 @@ export async function fetchTextThroughProxy(args: ProxyFetchTextArgs) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      maxAgeMs: args.remoteMaxAgeMs,
-      url: args.url,
-      options: args.options,
+      maxAgeMs: request.remoteMaxAgeMs,
+      url: request.url,
+      options: request.options,
     }),
   });
 
@@ -74,10 +74,10 @@ export async function getApproximateProxyCacheSizeBytes() {
   );
 }
 
-function getCacheKey(args: ProxyFetchTextArgs) {
+function getCacheKey(request: ProxyFetchTextArgs) {
   return JSON.stringify({
-    url: args.url,
-    options: normalizeOptions(args.options),
+    url: request.url,
+    options: normalizeOptions(request.options),
   });
 }
 

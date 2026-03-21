@@ -53,7 +53,7 @@ function ScreenCard<T>(props: {
   onFocus: () => void;
   onRemove: () => void;
 }) {
-  const spotlightBodyClassName = [
+  const screenBodyClassName = [
     "screen-spotlight-body",
     props.isFocused && props.displayLogs ? "" : "screen-spotlight-body-no-log",
   ]
@@ -80,7 +80,7 @@ function ScreenCard<T>(props: {
         label={props.stream.title}
         onClick={props.onRemove}
       />
-      <div className={spotlightBodyClassName}>
+      <div className={screenBodyClassName}>
         {props.isFocused && props.displayLogs ? (
           <div className="log-panel log-panel-spotlight">
             <div className="log-entry">{renderLog(props.stream)}</div>
@@ -140,9 +140,9 @@ function ScreenContent<T>(props: {
       .then((params) =>
         ReactDomServer.renderToStaticMarkup(props.host.getIframeDocStrElement(params)),
       )
-      .then((nextSrcDoc) => {
+      .then((renderedSrcDoc) => {
         if (!isActive) return;
-        setSrcDoc(nextSrcDoc);
+        setSrcDoc(renderedSrcDoc);
       })
       .catch((error) => {
         console.error(error);
