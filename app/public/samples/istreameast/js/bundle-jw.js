@@ -121,7 +121,7 @@
           const r = [],
             i = {},
             n = function () {
-              for (; r.length > 0; ) {
+              for (; r.length > 0;) {
                 const { command: t, args: s } = r.shift();
                 (i[t] || e[t]).apply(e, s);
               }
@@ -164,8 +164,8 @@
         "use strict";
         s.d(t, { R: () => i, a: () => r });
         const r = function (e) {
-            return (e.slice && "px" === e.slice(-2) && (e = e.slice(0, -2)), e);
-          },
+          return (e.slice && "px" === e.slice(-2) && (e = e.slice(0, -2)), e);
+        },
           i = function (e, t) {
             if (-1 === t.toString().indexOf("%")) return 0;
             if ("string" != typeof e || !e) return 0;
@@ -193,39 +193,39 @@
             return Object.prototype.hasOwnProperty.call(Object(e), t);
           };
         const h = {
-            autoPause: { viewability: !1, pauseAds: !1 },
-            autostart: !1,
-            allowFullscreen: !0,
-            bandwidthEstimate: null,
-            bitrateSelection: null,
-            castAvailable: !1,
-            controls: !0,
-            cues: [],
-            defaultPlaybackRate: 1,
-            displaydescription: !0,
-            displaytitle: !0,
-            displayPlaybackLabel: !1,
-            enableAdLoadingUI: !0,
-            allowPlaybackWhileHiddenAdLoading: !1,
-            enableShortcuts: !0,
-            floating: { mode: "never" },
-            height: 360,
-            intl: {},
-            item: 0,
-            language: "en",
-            liveTimeout: null,
-            localization: u.Z,
-            mute: !1,
-            nextUpDisplay: !0,
-            playbackRateControls: !1,
-            playbackRates: [0.5, 1, 1.25, 1.5, 2],
-            renderCaptionsNatively: !1,
-            repeat: !1,
-            showUIWhen: "onReady",
-            stretching: "uniform",
-            volume: 90,
-            width: 640,
-          },
+          autoPause: { viewability: !1, pauseAds: !1 },
+          autostart: !1,
+          allowFullscreen: !0,
+          bandwidthEstimate: null,
+          bitrateSelection: null,
+          castAvailable: !1,
+          controls: !0,
+          cues: [],
+          defaultPlaybackRate: 1,
+          displaydescription: !0,
+          displaytitle: !0,
+          displayPlaybackLabel: !1,
+          enableAdLoadingUI: !0,
+          allowPlaybackWhileHiddenAdLoading: !1,
+          enableShortcuts: !0,
+          floating: { mode: "never" },
+          height: 360,
+          intl: {},
+          item: 0,
+          language: "en",
+          liveTimeout: null,
+          localization: u.Z,
+          mute: !1,
+          nextUpDisplay: !0,
+          playbackRateControls: !1,
+          playbackRates: [0.5, 1, 1.25, 1.5, 2],
+          renderCaptionsNatively: !1,
+          repeat: !1,
+          showUIWhen: "onReady",
+          stretching: "uniform",
+          volume: 90,
+          width: 640,
+        },
           d = function (e) {
             return e < 5 ? 5 : e;
           },
@@ -315,7 +315,7 @@
             let _ = v.liveTimeout;
             null !== _ &&
               ((0, o.qh)(_) ? 0 !== _ && (_ = Math.max(30, _)) : (_ = null),
-              (v.liveTimeout = _));
+                (v.liveTimeout = _));
             const S = parseFloat(v.bandwidthEstimate),
               A = parseFloat(v.bitrateSelection);
             var P;
@@ -323,9 +323,9 @@
               (v.bandwidthEstimate = (0, o.qh)(S)
                 ? S
                 : (function (e) {
-                    const t = parseFloat(e);
-                    return (0, o.qh)(t) ? Math.max(t, 1) : h.bandwidthEstimate;
-                  })(v.defaultBandwidthEstimate)),
+                  const t = parseFloat(e);
+                  return (0, o.qh)(t) ? Math.max(t, 1) : h.bandwidthEstimate;
+                })(v.defaultBandwidthEstimate)),
               (v.bitrateSelection = (0, o.qh)(A) ? A : h.bitrateSelection),
               (v.liveSyncDuration = d(v.liveSyncDuration)),
               (v.backgroundLoading = (0, o.jn)(v.backgroundLoading)
@@ -340,7 +340,7 @@
                 );
               })(m, v, a.Features)),
               !1 === v.enableAdLoadingUI &&
-                ((v.backgroundLoading = !0),
+              ((v.backgroundLoading = !0),
                 (v.allowPlaybackWhileHiddenAdLoading =
                   null == (P = m.allowPlaybackWhileHiddenAdLoading) || P)),
               v
@@ -389,24 +389,24 @@
           d = s(8348);
         let g = null;
         const f = function () {
-            const e = window.IntersectionObserverEntry;
-            return (
-              !e ||
-              !("IntersectionObserver" in window) ||
-              !("intersectionRatio" in e.prototype)
-            );
-          },
+          const e = window.IntersectionObserverEntry;
+          return (
+            !e ||
+            !("IntersectionObserver" in window) ||
+            !("intersectionRatio" in e.prototype)
+          );
+        },
           p = function () {
             return (
               f()
                 ? s
-                    .e(943)
-                    .then(
-                      function (e) {
-                        return s(6337);
-                      }.bind(null, s),
-                    )
-                    .catch((0, n.Ep)(h.fU + 120))
+                  .e(943)
+                  .then(
+                    function (e) {
+                      return s(6337);
+                    }.bind(null, s),
+                  )
+                  .catch((0, n.Ep)(h.fU + 120))
                 : Promise.resolve()
             ).then(n.Zq);
           },
@@ -433,11 +433,28 @@
               ? p()
               : t && r && i
                 ? (function () {
+                  const e = s
+                    .e(605)
+                    .then(
+                      function (e) {
+                        s(6337);
+                        const t = s(8653).default;
+                        return (
+                          (c.v.controls = s(1130).default),
+                          (0, l.Z)(s(9181).default),
+                          t
+                        );
+                      }.bind(null, s),
+                    )
+                    .catch((0, n.Ep)(h.fU + 105));
+                  return ((n.Tr.html5 = e), e);
+                })()
+                : t && i
+                  ? (function () {
                     const e = s
-                      .e(605)
+                      .e(207)
                       .then(
                         function (e) {
-                          s(6337);
                           const t = s(8653).default;
                           return (
                             (c.v.controls = s(1130).default),
@@ -446,47 +463,30 @@
                           );
                         }.bind(null, s),
                       )
-                      .catch((0, n.Ep)(h.fU + 105));
+                      .catch((0, n.Ep)(h.fU + 104));
                     return ((n.Tr.html5 = e), e);
                   })()
-                : t && i
-                  ? (function () {
-                      const e = s
-                        .e(207)
-                        .then(
-                          function (e) {
-                            const t = s(8653).default;
-                            return (
-                              (c.v.controls = s(1130).default),
-                              (0, l.Z)(s(9181).default),
-                              t
-                            );
-                          }.bind(null, s),
-                        )
-                        .catch((0, n.Ep)(h.fU + 104));
-                      return ((n.Tr.html5 = e), e);
-                    })()
                   : t && r
                     ? s
-                        .e(493)
+                      .e(493)
+                      .then(
+                        function (e) {
+                          s(6337);
+                          const t = s(8653).default;
+                          return ((c.v.controls = s(1130).default), t);
+                        }.bind(null, s),
+                      )
+                      .catch((0, n.Ep)(h.fU + 103))
+                    : t
+                      ? s
+                        .e(581)
                         .then(
                           function (e) {
-                            s(6337);
                             const t = s(8653).default;
                             return ((c.v.controls = s(1130).default), t);
                           }.bind(null, s),
                         )
-                        .catch((0, n.Ep)(h.fU + 103))
-                    : t
-                      ? s
-                          .e(581)
-                          .then(
-                            function (e) {
-                              const t = s(8653).default;
-                              return ((c.v.controls = s(1130).default), t);
-                            }.bind(null, s),
-                          )
-                          .catch((0, n.Ep)(h.fU + 102))
+                        .catch((0, n.Ep)(h.fU + 102))
                       : p();
           };
         var y = s(1643),
@@ -526,9 +526,9 @@
           A = s(4425),
           P = s(8381);
         const F = function (e, t, s) {
-            const r = e.attributes;
-            ((r.playlist = (0, a.ZP)(t)), (r.feedData = s));
-          },
+          const r = e.attributes;
+          ((r.playlist = (0, a.ZP)(t)), (r.feedData = s));
+        },
           T = function (e) {
             const t = e.get("playlist");
             return new Promise((s, r) => {
@@ -554,21 +554,21 @@
           L = s(6599),
           k = s(7010);
         const R = function (e) {
-            const t = e.get("skin") ? e.get("skin").url : void 0;
-            if (
-              "string" == typeof t &&
-              !(function (e) {
-                const t = document.styleSheets;
-                for (let s = 0, r = t.length; s < r; s++)
-                  if (t[s].href === e) return !0;
-                return !1;
-              })(t)
-            ) {
-              const e = !0;
-              return new v.ZP(t, e).load().catch((e) => e);
-            }
-            return Promise.resolve();
-          },
+          const t = e.get("skin") ? e.get("skin").url : void 0;
+          if (
+            "string" == typeof t &&
+            !(function (e) {
+              const t = document.styleSheets;
+              for (let s = 0, r = t.length; s < r; s++)
+                if (t[s].href === e) return !0;
+              return !1;
+            })(t)
+          ) {
+            const e = !0;
+            return new v.ZP(t, e).load().catch((e) => e);
+          }
+          return Promise.resolve();
+        },
           O = (e) => {
             const t = e.get("advertising");
             return Boolean(null == t ? void 0 : t.outstream);
@@ -577,33 +577,33 @@
             O(e)
               ? Promise.resolve()
               : T(e)
-                  .then(() => {
-                    if (e.get("drm") || (0, I.w0)(e.get("playlist")))
-                      return (0, I.lD)(e.get("edition"));
-                  })
-                  .then(() => {
-                    return T((t = e)).then(() => {
-                      if (B(t)) return;
-                      const e = (0, a.s7)(t.get("playlist"), t);
-                      t.attributes.playlist = e;
-                      try {
-                        (0, a._)(e);
-                      } catch (e) {
-                        throw ((e.code += h.xk), e);
-                      }
-                      const s = t.getProviders(),
-                        r = (0, a.bx)(t.get("item"), e.length),
-                        { provider: i, name: o } = s.choose(e[r].sources[0]);
-                      return "function" == typeof i
-                        ? i
-                        : n.Tr.html5 && "html5" === o
-                          ? n.Tr.html5
-                          : s.load(o).catch((e) => {
-                              throw (0, h.l9)(e, h.y4);
-                            });
-                    });
-                    var t;
-                  }),
+                .then(() => {
+                  if (e.get("drm") || (0, I.w0)(e.get("playlist")))
+                    return (0, I.lD)(e.get("edition"));
+                })
+                .then(() => {
+                  return T((t = e)).then(() => {
+                    if (B(t)) return;
+                    const e = (0, a.s7)(t.get("playlist"), t);
+                    t.attributes.playlist = e;
+                    try {
+                      (0, a._)(e);
+                    } catch (e) {
+                      throw ((e.code += h.xk), e);
+                    }
+                    const s = t.getProviders(),
+                      r = (0, a.bx)(t.get("item"), e.length),
+                      { provider: i, name: o } = s.choose(e[r].sources[0]);
+                    return "function" == typeof i
+                      ? i
+                      : n.Tr.html5 && "html5" === o
+                        ? n.Tr.html5
+                        : s.load(o).catch((e) => {
+                          throw (0, h.l9)(e, h.y4);
+                        });
+                  });
+                  var t;
+                }),
           x = (e) => {
             const t = e.attributes,
               s = t.error;
@@ -621,10 +621,10 @@
                     s.error() ||
                       s.token() !== r.token() ||
                       ((t.key = e),
-                      (t.edition = s.edition()),
-                      (t.error = s.error()));
+                        (t.edition = s.edition()),
+                        (t.error = s.error()));
                   })
-                  .catch(() => {});
+                  .catch(() => { });
             }
             return Promise.resolve();
           },
@@ -648,17 +648,17 @@
             return !(0, S.q2)(s) || (0, S.dl)(o)
               ? Promise.resolve()
               : new Promise((i) =>
-                  (0, S.Dq)(r, s)
-                    .then(({ response: s }) => {
-                      if (!B(e)) {
-                        if (!s) throw new h.rG(null, h.wH);
-                        ((t.localization = (0, S.Mh)(s, o)), i());
-                      }
-                    })
-                    .catch((e) => {
-                      i(e.code === h.wH ? e : (0, h.l9)(e, h.A6));
-                    }),
-                );
+                (0, S.Dq)(r, s)
+                  .then(({ response: s }) => {
+                    if (!B(e)) {
+                      if (!s) throw new h.rG(null, h.wH);
+                      ((t.localization = (0, S.Mh)(s, o)), i());
+                    }
+                  })
+                  .catch((e) => {
+                    i(e.code === h.wH ? e : (0, h.l9)(e, h.A6));
+                  }),
+              );
           },
           q = (e) =>
             new Promise((t) => {
@@ -675,14 +675,14 @@
                 var s, r;
                 const i =
                   null == (s = t.utils) ||
-                  null == (r = s.logger) ||
-                  null == r.child
+                    null == (r = s.logger) ||
+                    null == r.child
                     ? void 0
                     : r.child("loadIdentity");
                 var n, o;
                 ((n = t.utils),
-                (o = e.get("key")),
-                b[o] ||
+                  (o = e.get("key")),
+                  b[o] ||
                   (b[o] = _(n, o)
                     .catch(() => {
                       throw new Error(
@@ -721,43 +721,43 @@
                     null == i || null == i.debug || i.debug(e);
                   });
               })(e, t);
-            } catch (e) {}
+            } catch (e) { }
             try {
               await ((e, t) => {
                 const s = e.get("key"),
                   r = e.get("advertising");
                 return r && r.adscheduleid
                   ? ((e, t) =>
-                      w[t] ||
-                      (w[t] = _(e, t)
-                        .catch(() => {
+                    w[t] ||
+                    (w[t] = _(e, t)
+                      .catch(() => {
+                        throw new Error(
+                          "Override Ad Config Disallowed Due to Entitlement Request Error",
+                        );
+                      })
+                      .then((e) => {
+                        if (!0 !== e.overrideAdConfig)
                           throw new Error(
-                            "Override Ad Config Disallowed Due to Entitlement Request Error",
+                            "Override Ad Config Disallowed Due to Missing Entitlement",
                           );
-                        })
-                        .then((e) => {
-                          if (!0 !== e.overrideAdConfig)
-                            throw new Error(
-                              "Override Ad Config Disallowed Due to Missing Entitlement",
-                            );
-                          return { message: "Override Ad Config Allowed" };
-                        })))(t.utils, s).then(() => {
-                      const t = Object.assign(
-                        { client: "cnx", adscheduleid: r.adscheduleid },
-                        null != r && r.adServer ? { adServer: r.adServer } : {},
-                      );
-                      ((t.overrideAdConfigActive = !0),
-                        e.set("advertising", t),
-                        e.set(
-                          "plugins",
-                          (0, i.qG)(
-                            Object.assign({}, e.attributes, { plugins: {} }),
-                          ),
-                        ));
-                    })
+                        return { message: "Override Ad Config Allowed" };
+                      })))(t.utils, s).then(() => {
+                        const t = Object.assign(
+                          { client: "cnx", adscheduleid: r.adscheduleid },
+                          null != r && r.adServer ? { adServer: r.adServer } : {},
+                        );
+                        ((t.overrideAdConfigActive = !0),
+                          e.set("advertising", t),
+                          e.set(
+                            "plugins",
+                            (0, i.qG)(
+                              Object.assign({}, e.attributes, { plugins: {} }),
+                            ),
+                          ));
+                      })
                   : Promise.resolve();
               })(e, t);
-            } catch (e) {}
+            } catch (e) { }
           };
         var U = s(7642);
         const W = function (e) {
@@ -765,26 +765,26 @@
           ((this.start = function (s) {
             let r;
             const i = z(e, s).then(() => {
-                r = ((e, t) => {
-                  const s = () =>
-                    (function (e, t) {
-                      return (0, A.ZP)(e, t);
-                    })(e, t);
-                  return (0, k.Z)() ? $(e, t).then(s).catch(s) : s();
-                })(e, s);
-                const t = (0, U.k)(e, s);
-                var i;
-                return Promise.all([
-                  ((i = e), g || (g = m(i)), g),
-                  q(e),
-                  r,
-                  t,
-                  M(e),
-                  N(e),
-                  R(e),
-                  j(e),
-                ]);
-              }),
+              r = ((e, t) => {
+                const s = () =>
+                  (function (e, t) {
+                    return (0, A.ZP)(e, t);
+                  })(e, t);
+                return (0, k.Z)() ? $(e, t).then(s).catch(s) : s();
+              })(e, s);
+              const t = (0, U.k)(e, s);
+              var i;
+              return Promise.all([
+                ((i = e), g || (g = m(i)), g),
+                q(e),
+                r,
+                t,
+                M(e),
+                N(e),
+                R(e),
+                j(e),
+              ]);
+            }),
               n = new Promise((e, s) => {
                 t = setTimeout(() => {
                   s(new h.rG(h.pJ, h.T6));
@@ -821,7 +821,7 @@
           Z = s(4742),
           X = s(8494);
         const J = X.Z.logger.child("jwplayer/model/storage");
-        let Y = { removeItem(e) {} };
+        let Y = { removeItem(e) { } };
         try {
           Y = window.localStorage || Y;
         } catch (e) {
@@ -836,8 +836,8 @@
               const s = Y[`${this.namespace}.${t}`];
               return (
                 s &&
-                  (e[t] =
-                    "captions" !== t ? (0, G.serialize)(s) : JSON.parse(s)),
+                (e[t] =
+                  "captions" !== t ? (0, G.serialize)(s) : JSON.parse(s)),
                 e
               );
             }, {});
@@ -873,7 +873,7 @@
             t &&
               t.code &&
               (t.sourceError && oe.error(t.sourceError),
-              oe.error(h.rG.logMessage(t.code)));
+                oe.error(h.rG.logMessage(t.code)));
           },
           ue = function (e) {
             e && e.code && oe.warn(h.rG.logMessage(e.code));
@@ -968,7 +968,7 @@
               (s.getProviders = function () {
                 return new H.Z(a);
               }),
-              (s.setProvider = function () {}));
+              (s.setProvider = function () { }));
             let u = (0, re.Z)();
             {
               s.get("backgroundLoading") ||
@@ -1054,7 +1054,7 @@
               this.setup && this.setup.destroy(),
               this.primeUi && this.primeUi.destroy(),
               this.currentContainer !== this.originalContainer &&
-                le(this, this.originalContainer),
+              le(this, this.originalContainer),
               this.off(),
               (this._events =
                 this._model =
@@ -1062,7 +1062,7 @@
                 this.apiQueue =
                 this.primeUi =
                 this.setup =
-                  null));
+                null));
           },
           getContainer() {
             return this.currentContainer;
@@ -1113,10 +1113,10 @@
           isBeforeComplete: () => !1,
           isBeforePlay: () => !1,
           createInstream: () => null,
-          skipAd() {},
-          getMediaElement() {},
-          attachMedia() {},
-          detachMedia() {},
+          skipAd() { },
+          getMediaElement() { },
+          attachMedia() { },
+          detachMedia() { },
           isReady() {
             var e;
             return (
@@ -1202,8 +1202,8 @@
           }
         }
         const B = function (e, t, s) {
-            return s instanceof T && s.code ? s : new T(e, t, s);
-          },
+          return s instanceof T && s.code ? s : new T(e, t, s);
+        },
           I = function (e, t) {
             const s = B(F, t, e);
             return ((s.code = ((e && e instanceof T && e.code) || 0) + t), s);
@@ -1296,29 +1296,29 @@
           a = function () {
             return (
               n ||
-                (n = i.OS.tizenApp
-                  ? s
-                      .e(74)
-                      .then(
-                        function (e) {
-                          const t = s(3112).default;
-                          return ((o.controls = t), t);
-                        }.bind(null, s),
-                      )
-                      .catch(function () {
-                        ((n = null), (0, r.Jt)(301133)());
-                      })
-                  : s
-                      .e(716)
-                      .then(
-                        function (e) {
-                          const t = s(1130).default;
-                          return ((o.controls = t), t);
-                        }.bind(null, s),
-                      )
-                      .catch(function () {
-                        ((n = null), (0, r.Jt)(301130)());
-                      })),
+              (n = i.OS.tizenApp
+                ? s
+                  .e(74)
+                  .then(
+                    function (e) {
+                      const t = s(3112).default;
+                      return ((o.controls = t), t);
+                    }.bind(null, s),
+                  )
+                  .catch(function () {
+                    ((n = null), (0, r.Jt)(301133)());
+                  })
+                : s
+                  .e(716)
+                  .then(
+                    function (e) {
+                      const t = s(1130).default;
+                      return ((o.controls = t), t);
+                    }.bind(null, s),
+                  )
+                  .catch(function () {
+                    ((n = null), (0, r.Jt)(301130)());
+                  })),
               n
             );
           };
@@ -1333,7 +1333,7 @@
         };
         var n = s(8494);
         const o = navigator.userAgent,
-          a = () => {},
+          a = () => { },
           u = {
             get androidNative() {
               return (0, r.O7)();
@@ -1378,10 +1378,10 @@
                     (-1 !== t.indexOf("rv:")
                       ? (s = t.substring(t.indexOf("rv:") + 3))
                       : -1 !== t.indexOf("MSIE") &&
-                        (s = t.substring(t.indexOf("MSIE") + 5)));
+                      (s = t.substring(t.indexOf("MSIE") + 5)));
                 return (
                   s &&
-                    (-1 !== (n = s.indexOf(";")) && (s = s.substring(0, n)),
+                  (-1 !== (n = s.indexOf(";")) && (s = s.substring(0, n)),
                     -1 !== (n = s.indexOf(" ")) && (s = s.substring(0, n)),
                     -1 !== (n = s.indexOf(")")) && (s = s.substring(0, n)),
                     (r = parseInt(s, 10)),
@@ -1647,14 +1647,14 @@
         "use strict";
         s.d(t, { L4: () => i, OG: () => o, bv: () => r, ni: () => n });
         const r = {
-            audioMode: !1,
-            itemMeta: {},
-            playbackRate: 1,
-            playRejected: !1,
-            state: s(1643).bc,
-            itemReady: !1,
-            controlsEnabled: !1,
-          },
+          audioMode: !1,
+          itemMeta: {},
+          playbackRate: 1,
+          playRejected: !1,
+          state: s(1643).bc,
+          itemReady: !1,
+          controlsEnabled: !1,
+        },
           i = { position: 0, duration: 0, buffer: 0, currentTime: 0 },
           n = 120,
           o = 25;
@@ -1708,22 +1708,22 @@
         s.d(t, { dZ: () => n, my: () => a, qk: () => o, r1: () => i });
         var r = s(2957);
         const i = (e) => {
-            let t = "";
-            return (
-              e &&
-                (e.localName
-                  ? (t = e.localName)
-                  : e.baseName && (t = e.baseName)),
-              t
-            );
-          },
+          let t = "";
+          return (
+            e &&
+            (e.localName
+              ? (t = e.localName)
+              : e.baseName && (t = e.baseName)),
+            t
+          );
+        },
           n = (e) => {
             let t = "";
             return (
               e &&
-                (e.textContent
-                  ? (t = (0, r.fy)(e.textContent))
-                  : e.text && (t = (0, r.fy)(e.text))),
+              (e.textContent
+                ? (t = (0, r.fy)(e.textContent))
+                : e.text && (t = (0, r.fy)(e.text))),
               t
             );
           },
@@ -1736,15 +1736,15 @@
         var r = s(7941),
           i = s(2957);
         const n = (e) => {
-            const t = [];
-            for (let s = 0; s < (0, r.my)(e); s++) {
-              const i = e.childNodes[s];
-              "jwplayer" === i.prefix &&
-                "mediatypes" === (0, r.r1)(i).toLowerCase() &&
-                t.push((0, r.dZ)(i));
-            }
-            return t;
-          },
+          const t = [];
+          for (let s = 0; s < (0, r.my)(e); s++) {
+            const i = e.childNodes[s];
+            "jwplayer" === i.prefix &&
+              "mediatypes" === (0, r.r1)(i).toLowerCase() &&
+              t.push((0, r.dZ)(i));
+          }
+          return t;
+        },
           o = (e) => {
             const t = {
               zh: "Chinese",
@@ -1771,15 +1771,15 @@
                     if (
                       ((0, i.Dc)(l, "duration") &&
                         (t.duration = (0, i.m9)((0, i.Dc)(l, "duration"))),
-                      (0, i.Dc)(l, "url"))
+                        (0, i.Dc)(l, "url"))
                     ) {
                       t.sources || (t.sources = []);
                       const e = {
-                          file: (0, i.Dc)(l, "url"),
-                          type: (0, i.Dc)(l, "type"),
-                          width: (0, i.Dc)(l, "width"),
-                          label: (0, i.Dc)(l, "label"),
-                        },
+                        file: (0, i.Dc)(l, "url"),
+                        type: (0, i.Dc)(l, "type"),
+                        width: (0, i.Dc)(l, "width"),
+                        label: (0, i.Dc)(l, "label"),
+                      },
                         s = n(l);
                       (s.length && (e.mediaTypes = s), t.sources.push(e));
                     }
@@ -1885,8 +1885,8 @@
                   const t = a[e];
                   t.file.length > 0 &&
                     ((t[s] = "true" === a[e][s]),
-                    t.label || delete t.label,
-                    c.sources.push(t));
+                      t.label || delete t.label,
+                      c.sources.push(t));
                 }
               }
               if (u.length) {
@@ -1896,9 +1896,9 @@
                   t.file &&
                     t.file.length > 0 &&
                     ((t[s] = "true" === u[e][s]),
-                    (t.kind = u[e].kind.length ? u[e].kind : "captions"),
-                    t.label || delete t.label,
-                    c.tracks.push(t));
+                      (t.kind = u[e].kind.length ? u[e].kind : "captions"),
+                      t.label || delete t.label,
+                      c.tracks.push(t));
                 }
               }
               return c;
@@ -1975,9 +1975,9 @@
               a(t.sources) ||
               (t.sources = [(0, r.Z)(t.sources)]),
               (a(t.sources) && 0 !== t.sources.length) ||
-                (e.levels
-                  ? (t.sources = e.levels)
-                  : (t.sources = [(0, r.Z)(e)])));
+              (e.levels
+                ? (t.sources = e.levels)
+                : (t.sources = [(0, r.Z)(e)])));
             for (let e = 0; e < t.sources.length; e++) {
               const s = t.sources[e];
               if (!s) continue;
@@ -1990,7 +1990,7 @@
               (t.sources = t.sources.filter(Boolean)),
               a(t.tracks) || (t.tracks = []),
               a(t.captions) &&
-                ((t.tracks = t.tracks.concat(t.captions)), delete t.captions),
+              ((t.tracks = t.tracks.concat(t.captions)), delete t.captions),
               (t.tracks = t.tracks.map(n).filter(Boolean)),
               t
             );
@@ -2024,7 +2024,7 @@
                   );
                   if (
                     (a && "xml" === (0, i.r1)(a) && (a = a.nextSibling),
-                    a && "rss" === (0, i.r1)(a))
+                      a && "rss" === (0, i.r1)(a))
                   ) {
                     const e = (0, n.Z)(a);
                     o = Object.assign({ playlist: e }, e.feedData);
@@ -2128,17 +2128,17 @@
               a = Object.assign({}, t);
             if (
               ((a.preload = i(t.preload, n)),
-              (a.allSources = g(d(a, e))),
-              (a.sources = f(a.allSources, r)),
-              a.sources.length)
+                (a.allSources = g(d(a, e))),
+                (a.sources = f(a.allSources, r)),
+                a.sources.length)
             )
               return (
                 (a.file = a.sources[0].file),
                 (a.feedData = s),
                 o &&
-                  -1 !== o &&
-                  e.get("generateSEOMetadata") &&
-                  (a.starttime = o),
+                -1 !== o &&
+                e.get("generateSEOMetadata") &&
+                (a.starttime = o),
                 ((e) => {
                   const t = e.sources[0].liveSyncDuration;
                   return (t && (e.liveSyncDuration = e.dvrSeekLimit = t), e);
@@ -2177,12 +2177,12 @@
             n = t.type;
           if (
             (s.test(n) && ((t.mimeType = n), (t.type = n.replace(s, "$1"))),
-            (0, r.isYouTube)(t.file)
-              ? (t.type = "youtube")
-              : (0, r.isRtmp)(t.file)
-                ? (t.type = "rtmp")
-                : t.type || (t.type = (0, i.AO)(t.file)),
-            t.type)
+              (0, r.isYouTube)(t.file)
+                ? (t.type = "youtube")
+                : (0, r.isRtmp)(t.file)
+                  ? (t.type = "rtmp")
+                  : t.type || (t.type = (0, i.AO)(t.file)),
+              t.type)
           ) {
             switch (t.type) {
               case "m3u8":
@@ -2216,13 +2216,13 @@
           o = s(4446),
           a = s(7164);
         const u = function (e) {
-            if ("string" != typeof e) return;
-            const t = (e = e.split("?")[0]).indexOf("://");
-            if (t > 0) return 0;
-            const s = e.indexOf("/"),
-              r = (0, n.AO)(e);
-            return !(t < 0 && s < 0) || (r && isNaN(r)) ? 1 : 2;
-          },
+          if ("string" != typeof e) return;
+          const t = (e = e.split("?")[0]).indexOf("://");
+          if (t > 0) return 0;
+          const s = e.indexOf("/"),
+            r = (0, n.AO)(e);
+          return !(t < 0 && s < 0) || (r && isNaN(r)) ? 1 : 2;
+        },
           l = function (e) {
             ((this.url = e), (this.promise_ = null));
           };
@@ -2231,7 +2231,7 @@
             get() {
               return this.load();
             },
-            set() {},
+            set() { },
           },
         }),
           Object.assign(l.prototype, {
@@ -2275,9 +2275,9 @@
                       e
                         ? this.trigger("pluginInitialized", n)
                         : setTimeout(
-                            () => this.trigger("pluginInitialized", n),
-                            0,
-                          ),
+                          () => this.trigger("pluginInitialized", n),
+                          0,
+                        ),
                       i
                     );
                 }),
@@ -2297,10 +2297,10 @@
         var r = s(5950);
         s(1569);
         const i = function (e) {
-            const t = /\/((.(?!\/))+?)\.js/i.exec(e),
-              s = (null == t ? void 0 : t[1]) || e;
-            return s && "jwpsrv-dnt" === s ? "jwpsrv" : s;
-          },
+          const t = /\/((.(?!\/))+?)\.js/i.exec(e),
+            s = (null == t ? void 0 : t[1]) || e;
+          return s && "jwpsrv-dnt" === s ? "jwpsrv" : s;
+        },
           n = function (e) {
             let t = 305e3;
             if (!e) return t;
@@ -2373,9 +2373,9 @@
               t.setAttribute("webkit-playsinline", ""),
               t.setAttribute("playsinline", ""),
               e &&
-                Object.keys(e).forEach((s) => {
-                  t.setAttribute(s, e[s]);
-                }),
+              Object.keys(e).forEach((s) => {
+                t.setAttribute(s, e[s]);
+              }),
               t
             );
           };
@@ -2458,7 +2458,7 @@
         s.d(t, { Z: () => u });
         var r = s(1643),
           i = s(1384);
-        const n = function () {},
+        const n = function () { },
           o = () => !1,
           a = { name: "default" },
           u = {
@@ -2520,17 +2520,17 @@
         s.d(t, { Gb: () => c, d3: () => h, lD: () => l, w0: () => u });
         var r = s(462);
         const i = [
-            { configName: "clearkey", keyName: "org.w3.clearkey" },
-            { configName: "widevine", keyName: "com.widevine.alpha" },
-            { configName: "playready", keyName: "com.microsoft.playready" },
-          ],
+          { configName: "clearkey", keyName: "org.w3.clearkey" },
+          { configName: "widevine", keyName: "com.widevine.alpha" },
+          { configName: "playready", keyName: "com.microsoft.playready" },
+        ],
           n = [],
           o = {};
         let a;
         const u = (e) =>
-            e.some(
-              (e) => Boolean(e.drm) || e.sources.some((e) => Boolean(e.drm)),
-            ),
+          e.some(
+            (e) => Boolean(e.drm) || e.sources.some((e) => Boolean(e.drm)),
+          ),
           l = (e) =>
             a ||
             (((Boolean(navigator.requestMediaKeySystemAccess) &&
@@ -2538,9 +2538,9 @@
                 window.MediaKeySystemAccess.prototype.getConfiguration,
               )) ||
               Boolean(window.MSMediaKeys)) &&
-            (0, r.Z)(e)("drm")
+              (0, r.Z)(e)("drm")
               ? (i.forEach((e) => {
-                  const t = ((s = e.keyName),
+                const t = ((s = e.keyName),
                   (r = [
                     {
                       initDataTypes: ["cenc"],
@@ -2555,23 +2555,23 @@
                   navigator.requestMediaKeySystemAccess
                     ? navigator.requestMediaKeySystemAccess(s, r)
                     : new Promise((e, t) => {
-                        let r;
-                        try {
-                          r = new window.MSMediaKeys(s);
-                        } catch (e) {
-                          return void t(e);
-                        }
-                        e(r);
-                      }))
-                    .then(function () {
-                      o[e.configName] = !0;
-                    })
-                    .catch(function () {
-                      o[e.configName] = !1;
-                    });
-                  var s, r;
-                  n.push(t);
-                }),
+                      let r;
+                      try {
+                        r = new window.MSMediaKeys(s);
+                      } catch (e) {
+                        return void t(e);
+                      }
+                      e(r);
+                    }))
+                  .then(function () {
+                    o[e.configName] = !0;
+                  })
+                  .catch(function () {
+                    o[e.configName] = !1;
+                  });
+                var s, r;
+                n.push(t);
+              }),
                 (a = Promise.all(n)),
                 a)
               : Promise.resolve()),
@@ -2587,8 +2587,8 @@
         const i = (e) =>
           "hls" === e.type && r.OS.android
             ? !1 !== e.androidhls &&
-              !r.Browser.firefox &&
-              parseFloat(r.OS.version.version || "0") >= 4.4
+            !r.Browser.firefox &&
+            parseFloat(r.OS.version.version || "0") >= 4.4
             : null;
       },
       12: (e, t, s) => {
@@ -2628,15 +2628,15 @@
           a = s(462),
           u = s(599);
         const l = (e) => {
-            var t;
-            (null != (t = e) && t.length && Array.isArray(e)) ||
-              (e = ['video/mp4;codecs="avc1.4d400d,mp4a.40.2"']);
-            const s = window.MediaSource;
-            return (
-              !(!s || !s.isTypeSupported) &&
-              e.every((e) => s.isTypeSupported(e))
-            );
-          },
+          var t;
+          (null != (t = e) && t.length && Array.isArray(e)) ||
+            (e = ['video/mp4;codecs="avc1.4d400d,mp4a.40.2"']);
+          const s = window.MediaSource;
+          return (
+            !(!s || !s.isTypeSupported) &&
+            e.every((e) => s.isTypeSupported(e))
+          );
+        },
           c = (e) =>
             /hls|m3u8/.test(
               ((null == e ? void 0 : e.type) || "").toLowerCase(),
@@ -2689,10 +2689,10 @@
               supports: (e) => {
                 if (e.drm || !c(e)) return !1;
                 const t = Boolean(
-                    null == n.Z || null == n.Z.canPlayType
-                      ? void 0
-                      : n.Z.canPlayType("application/vnd.apple.mpegURL"),
-                  ),
+                  null == n.Z || null == n.Z.canPlayType
+                    ? void 0
+                    : n.Z.canPlayType("application/vnd.apple.mpegURL"),
+                ),
                   s =
                     "boolean" == typeof (null == e ? void 0 : e.safarihlsjs) &&
                     e.safarihlsjs;
@@ -2742,37 +2742,37 @@
           n = s(670),
           o = s(2894);
         const a = {
-            html5: () =>
-              s
-                .e(250)
-                .then(
-                  function (e) {
-                    const t = s(9181).default;
-                    return ((0, n.Z)(t), t);
-                  }.bind(null, s),
-                )
-                .catch((0, o.Ep)(152)),
-            shaka: () =>
-              s
-                .e(371)
-                .then(
-                  function (e) {
-                    const t = s(2287).default;
-                    return ((0, n.Z)(t), t);
-                  }.bind(null, s),
-                )
-                .catch((0, o.Ep)(154)),
-            hlsjs: () =>
-              s
-                .e(98)
-                .then(
-                  function (e) {
-                    const t = s(9054).default;
-                    return ((0, n.Z)(t), t);
-                  }.bind(null, s),
-                )
-                .catch((0, o.Ep)(153)),
-          },
+          html5: () =>
+            s
+              .e(250)
+              .then(
+                function (e) {
+                  const t = s(9181).default;
+                  return ((0, n.Z)(t), t);
+                }.bind(null, s),
+              )
+              .catch((0, o.Ep)(152)),
+          shaka: () =>
+            s
+              .e(371)
+              .then(
+                function (e) {
+                  const t = s(2287).default;
+                  return ((0, n.Z)(t), t);
+                }.bind(null, s),
+              )
+              .catch((0, o.Ep)(154)),
+          hlsjs: () =>
+            s
+              .e(98)
+              .then(
+                function (e) {
+                  const t = s(9054).default;
+                  return ((0, n.Z)(t), t);
+                }.bind(null, s),
+              )
+              .catch((0, o.Ep)(153)),
+        },
           u = function (e) {
             this.config = e || {};
           };
@@ -2847,26 +2847,26 @@
         "use strict";
         s.d(t, { b: () => d, k: () => g });
         let r = class e {
-            static normalizeVersion(e, t) {
-              return e
-                .trim()
-                .replace(/^v/i, "")
-                .split(".")
-                .map(parseFloat)
-                .filter((e) => !Number.isNaN(e))
-                .join(t);
-            }
-            static generateCacheKey(t, s) {
-              return `${t}@@${e.normalizeVersion(s, ".")}`;
-            }
-            static makePromise() {
-              let e, t;
-              const s = new Promise((s, r) => {
-                ((e = s), (t = r));
-              });
-              return ((s.resolve = e), (s.reject = t), s);
-            }
-          },
+          static normalizeVersion(e, t) {
+            return e
+              .trim()
+              .replace(/^v/i, "")
+              .split(".")
+              .map(parseFloat)
+              .filter((e) => !Number.isNaN(e))
+              .join(t);
+          }
+          static generateCacheKey(t, s) {
+            return `${t}@@${e.normalizeVersion(s, ".")}`;
+          }
+          static makePromise() {
+            let e, t;
+            const s = new Promise((s, r) => {
+              ((e = s), (t = r));
+            });
+            return ((s.resolve = e), (s.reject = t), s);
+          }
+        },
           i = class {
             get key() {
               return r.generateCacheKey(this.name, this.version);
@@ -2890,7 +2890,7 @@
           addOverrides(e) {
             if (
               (Array.isArray(e) || "object" != typeof e || (e = [e]),
-              !Array.isArray(e))
+                !Array.isArray(e))
             )
               throw Error(
                 "addOverrides only accepts an array of object or a single object",
@@ -2908,7 +2908,7 @@
           delOverrides(e) {
             if (
               (Array.isArray(e) || "object" != typeof e || (e = [e]),
-              !Array.isArray(e))
+                !Array.isArray(e))
             )
               throw Error(
                 "delOverrides only accepts an array of object or a single object",
@@ -2977,7 +2977,7 @@
               o = r.generateCacheKey(e, i);
             this._serviceCache.has(o) ||
               (this._serviceCache.set(o, s),
-              this._maybeResolveOtherPending(e, t, i));
+                this._maybeResolveOtherPending(e, t, i));
           }
           _maybeResolveOtherPending(e, t, s) {
             const r = this._pendingQueue.get(e);
@@ -3020,10 +3020,10 @@
               (clearTimeout(e.timeoutId),
                 e.scriptElement && (e.scriptElement.onerror = null));
               const n = (
-                  null == e || null == (s = e.scriptElement) ? void 0 : s.src
-                )
-                  ? ` at ${e.scriptElement.src}`
-                  : "",
+                null == e || null == (s = e.scriptElement) ? void 0 : s.src
+              )
+                ? ` at ${e.scriptElement.src}`
+                : "",
                 o = (null == t ? void 0 : t.message)
                   ? ` with error: ${t.message}`
                   : "";
@@ -3049,12 +3049,12 @@
             if (
               ((this._baseUrl =
                 t || "https://ssl.p.jwpcdn.com/player/services"),
-              (this._global = s || window),
-              (this._overrides = new Map()),
-              (this._pendingQueue = new Map()),
-              (this._loadingEntries = new Map()),
-              (this._serviceCache = new Map()),
-              this._global.location)
+                (this._global = s || window),
+                (this._overrides = new Map()),
+                (this._pendingQueue = new Map()),
+                (this._loadingEntries = new Map()),
+                (this._serviceCache = new Map()),
+                this._global.location)
             ) {
               const e = new URL(this._global.location.href).searchParams.getAll(
                 "jwpcslOverride",
@@ -3095,18 +3095,18 @@
           return Object.prototype.hasOwnProperty.call(Object(e), t);
         };
         const d = async (e, t, s, r) => {
-            const i = a.getServiceLoader(),
-              { name: n, version: o, cfgKey: u } = s;
-            t.set(`services.${n}`, "loading");
-            const l = Object.assign({}, r || {});
-            l.client &&
-              (i.addOverrides({ name: n, client: l.client }), delete l.client);
-            const h = await i.getService(n, o);
-            if (t.attributes._destroyed) return;
-            const d = ((e, t, s) => (c[s] ? c[s](e, t) : [e, t]))(e, l, u),
-              g = await h.register("player", ...d);
-            t.attributes._destroyed || t.set(`services.${n}`, g);
-          },
+          const i = a.getServiceLoader(),
+            { name: n, version: o, cfgKey: u } = s;
+          t.set(`services.${n}`, "loading");
+          const l = Object.assign({}, r || {});
+          l.client &&
+            (i.addOverrides({ name: n, client: l.client }), delete l.client);
+          const h = await i.getService(n, o);
+          if (t.attributes._destroyed) return;
+          const d = ((e, t, s) => (c[s] ? c[s](e, t) : [e, t]))(e, l, u),
+            g = await h.register("player", ...d);
+          t.attributes._destroyed || t.set(`services.${n}`, g);
+        },
           g = async function (e, t) {
             const s = t.getConfig(),
               r = [];
@@ -3175,7 +3175,7 @@
         var r = s(9888),
           i = s(7034),
           n = s(4446);
-        const o = function () {},
+        const o = function () { },
           a = (e) => {
             ((e.onload = null),
               (e.onprogress = null),
@@ -3225,7 +3225,7 @@
                 if (o)
                   try {
                     t = o.firstChild;
-                  } catch (e) {}
+                  } catch (e) { }
                 if (o && t) return l(s, o, e);
                 var i;
                 if (
@@ -3233,7 +3233,7 @@
                   s.responseText &&
                   !o &&
                   ((o = (0, r.parseXML)(s.responseText)),
-                  null != (i = o) && i.firstChild)
+                    null != (i = o) && i.firstChild)
                 )
                   return l(s, o, e);
                 if (e.requireValidXML) return void u(e, n.ul, 602);
@@ -3246,28 +3246,28 @@
           let d;
           e === Object(e) && (e = (r = e).url);
           const g = Object.assign(
-              {
-                xhr: null,
-                url: e,
-                withCredentials: !1,
-                retryWithoutCredentials: !1,
-                timeout: 6e4,
-                timeoutId: -1,
-                oncomplete: t || o,
-                onerror: s || o,
-                mimeType: r && !r.responseType ? "text/xml" : "",
-                requireValidXML: !1,
-                responseType: null != (l = r) && l.plainText ? "text" : "",
-                useDomParser: !1,
-                requestFilter: null,
-              },
-              r,
-            ),
+            {
+              xhr: null,
+              url: e,
+              withCredentials: !1,
+              retryWithoutCredentials: !1,
+              timeout: 6e4,
+              timeoutId: -1,
+              oncomplete: t || o,
+              onerror: s || o,
+              mimeType: r && !r.responseType ? "text/xml" : "",
+              requireValidXML: !1,
+              responseType: null != (l = r) && l.plainText ? "text" : "",
+              useDomParser: !1,
+              requestFilter: null,
+            },
+            r,
+          ),
             f = h("Error loading file", g);
           if ("XMLHttpRequest" in window) {
             if (
               ((d = g.xhr = g.xhr || new window.XMLHttpRequest()),
-              "function" == typeof g.requestFilter)
+                "function" == typeof g.requestFilter)
             ) {
               let t;
               try {
@@ -3307,12 +3307,12 @@
             if (g.responseType)
               try {
                 d.responseType = g.responseType;
-              } catch (e) {}
+              } catch (e) { }
             return (
               g.timeout &&
-                ((g.timeoutId = setTimeout(function () {
-                  (a(d), u(g, n.ud, 1));
-                }, g.timeout)),
+              ((g.timeoutId = setTimeout(function () {
+                (a(d), u(g, n.ud, 1));
+              }, g.timeout)),
                 (d.onabort = function () {
                   clearTimeout(g.timeoutId);
                 })),
@@ -3326,7 +3326,7 @@
             const r = e.currentTarget || t.xhr;
             if (
               (clearTimeout(t.timeoutId),
-              t.retryWithoutCredentials && t.xhr.withCredentials)
+                t.retryWithoutCredentials && t.xhr.withCredentials)
             ) {
               a(r);
               const e = Object.assign({}, t, {
@@ -3360,7 +3360,7 @@
           o = (e, t, s, r) => {
             let i = -1;
             const o = e.length;
-            for (; ++i < o; ) {
+            for (; ++i < o;) {
               const o = e[i];
               if (r)
                 try {
@@ -3532,24 +3532,24 @@
             return (
               i.forEach((n, a) => {
                 const u = ((e, t = "en") => {
-                    let s = (0, r.G3)();
-                    const i = Object.keys(e.title),
-                      n = i[0];
-                    for (; !e.title[s]; ) {
-                      const e = i.find(o(s));
-                      if (e) {
-                        s = e;
-                        break;
-                      }
-                      const t = s.lastIndexOf("-");
-                      if (t <= 0) {
-                        s = null;
-                        break;
-                      }
-                      s = s.slice(0, t);
+                  let s = (0, r.G3)();
+                  const i = Object.keys(e.title),
+                    n = i[0];
+                  for (; !e.title[s];) {
+                    const e = i.find(o(s));
+                    if (e) {
+                      s = e;
+                      break;
                     }
-                    return s || (i.indexOf(t) >= 0 ? t : n);
-                  })(n, e.defaultLanguage),
+                    const t = s.lastIndexOf("-");
+                    if (t <= 0) {
+                      s = null;
+                      break;
+                    }
+                    s = s.slice(0, t);
+                  }
+                  return s || (i.indexOf(t) >= 0 ? t : n);
+                })(n, e.defaultLanguage),
                   l = n.title[u],
                   c = n.time,
                   h = n.image;
@@ -3588,8 +3588,8 @@
                 e &&
                   (e.defaultLanguage && e.timestamps
                     ? e.timestamps.some(
-                        (e) => !e.title || null === e.time || void 0 === e.time,
-                      ) && (s = !1)
+                      (e) => !e.title || null === e.time || void 0 === e.time,
+                    ) && (s = !1)
                     : (s = !1));
               }),
               t(s ? null : (0, n.l9)(new Error(), n.aD))
@@ -3847,16 +3847,16 @@
               );
             e =
               null !=
-              (r = ((e) => {
-                let t = 0,
-                  s = g;
-                for (; s && t < e.length; ) {
-                  if (((s = s[e[t]]), t++, !s)) return null;
-                  if ("string" == typeof s) return s;
-                  if ((s.$ && (t += s.$), t === e.length && s._)) return s._;
-                }
-                return null;
-              })((e = e.toUpperCase().replace("GREY", "GRAY"))))
+                (r = ((e) => {
+                  let t = 0,
+                    s = g;
+                  for (; s && t < e.length;) {
+                    if (((s = s[e[t]]), t++, !s)) return null;
+                    if ("string" == typeof s) return s;
+                    if ((s.$ && (t += s.$), t === e.length && s._)) return s._;
+                  }
+                  return null;
+                })((e = e.toUpperCase().replace("GREY", "GRAY"))))
                 ? r
                 : e;
             for (let t = 0; t < m.length; t++) {
@@ -3914,7 +3914,7 @@
         const a = (e, t) => e.classList.contains(t),
           u = (e) => {
             const t = e.querySelectorAll("script,object,iframe,meta");
-            for (let e = t.length; e--; ) {
+            for (let e = t.length; e--;) {
               const s = t[e];
               s.parentNode.removeChild(s);
             }
@@ -3924,12 +3924,12 @@
             /^((((https?):\/\/)|(mailto:))(%[0-9A-Fa-f]{2}|[-()_.!~*';/?:@&=+$,A-Za-z0-9])+)([).!';/?:,][[:blank:|:blank:]])?$/,
           c = (e) => {
             const t = e.attributes;
-            for (let s = t.length; s--; ) {
+            for (let s = t.length; s--;) {
               const r = t[s].name,
                 i = t[s].value;
               (/^\s*(javascript(:|&colon;))/.test(i) &&
                 (e.removeAttribute(r),
-                o.Z.logger.warn("jwplayer/utils/dom: Invalid or unsafe URL")),
+                  o.Z.logger.warn("jwplayer/utils/dom: Invalid or unsafe URL")),
                 /^on/.test(r) && e.removeAttribute(r));
             }
             return e;
@@ -3944,7 +3944,7 @@
             })(e);
             u(t);
             const s = t.querySelectorAll("*");
-            for (let e = s.length; e--; ) {
+            for (let e = s.length; e--;) {
               const t = s[e];
               c(t);
             }
@@ -3952,7 +3952,7 @@
           },
           d = (e) => h(e).firstChild,
           g = (e) => {
-            for (; e.firstChild; ) e.removeChild(e.firstChild);
+            for (; e.firstChild;) e.removeChild(e.firstChild);
           },
           f = (e, t) => {
             (g(e),
@@ -4037,12 +4037,12 @@
               (i = c(Object.assign(i, s))),
               n.Browser.firefox
                 ? i.dispatchEvent(
-                    new MouseEvent("click", {
-                      bubbles: !0,
-                      cancelable: !0,
-                      view: window,
-                    }),
-                  )
+                  new MouseEvent("click", {
+                    bubbles: !0,
+                    cancelable: !0,
+                    view: window,
+                  }),
+                )
                 : i.click());
           },
           I = () => {
@@ -4117,7 +4117,7 @@
         const m =
           "function" == typeof console.log
             ? console.log.bind(console)
-            : () => {};
+            : () => { };
         var y = s(6234),
           D = s(8762),
           v = function (e, t) {
@@ -4186,7 +4186,7 @@
             seconds: o.m9,
             prefix: o.O4,
             suffix: o.uA,
-            noop: () => {},
+            noop: () => { },
           });
       },
       7543: (e, t, s) => {
@@ -4235,7 +4235,7 @@
             try {
               (e >= o.LOG_LEVEL && console[t](`[${this._namespace}]:`, ...s),
                 o.LOG_HISTORY.length >= o.MAX_LOG_HISTORY &&
-                  o.LOG_HISTORY.shift(),
+                o.LOG_HISTORY.shift(),
                 o.LOG_HISTORY.push([
                   new Date(),
                   t.toUpperCase(),
@@ -4512,34 +4512,34 @@
           };
         v.mock_ = null;
         const E = [
-            "ar",
-            "da",
-            "de",
-            "el",
-            "es",
-            "fi",
-            "fr",
-            "he",
-            "id",
-            "it",
-            "ja",
-            "ko",
-            "nb",
-            "nl",
-            "nn",
-            "no",
-            "oc",
-            "pt",
-            "ro",
-            "ru",
-            "sl",
-            "sv",
-            "th",
-            "tr",
-            "vi",
-            "zh-tw",
-            "zh",
-          ],
+          "ar",
+          "da",
+          "de",
+          "el",
+          "es",
+          "fi",
+          "fr",
+          "he",
+          "id",
+          "it",
+          "ja",
+          "ko",
+          "nb",
+          "nl",
+          "nn",
+          "no",
+          "oc",
+          "pt",
+          "ro",
+          "ru",
+          "sl",
+          "sv",
+          "th",
+          "tr",
+          "vi",
+          "zh-tw",
+          "zh",
+        ],
           C = (e) =>
             8207 === e.charCodeAt(0) ||
             /^[\u0591-\u07FF\uFB1D-\uFDFD\uFE70-\uFEFC]/.test(e),
@@ -4548,34 +4548,34 @@
           };
         b.mock_ = null;
         const w = (e, t, s) => {
-            const r = e[s] || t[s];
-            r && (e[s] = r);
-          },
+          const r = e[s] || t[s];
+          r && (e[s] = r);
+        },
           _ = (e, t, s) =>
             Object.assign(
               {},
               ((e) => {
                 const {
-                    advertising: t,
-                    related: s,
-                    sharing: r,
-                    abouttext: i,
-                  } = e,
+                  advertising: t,
+                  related: s,
+                  sharing: r,
+                  abouttext: i,
+                } = e,
                   n = Object.assign({}, e.localization);
                 (t &&
                   ((n.advertising = n.advertising || {}),
-                  w(n.advertising, t, "admessage"),
-                  w(n.advertising, t, "cuetext"),
-                  w(n.advertising, t, "loadingAd"),
-                  w(n.advertising, t, "podmessage"),
-                  w(n.advertising, t, "skipmessage"),
-                  w(n.advertising, t, "skiptext")),
+                    w(n.advertising, t, "admessage"),
+                    w(n.advertising, t, "cuetext"),
+                    w(n.advertising, t, "loadingAd"),
+                    w(n.advertising, t, "podmessage"),
+                    w(n.advertising, t, "skipmessage"),
+                    w(n.advertising, t, "skiptext")),
                   "string" == typeof n.related
                     ? (n.related = { heading: n.related })
                     : (n.related = n.related || {}),
                   s && w(n.related, s, "autoplaymessage"),
                   r &&
-                    ((n.sharing = n.sharing || {}),
+                  ((n.sharing = n.sharing || {}),
                     w(n.sharing, r, "heading"),
                     w(n.sharing, r, "copied")),
                   i && w(n, e, "abouttext"));
@@ -4589,10 +4589,10 @@
             return "boolean" == typeof S.mock_
               ? S.mock_
               : (0, o.isDeepKeyCompliant)(
-                  a.Z,
-                  e,
-                  (e, t) => "string" == typeof t[e],
-                );
+                a.Z,
+                e,
+                (e, t) => "string" == typeof t[e],
+              );
           };
         S.mock_ = null;
         const A = function (e, t) {
@@ -4616,8 +4616,8 @@
         };
         A.mock_ = null;
         const P = (e, t, s, r) => {
-            e[t] = Object.assign({}, a.Z[t], s[t], r[t]);
-          },
+          e[t] = Object.assign({}, a.Z[t], s[t], r[t]);
+        },
           F = (e, t) => {
             const s = Object.assign({}, a.Z, e, t);
             return (
@@ -4659,7 +4659,7 @@
             try {
               ((t = new window.DOMParser().parseFromString(e, "text/xml")),
                 t.querySelector("parsererror") && (t = null));
-            } catch (e) {}
+            } catch (e) { }
             return t;
           },
           u = (e) => {
@@ -4684,7 +4684,7 @@
           c = (e, t) => {
             if (
               ((0, r.i2)(e) && (e = parseInt(e.toString(), 10)),
-              (0, r.i2)(e) || !isFinite(e) || (e <= 0 && !t))
+                (0, r.i2)(e) || !isFinite(e) || (e <= 0 && !t))
             )
               return "00:00";
             const s = e < 0 ? "-" : "";
@@ -4697,7 +4697,7 @@
           h = (e) => {
             if (
               ((0, r.i2)(e) && (e = parseInt(e.toString(), 10)),
-              (0, r.i2)(e) || !isFinite(e) || e <= 0)
+                (0, r.i2)(e) || !isFinite(e) || e <= 0)
             )
               return "0 seconds";
             const t = Math.floor(e / 3600),
@@ -4723,18 +4723,18 @@
         var r = s(6601),
           i = s(7034);
         const n = function (e) {
-            {
-              const t = document.getElementsByTagName("script");
-              for (let s = 0; s < t.length; s++) {
-                const r = t[s].src;
-                if (r) {
-                  const t = r.lastIndexOf(`/${e}`);
-                  if (t >= 0) return r.substr(0, t + 1);
-                }
+          {
+            const t = document.getElementsByTagName("script");
+            for (let s = 0; s < t.length; s++) {
+              const r = t[s].src;
+              if (r) {
+                const t = r.lastIndexOf(`/${e}`);
+                if (t >= 0) return r.substr(0, t + 1);
               }
             }
-            return "";
-          },
+          }
+          return "";
+        },
           o = function () {
             const e = "/jwp/8.38.10";
             return `${e && (0, i.isFileProtocol)() ? "https:" : ""}${e}`;
@@ -4770,7 +4770,7 @@
           },
           o = (e) => {
             let t = "";
-            for (; t.length < e; ) t += n();
+            for (; t.length < e;) t += n();
             return t.slice(0, e);
           };
       },
@@ -4810,8 +4810,8 @@
             const r = this;
             let u = 0;
             const l = (e) => {
-                ((u = 2), r.trigger(i.pn, e).off());
-              },
+              ((u = 2), r.trigger(i.pn, e).off());
+            },
               c = (e) => {
                 ((u = 3), r.trigger(i.xQ, e).off());
               };
@@ -4822,14 +4822,14 @@
                 let r = n[e];
                 return (
                   0 !== u ||
-                    (r && r.then(c).catch(l),
+                  (r && r.then(c).catch(l),
                     (u = 1),
                     (r = new Promise((r, i) => {
                       const n = (t ? o : a)(e, s);
                       let u;
                       const h = function () {
-                          ((n.onerror = n.onload = null), clearTimeout(u));
-                        },
+                        ((n.onerror = n.onload = null), clearTimeout(u));
+                      },
                         d = function (e) {
                           (h(), l(e), i(e));
                         };
@@ -4873,7 +4873,7 @@
         const i = window.parseFloat,
           n = (e) => e.replace(/^\s+|\s+$/g, ""),
           o = (e, t, s) => {
-            for (e = `${e}`, s = s || "0"; e.length < t; ) e = s + e;
+            for (e = `${e}`, s = s || "0"; e.length < t;) e = s + e;
             return e;
           },
           a = (e, t) => {
@@ -4949,28 +4949,28 @@
           m = !!p && { passive: !0 };
         let y, D;
         const v = (e, t, s) => {
-            const { el: r } = e,
-              i = ((e, t, s) => {
-                const { target: r, touches: i, changedTouches: n } = t;
-                let o,
-                  { pointerType: a } = t;
-                i || n
-                  ? ((o = null != i && i.length ? i[0] : n[0]),
-                    (a = a || "touch"))
-                  : ((o = t), (a = a || "mouse"));
-                const { pageX: u, pageY: l } = o;
-                return {
-                  type: e,
-                  pointerType: a,
-                  pageX: u,
-                  pageY: l,
-                  sourceEvent: t,
-                  currentTarget: s,
-                  target: r,
-                };
-              })(t, s, r);
-            e.trigger(t, i);
-          },
+          const { el: r } = e,
+            i = ((e, t, s) => {
+              const { target: r, touches: i, changedTouches: n } = t;
+              let o,
+                { pointerType: a } = t;
+              i || n
+                ? ((o = null != i && i.length ? i[0] : n[0]),
+                  (a = a || "touch"))
+                : ((o = t), (a = a || "mouse"));
+              const { pageX: u, pageY: l } = o;
+              return {
+                type: e,
+                pointerType: a,
+                pageX: u,
+                pageY: l,
+                sourceEvent: t,
+                currentTarget: s,
+                target: r,
+              };
+            })(t, s, r);
+          e.trigger(t, i);
+        },
           E = (e, t, s) => {
             const { el: r } = e,
               { target: i } = s;
@@ -5014,8 +5014,8 @@
                   ? n.removeEventListener(e, o[e], t)
                   : n.removeEventListener(e, o[e]);
               }),
-              (r[t] = null),
-              (i[t] = null));
+                (r[t] = null),
+                (i[t] = null));
           },
           S = (e) =>
             !(!Boolean(e.ctrlKey) || "click" !== e.type) ||
@@ -5023,7 +5023,7 @@
           A = (e, t) => {
             if (
               (D || (D = new R(document).on("interaction")),
-              e.handlers[d] || e.handlers[g])
+                e.handlers[d] || e.handlers[g])
             )
               return;
             const { el: s } = e;
@@ -5048,8 +5048,8 @@
                 S(s) ||
                   (Boolean(e.directSelect) && r !== t) ||
                   (s.isPrimary && "BUTTON" === r.tagName && r.focus(),
-                  (e.lastStart = (0, o.z)()),
-                  (e.clicking = !0));
+                    (e.lastStart = (0, o.z)()),
+                    (e.clicking = !0));
               }),
               b(e, g, "click", (s) => {
                 S(s) ||
@@ -5061,8 +5061,8 @@
                           ? (v(e, i.P, t), (e.lastClick = 0))
                           : (e.lastClick = (0, o.z)()));
                     })(e, s),
-                    v(e, i.ot, s)),
-                  (e.clicking = !1));
+                      v(e, i.ot, s)),
+                    (e.clicking = !1));
               }));
           },
           T = (e) =>
@@ -5090,7 +5090,7 @@
               o = (t) => {
                 (clearTimeout(y),
                   e.el &&
-                    (w(e),
+                  (w(e),
                     _(e, h),
                     e.dragged && ((e.dragged = !1), v(e, i.Sv, t))));
               };
@@ -5105,10 +5105,10 @@
                   const { pageX: c, pageY: d } = T(i);
                   if (
                     ((e.dragged = !1),
-                    (e.startX = c),
-                    (e.startY = d),
-                    _(e, h),
-                    "pointerdown" === l && i.isPrimary)
+                      (e.startX = c),
+                      (e.startY = d),
+                      _(e, h),
+                      "pointerdown" === l && i.isPrimary)
                   ) {
                     if (!s) {
                       const { pointerId: s } = i;
@@ -5121,7 +5121,7 @@
                     "mousedown" === l
                       ? (b(e, h, "mousemove", n, r), b(e, h, "mouseup", o))
                       : "touchstart" === l &&
-                        (b(e, h, "touchmove", n, r),
+                      (b(e, h, "touchmove", n, r),
                         b(e, h, "touchcancel", o),
                         b(e, h, "touchend", o));
                 },
@@ -5229,8 +5229,8 @@
                 };
               (b(e, t, "mousedown", s, !0), b(e, t, f, s, !0));
             },
-            tap() {},
-            doubleTap() {},
+            tap() { },
+            doubleTap() { },
           },
           L = /\s+/,
           k = (e) => e && !(L.test(e) || "object" == typeof e);
@@ -5390,12 +5390,12 @@
               : g && e.map === g
                 ? e.map(t, s)
                 : (P(e, function (e, i, n) {
-                    r.push(t.call(s, e, i, n));
-                  }),
+                  r.push(t.call(s, e, i, n));
+                }),
                   r);
           },
           N = x,
-          $ = function () {},
+          $ = function () { },
           j = function (e, t, ...s) {
             if (b && e.bind === b) return b.apply(e, [t].concat(s));
             if (!L(e)) throw new TypeError();
@@ -5417,7 +5417,7 @@
               (P(e, function (e, n, o) {
                 i ? (s = t.call(r, s, e, n, o)) : ((s = e), (i = !0));
               }),
-              !i)
+                !i)
             )
               throw new TypeError(
                 "Reduce of empty array with no initial value",
@@ -5437,8 +5437,8 @@
               : D && e.some === D
                 ? e.some(t, s)
                 : (P(e, function (e, i, o) {
-                    if (r || (r = t.call(s, e, i, o))) return n;
-                  }),
+                  if (r || (r = t.call(s, e, i, o))) return n;
+                }),
                   Boolean(r));
           },
           V = H,
@@ -5459,8 +5459,8 @@
               : m && e.filter === m
                 ? e.filter(t, s)
                 : (P(e, function (e, i, n) {
-                    t.call(s, e, i, n) && r.push(e);
-                  }),
+                  t.call(s, e, i, n) && r.push(e);
+                }),
                   r);
           },
           J = X,
@@ -5472,8 +5472,8 @@
               : y && e.every === y
                 ? e.every(t, s)
                 : (P(e, function (e, i, o) {
-                    if (!(r = r && t.call(s, e, i, o))) return n;
-                  }),
+                  if (!(r = r && t.call(s, e, i, o))) return n;
+                }),
                   Boolean(r));
           },
           K = Y,
@@ -5498,8 +5498,8 @@
           return "function" == typeof e;
         };
         const te = function (e) {
-            return w(e) && !M(parseFloat(e));
-          },
+          return w(e) && !M(parseFloat(e));
+        },
           se = function (e) {
             return !0 === e || !1 === e || "[object Boolean]" == h.call(e);
           },
@@ -5537,7 +5537,7 @@
             const i = (s = ne(s)).call(r, t);
             let n = 0,
               o = e.length;
-            for (; n < o; ) {
+            for (; n < o;) {
               const t = (n + o) >>> 1;
               s.call(r, e[t]) < i ? (n = t + 1) : (o = t);
             }
@@ -5567,7 +5567,7 @@
                   for (let i = 0; i < s; i++) r[i] = e[t[i]];
                   return r;
                 })(e)),
-              ce(e, t) >= 0)
+                ce(e, t) >= 0)
             );
           },
           de = he,
@@ -5596,7 +5596,7 @@
               const i = t.slice();
               for (let e = 0, t = i.length; e < t; e++)
                 _(i[e], "partial") && (i[e] = s[r++]);
-              for (; r < arguments.length; ) i.push(s[r++]);
+              for (; r < arguments.length;) i.push(s[r++]);
               return e.apply(this, i);
             };
           },
@@ -5790,10 +5790,10 @@
             property: ie,
             propertyOf: function (e) {
               return null == e
-                ? function () {}
+                ? function () { }
                 : function (t) {
-                    return e[t];
-                  };
+                  return e[t];
+                };
             },
             reduce: q,
             reject: function (e, t, s) {
@@ -5834,8 +5834,8 @@
           i = function (e) {
             if (!e) return {};
             const t = ((e) => {
-                if (e) return new URL(e, window.location);
-              })(e),
+              if (e) return new URL(e, window.location);
+            })(e),
               s = {};
             for (const e of t.searchParams.keys())
               if (!s[e]) {
@@ -5879,9 +5879,9 @@
             typeOf: () => h,
           }));
         const n =
-            (null == (r = window) || null == (i = r.location)
-              ? void 0
-              : i.protocol) || "",
+          (null == (r = window) || null == (i = r.location)
+            ? void 0
+            : i.protocol) || "",
           o = (e) => {
             switch (typeof e) {
               case "string":
@@ -5979,8 +5979,8 @@
                 o.forEach((e) => {
                   ((0, n.oB)(e.expandChild, { width: e.width + 1 }),
                     e.resized &&
-                      e.view.model.get("visibility") &&
-                      e.view.updateStyles());
+                    e.view.model.get("visibility") &&
+                    e.view.updateStyles());
                 }),
                 o.forEach((e) => {
                   e.expandElement.scrollLeft = e.width + 1;
@@ -5993,11 +5993,11 @@
         class l {
           constructor(e, t, s) {
             const r = {
-                display: "block",
-                position: "absolute",
-                top: 0,
-                left: 0,
-              },
+              display: "block",
+              position: "absolute",
+              top: 0,
+              left: 0,
+            },
               a = { width: "100%", height: "100%" },
               l = (0, i.az)(
                 '<div style="opacity:0;visibility:hidden;overflow:hidden;"><div><div style="height:1px;"></div></div><div class="jw-contract-trigger"></div></div>',
@@ -6043,14 +6043,14 @@
         let u,
           l = !1;
         const c = (e, t) => {
-            for (let s = t.length; s--; ) {
-              const r = t[s];
-              if (e.target === r.getContainer()) {
-                r.setIntersection(e);
-                break;
-              }
+          for (let s = t.length; s--;) {
+            const r = t[s];
+            if (e.target === r.getContainer()) {
+              r.setIntersection(e);
+              break;
             }
-          },
+          }
+        },
           h = () => {
             i.forEach((e) => {
               e.model.set("activeTab", (0, r.Z)());
@@ -6098,7 +6098,7 @@
                 (u = new e(
                   (e) => {
                     if (null != e && e.length)
-                      for (let t = e.length; t--; ) {
+                      for (let t = e.length; t--;) {
                         const s = e[t];
                         (c(s, i), c(s, n));
                       }
@@ -6137,8 +6137,8 @@
           f = s(67),
           p = s(7164);
         const m = (e) =>
-            "string" == typeof e &&
-            /^\/\/(?:content\.jwplatform|cdn\.jwplayer)\.com\//.test(e),
+          "string" == typeof e &&
+          /^\/\/(?:content\.jwplatform|cdn\.jwplayer)\.com\//.test(e),
           y = (e) => `https:${e}`,
           D = (e) => {
             const t = (0, l.Z)(e.edition),
@@ -6210,13 +6210,13 @@
                     "width",
                   ]),
                 )),
-              (d.key = p),
-              (d.edition = C),
-              (d.error = v.error()),
-              (d.generateSEOMetadata = d.generateSEOMetadata || !1),
-              null != (l = d).enableVideoThumbnails ||
+                (d.key = p),
+                (d.edition = C),
+                (d.error = v.error()),
+                (d.generateSEOMetadata = d.generateSEOMetadata || !1),
+                null != (l = d).enableVideoThumbnails ||
                 (l.enableVideoThumbnails = !0),
-              "unlimited" === C)
+                "unlimited" === C)
             ) {
               const e = (0, i.getScriptPath)("jwplayer.js");
               if (!e)
@@ -6228,7 +6228,7 @@
             var b, w, _;
             if (
               ((d.related = D(d)),
-              d.ab &&
+                d.ab &&
                 (d.ab = ((e) => {
                   let t = e.ab;
                   return (
@@ -6241,18 +6241,18 @@
                     t
                   );
                 })(d)),
-              (d.plugins = E(d)),
-              (b = d.playlist),
-              (0, n.HD)(b) &&
+                (d.plugins = E(d)),
+                (b = d.playlist),
+                (0, n.HD)(b) &&
                 b.indexOf(c) > -1 &&
                 ((d.playlist = ((e, t) => {
                   var s;
                   const r =
-                      null == e ||
+                    null == e ||
                       null == e.querySelector ||
                       null == (s = e.querySelector("title"))
-                        ? void 0
-                        : s.textContent,
+                      ? void 0
+                      : s.textContent,
                     i = h(e, 'meta[property="og:title"]');
                   let n = encodeURIComponent(i || r || "");
                   const o =
@@ -6263,8 +6263,8 @@
                     t.replace(c, n)
                   );
                 })(document, d.playlist)),
-                (d.contextual = !0)),
-              (0, o.isFileProtocol)())
+                  (d.contextual = !0)),
+                (0, o.isFileProtocol)())
             ) {
               const { playlist: e, related: t } = d;
               (m(e) && (d.playlist = y(e)),
@@ -6272,10 +6272,10 @@
             }
             return (
               d.__abSendDomainToFeeds &&
-                ((_ = d.playlist), /\.jwplatform.com|\.jwplayer.com/.test(_)) &&
-                (d.playlist =
-                  (w = d.playlist) +
-                  `${-1 !== w.indexOf("?") ? "&" : "?"}page_domain=${encodeURIComponent((0, f.X)())}`),
+              ((_ = d.playlist), /\.jwplatform.com|\.jwplayer.com/.test(_)) &&
+              (d.playlist =
+                (w = d.playlist) +
+                `${-1 !== w.indexOf("?") ? "&" : "?"}page_domain=${encodeURIComponent((0, f.X)())}`),
               d
             );
           };
@@ -6316,8 +6316,8 @@
             if (!s) return;
             if (
               (s.resize && e.off("resize", s.resizeHandler),
-              delete e.plugins[t],
-              s.destroy)
+                delete e.plugins[t],
+                s.destroy)
             )
               try {
                 s.destroy();
@@ -6336,18 +6336,18 @@
           S = s(8762);
         let A = 0;
         const P = function (e, t) {
-            const s = new p.ZP(t);
-            return (
-              s.on(m.Rc, (t) => {
-                (e._qoe.tick("ready"),
-                  (t.setupTime = e._qoe.between("setup", "ready")));
-              }),
-              s.on("all", (t, s) => {
-                e.trigger(t, s);
-              }),
-              s
-            );
-          },
+          const s = new p.ZP(t);
+          return (
+            s.on(m.Rc, (t) => {
+              (e._qoe.tick("ready"),
+                (t.setupTime = e._qoe.between("setup", "ready")));
+            }),
+            s.on("all", (t, s) => {
+              e.trigger(t, s);
+            }),
+            s
+          );
+        },
           F = function (e, t) {
             const s = e.plugins,
               r = Object.keys(s).map((e) => {
@@ -6412,7 +6412,7 @@
                 return (
                   this.getPip() && this.setPip(!1),
                   (function (e) {
-                    for (let t = o.Z.length; t--; )
+                    for (let t = o.Z.length; t--;)
                       if (o.Z[t].uniqueId === e.uniqueId) {
                         o.Z.splice(t, 1);
                         break;
@@ -6605,36 +6605,36 @@
               setupDynamicPlugin(e, t) {
                 return e
                   ? ((e, t, s, r) => {
-                      const i = (0, v.Nq)(t),
-                        n = Object.keys(C),
-                        o = ((e, t) => {
-                          if (t[e]) return t[e];
-                          const s = (0, v.sb)(e);
-                          if (t[s]) return t[s];
-                          const r = (0, v.Nq)(e);
-                          return t[r] ? t[r] : {};
-                        })(t, r);
-                      if (-1 === n.indexOf(i))
-                        throw new Error(
-                          `setupDynamicPlugin must be called with plugins with one of the following plugins: ${n.toString()}`,
-                        );
-                      b(e, i);
-                      const a = ((e, t, s) => {
-                        const r = Object.assign({}, e),
-                          i = Object.assign({}, t),
-                          n = Object.keys(i).filter((e) => null === e);
-                        return (
-                          n.forEach((e) => delete r[e]),
-                          n.forEach((e) => delete i[e]),
-                          s.forEach((e) => {
-                            e.some((e) => i[e]) &&
-                              e.forEach((e) => delete r[e]);
-                          }),
-                          Object.assign({}, r, i)
-                        );
-                      })(o, s, C[i]);
-                      return (0, c.Ve)(t, a, e);
-                    })(this, e, t, a.get("plugins"))
+                    const i = (0, v.Nq)(t),
+                      n = Object.keys(C),
+                      o = ((e, t) => {
+                        if (t[e]) return t[e];
+                        const s = (0, v.sb)(e);
+                        if (t[s]) return t[s];
+                        const r = (0, v.Nq)(e);
+                        return t[r] ? t[r] : {};
+                      })(t, r);
+                    if (-1 === n.indexOf(i))
+                      throw new Error(
+                        `setupDynamicPlugin must be called with plugins with one of the following plugins: ${n.toString()}`,
+                      );
+                    b(e, i);
+                    const a = ((e, t, s) => {
+                      const r = Object.assign({}, e),
+                        i = Object.assign({}, t),
+                        n = Object.keys(i).filter((e) => null === e);
+                      return (
+                        n.forEach((e) => delete r[e]),
+                        n.forEach((e) => delete i[e]),
+                        s.forEach((e) => {
+                          e.some((e) => i[e]) &&
+                            e.forEach((e) => delete r[e]);
+                        }),
+                        Object.assign({}, r, i)
+                      );
+                    })(o, s, C[i]);
+                    return (0, c.Ve)(t, a, e);
+                  })(this, e, t, a.get("plugins"))
                   : Promise.resolve();
               },
               destroyDynamicPlugin(e) {
@@ -6664,31 +6664,31 @@
           addPlugin(e, t) {
             ((this.plugins[e] = t),
               "function" == typeof t.addToPlayer &&
-                (this.isReady()
-                  ? t.addToPlayer.call(this, !0)
-                  : this.on("ready", function () {
-                      t.addToPlayer.call(this, !1);
-                    })),
+              (this.isReady()
+                ? t.addToPlayer.call(this, !0)
+                : this.on("ready", function () {
+                  t.addToPlayer.call(this, !1);
+                })),
               t.resize && this.on("resize", t.resizeHandler));
           },
           registerPlugin(e, t, s) {
             (0, c.fo)(e, t, s);
           },
           getAdBlock: () => !1,
-          playAd(e) {},
-          pauseAd(e) {},
-          skipAd() {},
-          setAdMacros(e) {},
-          getAdMacros() {},
-          updateQueryJSAdTargeting(e) {},
-          getQueryJSAdTargeting() {},
+          playAd(e) { },
+          pauseAd(e) { },
+          skipAd() { },
+          setAdMacros(e) { },
+          getAdMacros() { },
+          updateQueryJSAdTargeting(e) { },
+          getQueryJSAdTargeting() { },
         }),
           (s.p = (0, n.loadFrom)()));
         const B = (e) => {
-            for (let t = 0; t < o.Z.length; t++)
-              if (o.Z[t].id === e) return o.Z[t];
-            return null;
-          },
+          for (let t = 0; t < o.Z.length; t++)
+            if (o.Z[t].id === e) return o.Z[t];
+          return null;
+        },
           I = function (e) {
             let t, s;
             if (
@@ -6698,10 +6698,10 @@
                   : "number" == typeof e
                     ? (t = o.Z[e])
                     : e.nodeType &&
-                      ((s = e),
+                    ((s = e),
                       (t = B(s.id || s.getAttribute("data-jwplayer-id"))))
                 : (t = o.Z[0]),
-              t)
+                t)
             )
               return t;
             if (s) {
@@ -6712,8 +6712,8 @@
           },
           L = (e) => {
             Object.defineProperties(e, {
-              api: { get: () => h, set() {} },
-              version: { get: () => d.i, set() {} },
+              api: { get: () => h, set() { } },
+              version: { get: () => d.i, set() { } },
               debug: {
                 get: () => g.Z.debug,
                 set(e) {
@@ -6795,7 +6795,7 @@
                     }
                   })(s, e[0], e[1]);
                 }),
-                (t.length = 0));
+                  (t.length = 0));
             }
           },
           Z = (e, t, s, r, i) =>
@@ -6876,17 +6876,17 @@
                 "remove" === s
                   ? t.off.call(e)
                   : "setup" === s &&
-                    (t.off.call(e),
+                  (t.off.call(e),
                     t.off(o.events, null, t),
                     t.on.call(e, o.events, null, e),
                     t.on("all", (s, n) => {
                       if ("ready" === s) {
                         const s = Object.keys(t).filter(
-                            (e) =>
-                              "_" !== e[0] &&
-                              -1 === r.indexOf(e) &&
-                              "function" == typeof t[e],
-                          ),
+                          (e) =>
+                            "_" !== e[0] &&
+                            -1 === r.indexOf(e) &&
+                            "function" == typeof t[e],
+                        ),
                           n = r.concat(s);
                         s.forEach((s) => {
                           e[s] = Z(e, t, s, n, i);
@@ -6909,9 +6909,9 @@
                   : "_events" === n
                     ? (e._events = {})
                     : Object.defineProperty(e, n, {
-                        enumerable: !0,
-                        get: () => s[n],
-                      }));
+                      enumerable: !0,
+                      get: () => s[n],
+                    }));
             });
           },
           Y = function (e) {
@@ -6927,10 +6927,10 @@
         (Object.assign(Q, z),
           L(Q),
           "function" == typeof K.define &&
-            K.define.amd &&
-            K.define([], function () {
-              return Q;
-            }));
+          K.define.amd &&
+          K.define([], function () {
+            return Q;
+          }));
         let ee = Q;
         K.jwplayer && (ee = K.jwplayer);
         const te = ee;
@@ -6944,24 +6944,24 @@
           this.load = function (e, t, s, n) {
             return s && "object" == typeof s
               ? Promise.all(
-                  Object.keys(s)
-                    .filter((e) => e)
-                    .map((o) => {
-                      const a = s[o];
-                      return t
-                        .setupPlugin(o)
-                        .then((t) => {
-                          if (!n.attributes._destroyed)
-                            return (0, i.MK)(t, a, e);
-                        })
-                        .catch(
-                          (e) => (
-                            t.removePlugin(o),
-                            e.code ? e : new r.rG(null, (0, i.bX)(o), e)
-                          ),
-                        );
-                    }),
-                )
+                Object.keys(s)
+                  .filter((e) => e)
+                  .map((o) => {
+                    const a = s[o];
+                    return t
+                      .setupPlugin(o)
+                      .then((t) => {
+                        if (!n.attributes._destroyed)
+                          return (0, i.MK)(t, a, e);
+                      })
+                      .catch(
+                        (e) => (
+                          t.removePlugin(o),
+                          e.code ? e : new r.rG(null, (0, i.bX)(o), e)
+                        ),
+                      );
+                  }),
+              )
               : Promise.resolve();
           };
         };
@@ -7065,9 +7065,9 @@
                   ).split("/");
                   if (
                     ((t = a[0]),
-                    "pro" === t && (t = "premium"),
-                    (0, i.Z)(t)("setup") || (t = u),
-                    a.length > 2)
+                      "pro" === t && (t = "premium"),
+                      (0, i.Z)(t)("setup") || (t = u),
+                      a.length > 2)
                   ) {
                     s = a[1];
                     const e = parseInt(a[2], 10);
@@ -7120,14 +7120,14 @@
             e = (
               document.referrer
                 ? ((e) => {
-                    const t = document.createElement("a");
-                    return ((t.href = e), t);
-                  })(document.referrer)
+                  const t = document.createElement("a");
+                  return ((t.href = e), t);
+                })(document.referrer)
                 : {}
             ).host;
             try {
               e = e || window.top.location.host;
-            } catch (e) {}
+            } catch (e) { }
           }
           return e;
         };
@@ -7137,15 +7137,15 @@
         s.d(t, { p: () => n });
         var r = s(1225);
         const i = (e) => {
-            const t = new Array(Math.ceil(e.length / 4));
-            for (let s = 0; s < t.length; s++)
-              t[s] =
-                e.charCodeAt(4 * s) +
-                (e.charCodeAt(4 * s + 1) << 8) +
-                (e.charCodeAt(4 * s + 2) << 16) +
-                (e.charCodeAt(4 * s + 3) << 24);
-            return t;
-          },
+          const t = new Array(Math.ceil(e.length / 4));
+          for (let s = 0; s < t.length; s++)
+            t[s] =
+              e.charCodeAt(4 * s) +
+              (e.charCodeAt(4 * s + 1) << 8) +
+              (e.charCodeAt(4 * s + 2) << 16) +
+              (e.charCodeAt(4 * s + 3) << 24);
+          return t;
+        },
           n = function (e, t) {
             if (((e = String(e)), (t = String(t)), 0 === e.length)) return "";
             const s = i((0, r.t)(e)),
@@ -7157,7 +7157,7 @@
               c = s[o - 1],
               h = s[0],
               d = Math.floor(6 + 52 / o) * a;
-            for (; d; ) {
+            for (; d;) {
               l = (d >>> 2) & 3;
               for (let e = o - 1; e >= 0; e--)
                 ((c = s[e > 0 ? e - 1 : o - 1]),
@@ -7195,25 +7195,25 @@
             return (e((t = { exports: {} }), t.exports), t.exports);
           }
           var t = e(function (e) {
-              var t = (e.exports =
-                "undefined" != typeof window && window.Math == Math
-                  ? window
-                  : "undefined" != typeof self && self.Math == Math
-                    ? self
-                    : Function("return this")());
-              "number" == typeof __g && (__g = t);
-            }),
+            var t = (e.exports =
+              "undefined" != typeof window && window.Math == Math
+                ? window
+                : "undefined" != typeof self && self.Math == Math
+                  ? self
+                  : Function("return this")());
+            "number" == typeof __g && (__g = t);
+          }),
             s = e(function (e) {
               var t = (e.exports = { version: "2.6.5" });
               "number" == typeof __e && (__e = t);
             }),
             r =
               (s.version,
-              function (e) {
-                return "object" == typeof e
-                  ? null !== e
-                  : "function" == typeof e;
-              }),
+                function (e) {
+                  return "object" == typeof e
+                    ? null !== e
+                    : "function" == typeof e;
+                }),
             i = function (e) {
               if (!r(e)) throw TypeError(e + " is not an object!");
               return e;
@@ -7260,8 +7260,8 @@
               f: o
                 ? Object.defineProperty
                 : function (e, t, s) {
-                    if (
-                      (i(e),
+                  if (
+                    (i(e),
                       (t = (function (e, t) {
                         if (!r(e)) return e;
                         var s, i;
@@ -7288,33 +7288,33 @@
                       })(t, !0)),
                       i(s),
                       l)
-                    )
-                      try {
-                        return c(e, t, s);
-                      } catch (e) {}
-                    if ("get" in s || "set" in s)
-                      throw TypeError("Accessors not supported!");
-                    return ("value" in s && (e[t] = s.value), e);
-                  },
+                  )
+                    try {
+                      return c(e, t, s);
+                    } catch (e) { }
+                  if ("get" in s || "set" in s)
+                    throw TypeError("Accessors not supported!");
+                  return ("value" in s && (e[t] = s.value), e);
+                },
             },
             d = o
               ? function (e, t, s) {
-                  return h.f(
-                    e,
-                    t,
-                    (function (e, t) {
-                      return {
-                        enumerable: !(1 & e),
-                        configurable: !(2 & e),
-                        writable: !(4 & e),
-                        value: t,
-                      };
-                    })(1, s),
-                  );
-                }
+                return h.f(
+                  e,
+                  t,
+                  (function (e, t) {
+                    return {
+                      enumerable: !(1 & e),
+                      configurable: !(2 & e),
+                      writable: !(4 & e),
+                      value: t,
+                    };
+                  })(1, s),
+                );
+              }
               : function (e, t, s) {
-                  return ((e[t] = s), e);
-                },
+                return ((e[t] = s), e);
+              },
             g = {}.hasOwnProperty,
             f = function (e, t) {
               return g.call(e, t);
@@ -7335,12 +7335,12 @@
             D = y("native-function-to-string", Function.toString),
             v = e(function (e) {
               var r = (function (e) {
-                  return "Symbol(".concat(
-                    void 0 === e ? "" : e,
-                    ")_",
-                    (++p + m).toString(36),
-                  );
-                })("src"),
+                return "Symbol(".concat(
+                  void 0 === e ? "" : e,
+                  ")_",
+                  (++p + m).toString(36),
+                );
+              })("src"),
                 i = "toString",
                 n = ("" + D).split(i);
               ((s.inspectSource = function (e) {
@@ -7350,9 +7350,9 @@
                   var a = "function" == typeof i;
                   (a && (f(i, "name") || d(i, "name", s)),
                     e[s] !== i &&
-                      (a &&
-                        (f(i, r) ||
-                          d(i, r, e[s] ? "" + e[s] : n.join(String(s)))),
+                    (a &&
+                      (f(i, r) ||
+                        d(i, r, e[s] ? "" + e[s] : n.join(String(s)))),
                       e === t
                         ? (e[s] = i)
                         : o
@@ -7370,7 +7370,7 @@
                   if ("function" != typeof e)
                     throw TypeError(e + " is not a function!");
                 })(e),
-                void 0 === t)
+                  void 0 === t)
               )
                 return e;
               switch (s) {
@@ -7447,10 +7447,10 @@
               return n < 0 || n >= o
                 ? void 0
                 : (s = i.charCodeAt(n)) < 55296 ||
-                    s > 56319 ||
-                    n + 1 === o ||
-                    (r = i.charCodeAt(n + 1)) < 56320 ||
-                    r > 57343
+                  s > 56319 ||
+                  n + 1 === o ||
+                  (r = i.charCodeAt(n + 1)) < 56320 ||
+                  r > 57343
                   ? s
                   : r - 56320 + ((s - 55296) << 10) + 65536;
             };
@@ -7548,11 +7548,11 @@
                   void 0 === o
                     ? delete r[n]
                     : Object.defineProperty(r, n, {
-                        value: o,
-                        writable: !0,
-                        enumerable: !0,
-                        configurable: !0,
-                      });
+                      value: o,
+                      writable: !0,
+                      enumerable: !0,
+                      configurable: !0,
+                    });
                 }
               else
                 for (var a in r) {
@@ -7560,16 +7560,16 @@
                   void 0 === u
                     ? delete r[a]
                     : Object.defineProperty(r, a, {
-                        value: u,
-                        writable: !0,
-                        enumerable: !0,
-                        configurable: !0,
-                      });
+                      value: u,
+                      writable: !0,
+                      enumerable: !0,
+                      configurable: !0,
+                    });
                 }
             return s.call(e, t, r);
           }
           function ee() {
-            for (z = "default", U = "", W = !1, H = 1; ; ) {
+            for (z = "default", U = "", W = !1, H = 1; ;) {
               V = te();
               var e = re[z]();
               if (e) return e;
@@ -7897,8 +7897,8 @@
                   !(function (e) {
                     console.warn(
                       "JSON5: '" +
-                        ge(e) +
-                        "' in strings is not valid ECMAScript; consider escaping",
+                      ge(e) +
+                      "' in strings is not valid ECMAScript; consider escaping",
                     );
                   })(V);
                   break;
@@ -7973,7 +7973,7 @@
             }
           }
           function oe() {
-            for (var e = "", t = 4; t-- > 0; ) {
+            for (var e = "", t = 4; t-- > 0;) {
               var s = te();
               if (!K(s)) throw ce(se());
               e += se();
@@ -8026,7 +8026,7 @@
                   le();
               }
             },
-            end: function () {},
+            end: function () { },
           };
           function ue() {
             var e;
@@ -8052,11 +8052,11 @@
               Array.isArray(t)
                 ? t.push(e)
                 : Object.defineProperty(t, j, {
-                    value: e,
-                    writable: !0,
-                    enumerable: !0,
-                    configurable: !0,
-                  });
+                  value: e,
+                  writable: !0,
+                  enumerable: !0,
+                  configurable: !0,
+                });
             }
             if (null !== e && "object" == typeof e)
               (O.push(e),
@@ -8152,7 +8152,7 @@
                   "object" != typeof t ||
                   Array.isArray(t) ||
                   ((s = t.space), (n = t.quote), (t = t.replacer)),
-                "function" == typeof t)
+                  "function" == typeof t)
               )
                 i = t;
               else if (Array.isArray(t)) {
@@ -8163,9 +8163,9 @@
                   ("string" == typeof h
                     ? (d = h)
                     : ("number" == typeof h ||
-                        h instanceof String ||
-                        h instanceof Number) &&
-                      (d = String(h)),
+                      h instanceof String ||
+                      h instanceof Number) &&
+                    (d = String(h)),
                     void 0 !== d && r.indexOf(d) < 0 && r.push(d));
                 }
               }
@@ -8175,7 +8175,7 @@
                   : s instanceof String && (s = String(s)),
                 "number" == typeof s
                   ? s > 0 &&
-                    ((s = Math.min(10, Math.floor(s))),
+                  ((s = Math.min(10, Math.floor(s))),
                     (u = "          ".substr(0, s)))
                   : "string" == typeof s && (u = s.substr(0, 10)),
                 g("", { "": e })
@@ -8183,10 +8183,10 @@
               function g(e, t) {
                 var s = t[e];
                 switch (
-                  (null != s &&
-                    ("function" == typeof s.toJSON5
-                      ? (s = s.toJSON5(e))
-                      : "function" == typeof s.toJSON && (s = s.toJSON(e))),
+                (null != s &&
+                  ("function" == typeof s.toJSON5
+                    ? (s = s.toJSON5(e))
+                    : "function" == typeof s.toJSON && (s = s.toJSON(e))),
                   i && (s = i.call(t, e, s)),
                   s instanceof Number
                     ? (s = Number(s))
@@ -8209,77 +8209,77 @@
                     : "object" == typeof s
                       ? Array.isArray(s)
                         ? (function (e) {
-                            if (o.indexOf(e) >= 0)
-                              throw TypeError(
-                                "Converting circular structure to JSON5",
-                              );
-                            o.push(e);
-                            var t = a;
-                            a += u;
-                            for (var s, r = [], i = 0; i < e.length; i++) {
-                              var n = g(String(i), e);
-                              r.push(void 0 !== n ? n : "null");
-                            }
-                            if (0 === r.length) s = "[]";
-                            else if ("" === u) s = "[" + r.join(",") + "]";
-                            else {
-                              var l = ",\n" + a,
-                                c = r.join(l);
-                              s = "[\n" + a + c + ",\n" + t + "]";
-                            }
-                            return (o.pop(), (a = t), s);
-                          })(s)
+                          if (o.indexOf(e) >= 0)
+                            throw TypeError(
+                              "Converting circular structure to JSON5",
+                            );
+                          o.push(e);
+                          var t = a;
+                          a += u;
+                          for (var s, r = [], i = 0; i < e.length; i++) {
+                            var n = g(String(i), e);
+                            r.push(void 0 !== n ? n : "null");
+                          }
+                          if (0 === r.length) s = "[]";
+                          else if ("" === u) s = "[" + r.join(",") + "]";
+                          else {
+                            var l = ",\n" + a,
+                              c = r.join(l);
+                            s = "[\n" + a + c + ",\n" + t + "]";
+                          }
+                          return (o.pop(), (a = t), s);
+                        })(s)
                         : (function (e) {
-                            if (o.indexOf(e) >= 0)
-                              throw TypeError(
-                                "Converting circular structure to JSON5",
-                              );
-                            o.push(e);
-                            var t = a;
-                            a += u;
-                            for (
-                              var s, i, n = [], l = 0, c = r || Object.keys(e);
-                              l < c.length;
-                              l += 1
-                            ) {
-                              var h = c[l],
-                                d = g(h, e);
-                              if (void 0 !== d) {
-                                var f = p(h) + ":";
-                                ("" !== u && (f += " "), (f += d), n.push(f));
-                              }
+                          if (o.indexOf(e) >= 0)
+                            throw TypeError(
+                              "Converting circular structure to JSON5",
+                            );
+                          o.push(e);
+                          var t = a;
+                          a += u;
+                          for (
+                            var s, i, n = [], l = 0, c = r || Object.keys(e);
+                            l < c.length;
+                            l += 1
+                          ) {
+                            var h = c[l],
+                              d = g(h, e);
+                            if (void 0 !== d) {
+                              var f = p(h) + ":";
+                              ("" !== u && (f += " "), (f += d), n.push(f));
                             }
-                            if (0 === n.length) s = "{}";
-                            else if ("" === u)
-                              s = "{" + (i = n.join(",")) + "}";
-                            else {
-                              var m = ",\n" + a;
-                              ((i = n.join(m)),
-                                (s = "{\n" + a + i + ",\n" + t + "}"));
-                            }
-                            return (o.pop(), (a = t), s);
-                          })(s)
+                          }
+                          if (0 === n.length) s = "{}";
+                          else if ("" === u)
+                            s = "{" + (i = n.join(",")) + "}";
+                          else {
+                            var m = ",\n" + a;
+                            ((i = n.join(m)),
+                              (s = "{\n" + a + i + ",\n" + t + "}"));
+                          }
+                          return (o.pop(), (a = t), s);
+                        })(s)
                       : void 0;
               }
               function f(e) {
                 for (
                   var t = { "'": 0.1, '"': 0.2 },
-                    s = {
-                      "'": "\\'",
-                      '"': '\\"',
-                      "\\": "\\\\",
-                      "\b": "\\b",
-                      "\f": "\\f",
-                      "\n": "\\n",
-                      "\r": "\\r",
-                      "\t": "\\t",
-                      "\v": "\\v",
-                      "\0": "\\0",
-                      "\u2028": "\\u2028",
-                      "\u2029": "\\u2029",
-                    },
-                    r = "",
-                    i = 0;
+                  s = {
+                    "'": "\\'",
+                    '"': '\\"',
+                    "\\": "\\\\",
+                    "\b": "\\b",
+                    "\f": "\\f",
+                    "\n": "\\n",
+                    "\r": "\\r",
+                    "\t": "\\t",
+                    "\v": "\\v",
+                    "\0": "\\0",
+                    "\u2028": "\\u2028",
+                    "\u2029": "\\u2029",
+                  },
+                  r = "",
+                  i = 0;
                   i < e.length;
                   i++
                 ) {
@@ -8323,7 +8323,7 @@
       1096: function (e) {
         e.exports = (function () {
           "use strict";
-          function e() {}
+          function e() { }
           function t(e) {
             if (!(this instanceof t))
               throw new TypeError("Promises must be constructed via new");
@@ -8335,7 +8335,7 @@
               o(e, this));
           }
           function s(e, s) {
-            for (; 3 === e._state; ) e = e._value;
+            for (; 3 === e._state;) e = e._value;
             0 !== e._state
               ? ((e._handled = !0),
                 t._immediateFn(function () {
@@ -8471,8 +8471,8 @@
               return e && "object" == typeof e && e.constructor === t
                 ? e
                 : new t(function (t) {
-                    t(e);
-                  });
+                  t(e);
+                });
             }),
             (t.reject = function (e) {
               return new t(function (t, s) {
@@ -8510,9 +8510,9 @@
             ((t = function () {
               return document.head || document.getElementsByTagName("head")[0];
             }),
-            function () {
-              return (void 0 === s && (s = t.apply(this, arguments)), s);
-            });
+              function () {
+                return (void 0 === s && (s = t.apply(this, arguments)), s);
+              });
         function o(e) {
           var t = document.createElement("style");
           return (
@@ -8596,9 +8596,9 @@
         var u,
           l =
             ((u = []),
-            function (e, t) {
-              return ((u[e] = t), u.filter(Boolean).join("\n"));
-            });
+              function (e, t) {
+                return ((u[e] = t), u.filter(Boolean).join("\n"));
+              });
         function c(e, t, s) {
           if (e.styleSheet) e.styleSheet.cssText = l(t, s);
           else {
@@ -8679,23 +8679,23 @@
           }
         (a ||
           ((u = !0),
-          ((a = document.createElement("script")).charset = "utf-8"),
-          (a.timeout = 55),
-          i.nc && a.setAttribute("nonce", i.nc),
-          a.setAttribute("data-webpack", t + n),
-          (a.src = s)),
+            ((a = document.createElement("script")).charset = "utf-8"),
+            (a.timeout = 55),
+            i.nc && a.setAttribute("nonce", i.nc),
+            a.setAttribute("data-webpack", t + n),
+            (a.src = s)),
           (e[s] = [r]));
         var d = (t, r) => {
-            ((a.onerror = a.onload = null), clearTimeout(g));
-            var i = e[s];
-            if (
-              (delete e[s],
+          ((a.onerror = a.onload = null), clearTimeout(g));
+          var i = e[s];
+          if (
+            (delete e[s],
               a.parentNode && a.parentNode.removeChild(a),
               i && i.forEach((e) => e(r)),
               t)
-            )
-              return t(r);
-          },
+          )
+            return t(r);
+        },
           g = setTimeout(
             d.bind(null, void 0, { type: "timeout", target: a }),
             55e3,
@@ -8744,19 +8744,19 @@
           }
       };
       var t = (t, s) => {
-          var r,
-            n,
-            o = s[0],
-            a = s[1],
-            u = s[2],
-            l = 0;
-          if (o.some((t) => 0 !== e[t])) {
-            for (r in a) i.o(a, r) && (i.m[r] = a[r]);
-            u && u(i);
-          }
-          for (t && t(s); l < o.length; l++)
-            ((n = o[l]), i.o(e, n) && e[n] && e[n][0](), (e[n] = 0));
-        },
+        var r,
+          n,
+          o = s[0],
+          a = s[1],
+          u = s[2],
+          l = 0;
+        if (o.some((t) => 0 !== e[t])) {
+          for (r in a) i.o(a, r) && (i.m[r] = a[r]);
+          u && u(i);
+        }
+        for (t && t(s); l < o.length; l++)
+          ((n = o[l]), i.o(e, n) && e[n] && e[n][0](), (e[n] = 0));
+      },
         s = (self.webpackChunkjwplayer = self.webpackChunkjwplayer || []);
       (s.forEach(t.bind(null, 0)), (s.push = t.bind(null, s.push.bind(s))));
     })(),
@@ -8775,978 +8775,978 @@
   })(this, () =>
     (() => {
       var e = {
-          415: (e) => {
-            "use strict";
-            var t,
-              s = "object" == typeof Reflect ? Reflect : null,
-              r =
-                s && "function" == typeof s.apply
-                  ? s.apply
-                  : function (e, t, s) {
-                      return Function.prototype.apply.call(e, t, s);
-                    };
-            t =
-              s && "function" == typeof s.ownKeys
-                ? s.ownKeys
-                : Object.getOwnPropertySymbols
-                  ? function (e) {
-                      return Object.getOwnPropertyNames(e).concat(
-                        Object.getOwnPropertySymbols(e),
-                      );
-                    }
-                  : function (e) {
-                      return Object.getOwnPropertyNames(e);
-                    };
-            var i =
-              Number.isNaN ||
-              function (e) {
-                return e != e;
-              };
-            function n() {
-              n.init.call(this);
-            }
-            ((e.exports = n),
-              (e.exports.once = function (e, t) {
-                return new Promise(function (s, r) {
-                  function i(s) {
-                    (e.removeListener(t, n), r(s));
-                  }
-                  function n() {
-                    ("function" == typeof e.removeListener &&
-                      e.removeListener("error", i),
-                      s([].slice.call(arguments)));
-                  }
-                  (p(e, t, n, { once: !0 }),
-                    "error" !== t &&
-                      (function (e, t) {
-                        "function" == typeof e.on &&
-                          p(e, "error", t, { once: !0 });
-                      })(e, i));
-                });
-              }),
-              (n.EventEmitter = n),
-              (n.prototype._events = void 0),
-              (n.prototype._eventsCount = 0),
-              (n.prototype._maxListeners = void 0));
-            var o = 10;
-            function a(e) {
-              if ("function" != typeof e)
-                throw new TypeError(
-                  'The "listener" argument must be of type Function. Received type ' +
-                    typeof e,
-                );
-            }
-            function u(e) {
-              return void 0 === e._maxListeners
-                ? n.defaultMaxListeners
-                : e._maxListeners;
-            }
-            function l(e, t, s, r) {
-              var i, n, o, l;
-              if (
-                (a(s),
+        415: (e) => {
+          "use strict";
+          var t,
+            s = "object" == typeof Reflect ? Reflect : null,
+            r =
+              s && "function" == typeof s.apply
+                ? s.apply
+                : function (e, t, s) {
+                  return Function.prototype.apply.call(e, t, s);
+                };
+          t =
+            s && "function" == typeof s.ownKeys
+              ? s.ownKeys
+              : Object.getOwnPropertySymbols
+                ? function (e) {
+                  return Object.getOwnPropertyNames(e).concat(
+                    Object.getOwnPropertySymbols(e),
+                  );
+                }
+                : function (e) {
+                  return Object.getOwnPropertyNames(e);
+                };
+          var i =
+            Number.isNaN ||
+            function (e) {
+              return e != e;
+            };
+          function n() {
+            n.init.call(this);
+          }
+          ((e.exports = n),
+            (e.exports.once = function (e, t) {
+              return new Promise(function (s, r) {
+                function i(s) {
+                  (e.removeListener(t, n), r(s));
+                }
+                function n() {
+                  ("function" == typeof e.removeListener &&
+                    e.removeListener("error", i),
+                    s([].slice.call(arguments)));
+                }
+                (p(e, t, n, { once: !0 }),
+                  "error" !== t &&
+                  (function (e, t) {
+                    "function" == typeof e.on &&
+                      p(e, "error", t, { once: !0 });
+                  })(e, i));
+              });
+            }),
+            (n.EventEmitter = n),
+            (n.prototype._events = void 0),
+            (n.prototype._eventsCount = 0),
+            (n.prototype._maxListeners = void 0));
+          var o = 10;
+          function a(e) {
+            if ("function" != typeof e)
+              throw new TypeError(
+                'The "listener" argument must be of type Function. Received type ' +
+                typeof e,
+              );
+          }
+          function u(e) {
+            return void 0 === e._maxListeners
+              ? n.defaultMaxListeners
+              : e._maxListeners;
+          }
+          function l(e, t, s, r) {
+            var i, n, o, l;
+            if (
+              (a(s),
                 void 0 === (n = e._events)
                   ? ((n = e._events = Object.create(null)),
                     (e._eventsCount = 0))
                   : (void 0 !== n.newListener &&
-                      (e.emit("newListener", t, s.listener ? s.listener : s),
+                    (e.emit("newListener", t, s.listener ? s.listener : s),
                       (n = e._events)),
                     (o = n[t])),
                 void 0 === o)
-              )
-                ((o = n[t] = s), ++e._eventsCount);
-              else if (
-                ("function" == typeof o
-                  ? (o = n[t] = r ? [s, o] : [o, s])
-                  : r
-                    ? o.unshift(s)
-                    : o.push(s),
+            )
+              ((o = n[t] = s), ++e._eventsCount);
+            else if (
+              ("function" == typeof o
+                ? (o = n[t] = r ? [s, o] : [o, s])
+                : r
+                  ? o.unshift(s)
+                  : o.push(s),
                 (i = u(e)) > 0 && o.length > i && !o.warned)
-              ) {
-                o.warned = !0;
-                var c = new Error(
-                  "Possible EventEmitter memory leak detected. " +
-                    o.length +
-                    " " +
-                    String(t) +
-                    " listeners added. Use emitter.setMaxListeners() to increase limit",
-                );
-                ((c.name = "MaxListenersExceededWarning"),
-                  (c.emitter = e),
-                  (c.type = t),
-                  (c.count = o.length),
-                  (l = c),
-                  console && console.warn && console.warn(l));
-              }
-              return e;
-            }
-            function c() {
-              if (!this.fired)
-                return (
-                  this.target.removeListener(this.type, this.wrapFn),
-                  (this.fired = !0),
-                  0 === arguments.length
-                    ? this.listener.call(this.target)
-                    : this.listener.apply(this.target, arguments)
-                );
-            }
-            function h(e, t, s) {
-              var r = {
-                  fired: !1,
-                  wrapFn: void 0,
-                  target: e,
-                  type: t,
-                  listener: s,
-                },
-                i = c.bind(r);
-              return ((i.listener = s), (r.wrapFn = i), i);
-            }
-            function d(e, t, s) {
-              var r = e._events;
-              if (void 0 === r) return [];
-              var i = r[t];
-              return void 0 === i
-                ? []
-                : "function" == typeof i
-                  ? s
-                    ? [i.listener || i]
-                    : [i]
-                  : s
-                    ? (function (e) {
-                        for (
-                          var t = new Array(e.length), s = 0;
-                          s < t.length;
-                          ++s
-                        )
-                          t[s] = e[s].listener || e[s];
-                        return t;
-                      })(i)
-                    : f(i, i.length);
-            }
-            function g(e) {
-              var t = this._events;
-              if (void 0 !== t) {
-                var s = t[e];
-                if ("function" == typeof s) return 1;
-                if (void 0 !== s) return s.length;
-              }
-              return 0;
-            }
-            function f(e, t) {
-              for (var s = new Array(t), r = 0; r < t; ++r) s[r] = e[r];
-              return s;
-            }
-            function p(e, t, s, r) {
-              if ("function" == typeof e.on) r.once ? e.once(t, s) : e.on(t, s);
-              else {
-                if ("function" != typeof e.addEventListener)
-                  throw new TypeError(
-                    'The "emitter" argument must be of type EventEmitter. Received type ' +
-                      typeof e,
-                  );
-                e.addEventListener(t, function i(n) {
-                  (r.once && e.removeEventListener(t, i), s(n));
-                });
-              }
-            }
-            (Object.defineProperty(n, "defaultMaxListeners", {
-              enumerable: !0,
-              get: function () {
-                return o;
-              },
-              set: function (e) {
-                if ("number" != typeof e || e < 0 || i(e))
-                  throw new RangeError(
-                    'The value of "defaultMaxListeners" is out of range. It must be a non-negative number. Received ' +
-                      e +
-                      ".",
-                  );
-                o = e;
-              },
-            }),
-              (n.init = function () {
-                ((void 0 !== this._events &&
-                  this._events !== Object.getPrototypeOf(this)._events) ||
-                  ((this._events = Object.create(null)),
-                  (this._eventsCount = 0)),
-                  (this._maxListeners = this._maxListeners || void 0));
-              }),
-              (n.prototype.setMaxListeners = function (e) {
-                if ("number" != typeof e || e < 0 || i(e))
-                  throw new RangeError(
-                    'The value of "n" is out of range. It must be a non-negative number. Received ' +
-                      e +
-                      ".",
-                  );
-                return ((this._maxListeners = e), this);
-              }),
-              (n.prototype.getMaxListeners = function () {
-                return u(this);
-              }),
-              (n.prototype.emit = function (e) {
-                for (var t = [], s = 1; s < arguments.length; s++)
-                  t.push(arguments[s]);
-                var i = "error" === e,
-                  n = this._events;
-                if (void 0 !== n) i = i && void 0 === n.error;
-                else if (!i) return !1;
-                if (i) {
-                  var o;
-                  if ((t.length > 0 && (o = t[0]), o instanceof Error)) throw o;
-                  var a = new Error(
-                    "Unhandled error." + (o ? " (" + o.message + ")" : ""),
-                  );
-                  throw ((a.context = o), a);
-                }
-                var u = n[e];
-                if (void 0 === u) return !1;
-                if ("function" == typeof u) r(u, this, t);
-                else {
-                  var l = u.length,
-                    c = f(u, l);
-                  for (s = 0; s < l; ++s) r(c[s], this, t);
-                }
-                return !0;
-              }),
-              (n.prototype.addListener = function (e, t) {
-                return l(this, e, t, !1);
-              }),
-              (n.prototype.on = n.prototype.addListener),
-              (n.prototype.prependListener = function (e, t) {
-                return l(this, e, t, !0);
-              }),
-              (n.prototype.once = function (e, t) {
-                return (a(t), this.on(e, h(this, e, t)), this);
-              }),
-              (n.prototype.prependOnceListener = function (e, t) {
-                return (a(t), this.prependListener(e, h(this, e, t)), this);
-              }),
-              (n.prototype.removeListener = function (e, t) {
-                var s, r, i, n, o;
-                if ((a(t), void 0 === (r = this._events))) return this;
-                if (void 0 === (s = r[e])) return this;
-                if (s === t || s.listener === t)
-                  0 == --this._eventsCount
-                    ? (this._events = Object.create(null))
-                    : (delete r[e],
-                      r.removeListener &&
-                        this.emit("removeListener", e, s.listener || t));
-                else if ("function" != typeof s) {
-                  for (i = -1, n = s.length - 1; n >= 0; n--)
-                    if (s[n] === t || s[n].listener === t) {
-                      ((o = s[n].listener), (i = n));
-                      break;
-                    }
-                  if (i < 0) return this;
-                  (0 === i
-                    ? s.shift()
-                    : (function (e, t) {
-                        for (; t + 1 < e.length; t++) e[t] = e[t + 1];
-                        e.pop();
-                      })(s, i),
-                    1 === s.length && (r[e] = s[0]),
-                    void 0 !== r.removeListener &&
-                      this.emit("removeListener", e, o || t));
-                }
-                return this;
-              }),
-              (n.prototype.off = n.prototype.removeListener),
-              (n.prototype.removeAllListeners = function (e) {
-                var t, s, r;
-                if (void 0 === (s = this._events)) return this;
-                if (void 0 === s.removeListener)
-                  return (
-                    0 === arguments.length
-                      ? ((this._events = Object.create(null)),
-                        (this._eventsCount = 0))
-                      : void 0 !== s[e] &&
-                        (0 == --this._eventsCount
-                          ? (this._events = Object.create(null))
-                          : delete s[e]),
-                    this
-                  );
-                if (0 === arguments.length) {
-                  var i,
-                    n = Object.keys(s);
-                  for (r = 0; r < n.length; ++r)
-                    "removeListener" !== (i = n[r]) &&
-                      this.removeAllListeners(i);
-                  return (
-                    this.removeAllListeners("removeListener"),
-                    (this._events = Object.create(null)),
-                    (this._eventsCount = 0),
-                    this
-                  );
-                }
-                if ("function" == typeof (t = s[e])) this.removeListener(e, t);
-                else if (void 0 !== t)
-                  for (r = t.length - 1; r >= 0; r--)
-                    this.removeListener(e, t[r]);
-                return this;
-              }),
-              (n.prototype.listeners = function (e) {
-                return d(this, e, !0);
-              }),
-              (n.prototype.rawListeners = function (e) {
-                return d(this, e, !1);
-              }),
-              (n.listenerCount = function (e, t) {
-                return "function" == typeof e.listenerCount
-                  ? e.listenerCount(t)
-                  : g.call(e, t);
-              }),
-              (n.prototype.listenerCount = g),
-              (n.prototype.eventNames = function () {
-                return this._eventsCount > 0 ? t(this._events) : [];
-              }));
-          },
-          558: function (e) {
-            !(function () {
-              var t =
-                  /^(?=((?:[a-zA-Z0-9+\-.]+:)?))\1(?=((?:\/\/[^\/?#]*)?))\2(?=((?:(?:[^?#\/]*\/)*[^;?#\/]*)?))\3((?:;[^?#]*)?)(\?[^#]*)?(#[^]*)?$/,
-                s = /^(?=([^\/?#]*))\1([^]*)$/,
-                r = /(?:\/|^)\.(?=\/)/g,
-                i = /(?:\/|^)\.\.\/(?!\.\.\/)[^\/]*(?=\/)/g,
-                n = {
-                  buildAbsoluteURL: function (e, t, r) {
-                    if (((r = r || {}), (e = e.trim()), !(t = t.trim()))) {
-                      if (!r.alwaysNormalize) return e;
-                      var i = n.parseURL(e);
-                      if (!i)
-                        throw new Error("Error trying to parse base URL.");
-                      return (
-                        (i.path = n.normalizePath(i.path)),
-                        n.buildURLFromParts(i)
-                      );
-                    }
-                    var o = n.parseURL(t);
-                    if (!o)
-                      throw new Error("Error trying to parse relative URL.");
-                    if (o.scheme)
-                      return r.alwaysNormalize
-                        ? ((o.path = n.normalizePath(o.path)),
-                          n.buildURLFromParts(o))
-                        : t;
-                    var a = n.parseURL(e);
-                    if (!a) throw new Error("Error trying to parse base URL.");
-                    if (!a.netLoc && a.path && "/" !== a.path[0]) {
-                      var u = s.exec(a.path);
-                      ((a.netLoc = u[1]), (a.path = u[2]));
-                    }
-                    a.netLoc && !a.path && (a.path = "/");
-                    var l = {
-                      scheme: a.scheme,
-                      netLoc: o.netLoc,
-                      path: null,
-                      params: o.params,
-                      query: o.query,
-                      fragment: o.fragment,
-                    };
-                    if (!o.netLoc && ((l.netLoc = a.netLoc), "/" !== o.path[0]))
-                      if (o.path) {
-                        var c = a.path,
-                          h = c.substring(0, c.lastIndexOf("/") + 1) + o.path;
-                        l.path = n.normalizePath(h);
-                      } else
-                        ((l.path = a.path),
-                          o.params ||
-                            ((l.params = a.params),
-                            o.query || (l.query = a.query)));
-                    return (
-                      null === l.path &&
-                        (l.path = r.alwaysNormalize
-                          ? n.normalizePath(o.path)
-                          : o.path),
-                      n.buildURLFromParts(l)
-                    );
-                  },
-                  parseURL: function (e) {
-                    var s = t.exec(e);
-                    return s
-                      ? {
-                          scheme: s[1] || "",
-                          netLoc: s[2] || "",
-                          path: s[3] || "",
-                          params: s[4] || "",
-                          query: s[5] || "",
-                          fragment: s[6] || "",
-                        }
-                      : null;
-                  },
-                  normalizePath: function (e) {
-                    for (
-                      e = e.split("").reverse().join("").replace(r, "");
-                      e.length !== (e = e.replace(i, "")).length;
-                    );
-                    return e.split("").reverse().join("");
-                  },
-                  buildURLFromParts: function (e) {
-                    return (
-                      e.scheme +
-                      e.netLoc +
-                      e.path +
-                      e.params +
-                      e.query +
-                      e.fragment
-                    );
-                  },
-                };
-              e.exports = n;
-            })();
-          },
-          424: (e, t) => {
-            "use strict";
-            t.h = i;
-            var s = 2147483647;
-            function r(e) {
-              if (e > s)
-                throw new RangeError(
-                  'The value "' + e + '" is invalid for option "size"',
-                );
-              var t = new Uint8Array(e);
-              return ((t.__proto__ = i.prototype), t);
-            }
-            function i(e, t, s) {
-              if ("number" == typeof e) {
-                if ("string" == typeof t)
-                  throw new TypeError(
-                    'The "string" argument must be of type string. Received type number',
-                  );
-                return a(e);
-              }
-              return n(e, t, s);
-            }
-            function n(e, t, s) {
-              if ("string" == typeof e)
-                return (function (e, t) {
-                  if (
-                    (("string" == typeof t && "" !== t) || (t = "utf8"),
-                    !i.isEncoding(t))
-                  )
-                    throw new TypeError("Unknown encoding: " + t);
-                  var s = 0 | c(e, t),
-                    n = r(s),
-                    o = n.write(e, t);
-                  return (o !== s && (n = n.slice(0, o)), n);
-                })(e, t);
-              if (ArrayBuffer.isView(e)) return u(e);
-              if (null == e)
-                throw TypeError(
-                  "The first argument must be one of type string, Buffer, ArrayBuffer, Array, or Array-like Object. Received type " +
-                    typeof e,
-                );
-              if (y(e, ArrayBuffer) || (e && y(e.buffer, ArrayBuffer)))
-                return (function (e, t, s) {
-                  if (t < 0 || e.byteLength < t)
-                    throw new RangeError(
-                      '"offset" is outside of buffer bounds',
-                    );
-                  if (e.byteLength < t + (s || 0))
-                    throw new RangeError(
-                      '"length" is outside of buffer bounds',
-                    );
-                  var r;
-                  return (
-                    ((r =
-                      void 0 === t && void 0 === s
-                        ? new Uint8Array(e)
-                        : void 0 === s
-                          ? new Uint8Array(e, t)
-                          : new Uint8Array(e, t, s)).__proto__ = i.prototype),
-                    r
-                  );
-                })(e, t, s);
-              if ("number" == typeof e)
-                throw new TypeError(
-                  'The "value" argument must not be of type number. Received type number',
-                );
-              var n = e.valueOf && e.valueOf();
-              if (null != n && n !== e) return i.from(n, t, s);
-              var o = (function (e) {
-                if (i.isBuffer(e)) {
-                  var t = 0 | l(e.length),
-                    s = r(t);
-                  return (0 === s.length || e.copy(s, 0, 0, t), s);
-                }
-                return void 0 !== e.length
-                  ? "number" != typeof e.length || D(e.length)
-                    ? r(0)
-                    : u(e)
-                  : "Buffer" === e.type && Array.isArray(e.data)
-                    ? u(e.data)
-                    : void 0;
-              })(e);
-              if (o) return o;
-              if (
-                "undefined" != typeof Symbol &&
-                null != Symbol.toPrimitive &&
-                "function" == typeof e[Symbol.toPrimitive]
-              )
-                return i.from(e[Symbol.toPrimitive]("string"), t, s);
-              throw new TypeError(
-                "The first argument must be one of type string, Buffer, ArrayBuffer, Array, or Array-like Object. Received type " +
-                  typeof e,
+            ) {
+              o.warned = !0;
+              var c = new Error(
+                "Possible EventEmitter memory leak detected. " +
+                o.length +
+                " " +
+                String(t) +
+                " listeners added. Use emitter.setMaxListeners() to increase limit",
               );
+              ((c.name = "MaxListenersExceededWarning"),
+                (c.emitter = e),
+                (c.type = t),
+                (c.count = o.length),
+                (l = c),
+                console && console.warn && console.warn(l));
             }
-            function o(e) {
-              if ("number" != typeof e)
-                throw new TypeError('"size" argument must be of type number');
-              if (e < 0)
-                throw new RangeError(
-                  'The value "' + e + '" is invalid for option "size"',
-                );
-            }
-            function a(e) {
-              return (o(e), r(e < 0 ? 0 : 0 | l(e)));
-            }
-            function u(e) {
-              for (
-                var t = e.length < 0 ? 0 : 0 | l(e.length), s = r(t), i = 0;
-                i < t;
-                i += 1
-              )
-                s[i] = 255 & e[i];
-              return s;
-            }
-            function l(e) {
-              if (e >= s)
-                throw new RangeError(
-                  "Attempt to allocate Buffer larger than maximum size: 0x" +
-                    s.toString(16) +
-                    " bytes",
-                );
-              return 0 | e;
-            }
-            function c(e, t) {
-              if (i.isBuffer(e)) return e.length;
-              if (ArrayBuffer.isView(e) || y(e, ArrayBuffer))
-                return e.byteLength;
-              if ("string" != typeof e)
-                throw new TypeError(
-                  'The "string" argument must be one of type string, Buffer, or ArrayBuffer. Received type ' +
-                    typeof e,
-                );
-              var s = e.length,
-                r = arguments.length > 2 && !0 === arguments[2];
-              if (!r && 0 === s) return 0;
-              for (var n = !1; ; )
-                switch (t) {
-                  case "ascii":
-                  case "latin1":
-                  case "binary":
-                    return s;
-                  case "utf8":
-                  case "utf-8":
-                    return m(e).length;
-                  case "ucs2":
-                  case "ucs-2":
-                  case "utf16le":
-                  case "utf-16le":
-                    return 2 * s;
-                  case "hex":
-                    return s >>> 1;
-                  default:
-                    if (n) return r ? -1 : m(e).length;
-                    ((t = ("" + t).toLowerCase()), (n = !0));
-                }
-            }
-            function h(e, t, s, r) {
-              s = Number(s) || 0;
-              const i = e.length - s;
-              r ? (r = Number(r)) > i && (r = i) : (r = i);
-              const n = t.length;
-              let o;
-              for (r > n / 2 && (r = n / 2), o = 0; o < r; ++o) {
-                const r = parseInt(t.substr(2 * o, 2), 16);
-                if (D(r)) return o;
-                e[s + o] = r;
-              }
-              return o;
-            }
-            function d(e, t, s, r) {
-              return p(m(t, e.length - s), e, s, r);
-            }
-            function g(e, t, s, r) {
-              return p(
-                (function (e) {
-                  const t = [];
-                  for (let s = 0; s < e.length; ++s)
-                    t.push(255 & e.charCodeAt(s));
-                  return t;
-                })(t),
-                e,
-                s,
-                r,
-              );
-            }
-            function f(e, t, s, r) {
-              return p(
-                (function (e, t) {
-                  let s, r, i;
-                  const n = [];
-                  for (let o = 0; o < e.length && !((t -= 2) < 0); ++o)
-                    ((s = e.charCodeAt(o)),
-                      (r = s >> 8),
-                      (i = s % 256),
-                      n.push(i),
-                      n.push(r));
-                  return n;
-                })(t, e.length - s),
-                e,
-                s,
-                r,
-              );
-            }
-            function p(e, t, s, r) {
-              let i;
-              for (i = 0; i < r && !(i + s >= t.length || i >= e.length); ++i)
-                t[i + s] = e[i];
-              return i;
-            }
-            function m(e, t) {
-              var s;
-              t = t || 1 / 0;
-              for (var r = e.length, i = null, n = [], o = 0; o < r; ++o) {
-                if ((s = e.charCodeAt(o)) > 55295 && s < 57344) {
-                  if (!i) {
-                    if (s > 56319) {
-                      (t -= 3) > -1 && n.push(239, 191, 189);
-                      continue;
-                    }
-                    if (o + 1 === r) {
-                      (t -= 3) > -1 && n.push(239, 191, 189);
-                      continue;
-                    }
-                    i = s;
-                    continue;
-                  }
-                  if (s < 56320) {
-                    ((t -= 3) > -1 && n.push(239, 191, 189), (i = s));
-                    continue;
-                  }
-                  s = 65536 + (((i - 55296) << 10) | (s - 56320));
-                } else i && (t -= 3) > -1 && n.push(239, 191, 189);
-                if (((i = null), s < 128)) {
-                  if ((t -= 1) < 0) break;
-                  n.push(s);
-                } else if (s < 2048) {
-                  if ((t -= 2) < 0) break;
-                  n.push((s >> 6) | 192, (63 & s) | 128);
-                } else if (s < 65536) {
-                  if ((t -= 3) < 0) break;
-                  n.push(
-                    (s >> 12) | 224,
-                    ((s >> 6) & 63) | 128,
-                    (63 & s) | 128,
-                  );
-                } else {
-                  if (!(s < 1114112)) throw new Error("Invalid code point");
-                  if ((t -= 4) < 0) break;
-                  n.push(
-                    (s >> 18) | 240,
-                    ((s >> 12) & 63) | 128,
-                    ((s >> 6) & 63) | 128,
-                    (63 & s) | 128,
-                  );
-                }
-              }
-              return n;
-            }
-            function y(e, t) {
+            return e;
+          }
+          function c() {
+            if (!this.fired)
               return (
-                e instanceof t ||
-                (null != e &&
-                  null != e.constructor &&
-                  null != e.constructor.name &&
-                  e.constructor.name === t.name)
+                this.target.removeListener(this.type, this.wrapFn),
+                (this.fired = !0),
+                0 === arguments.length
+                  ? this.listener.call(this.target)
+                  : this.listener.apply(this.target, arguments)
               );
+          }
+          function h(e, t, s) {
+            var r = {
+              fired: !1,
+              wrapFn: void 0,
+              target: e,
+              type: t,
+              listener: s,
+            },
+              i = c.bind(r);
+            return ((i.listener = s), (r.wrapFn = i), i);
+          }
+          function d(e, t, s) {
+            var r = e._events;
+            if (void 0 === r) return [];
+            var i = r[t];
+            return void 0 === i
+              ? []
+              : "function" == typeof i
+                ? s
+                  ? [i.listener || i]
+                  : [i]
+                : s
+                  ? (function (e) {
+                    for (
+                      var t = new Array(e.length), s = 0;
+                      s < t.length;
+                      ++s
+                    )
+                      t[s] = e[s].listener || e[s];
+                    return t;
+                  })(i)
+                  : f(i, i.length);
+          }
+          function g(e) {
+            var t = this._events;
+            if (void 0 !== t) {
+              var s = t[e];
+              if ("function" == typeof s) return 1;
+              if (void 0 !== s) return s.length;
             }
-            function D(e) {
-              return e != e;
+            return 0;
+          }
+          function f(e, t) {
+            for (var s = new Array(t), r = 0; r < t; ++r) s[r] = e[r];
+            return s;
+          }
+          function p(e, t, s, r) {
+            if ("function" == typeof e.on) r.once ? e.once(t, s) : e.on(t, s);
+            else {
+              if ("function" != typeof e.addEventListener)
+                throw new TypeError(
+                  'The "emitter" argument must be of type EventEmitter. Received type ' +
+                  typeof e,
+                );
+              e.addEventListener(t, function i(n) {
+                (r.once && e.removeEventListener(t, i), s(n));
+              });
             }
-            ("undefined" != typeof Symbol &&
-              null != Symbol.species &&
-              i[Symbol.species] === i &&
-              Object.defineProperty(i, Symbol.species, {
-                value: null,
-                configurable: !0,
-                enumerable: !1,
-                writable: !1,
-              }),
-              (i.from = function (e, t, s) {
-                return n(e, t, s);
-              }),
-              (i.prototype.__proto__ = Uint8Array.prototype),
-              (i.__proto__ = Uint8Array),
-              (i.alloc = function (e, t, s) {
-                return (function (e, t, s) {
+          }
+          (Object.defineProperty(n, "defaultMaxListeners", {
+            enumerable: !0,
+            get: function () {
+              return o;
+            },
+            set: function (e) {
+              if ("number" != typeof e || e < 0 || i(e))
+                throw new RangeError(
+                  'The value of "defaultMaxListeners" is out of range. It must be a non-negative number. Received ' +
+                  e +
+                  ".",
+                );
+              o = e;
+            },
+          }),
+            (n.init = function () {
+              ((void 0 !== this._events &&
+                this._events !== Object.getPrototypeOf(this)._events) ||
+                ((this._events = Object.create(null)),
+                  (this._eventsCount = 0)),
+                (this._maxListeners = this._maxListeners || void 0));
+            }),
+            (n.prototype.setMaxListeners = function (e) {
+              if ("number" != typeof e || e < 0 || i(e))
+                throw new RangeError(
+                  'The value of "n" is out of range. It must be a non-negative number. Received ' +
+                  e +
+                  ".",
+                );
+              return ((this._maxListeners = e), this);
+            }),
+            (n.prototype.getMaxListeners = function () {
+              return u(this);
+            }),
+            (n.prototype.emit = function (e) {
+              for (var t = [], s = 1; s < arguments.length; s++)
+                t.push(arguments[s]);
+              var i = "error" === e,
+                n = this._events;
+              if (void 0 !== n) i = i && void 0 === n.error;
+              else if (!i) return !1;
+              if (i) {
+                var o;
+                if ((t.length > 0 && (o = t[0]), o instanceof Error)) throw o;
+                var a = new Error(
+                  "Unhandled error." + (o ? " (" + o.message + ")" : ""),
+                );
+                throw ((a.context = o), a);
+              }
+              var u = n[e];
+              if (void 0 === u) return !1;
+              if ("function" == typeof u) r(u, this, t);
+              else {
+                var l = u.length,
+                  c = f(u, l);
+                for (s = 0; s < l; ++s) r(c[s], this, t);
+              }
+              return !0;
+            }),
+            (n.prototype.addListener = function (e, t) {
+              return l(this, e, t, !1);
+            }),
+            (n.prototype.on = n.prototype.addListener),
+            (n.prototype.prependListener = function (e, t) {
+              return l(this, e, t, !0);
+            }),
+            (n.prototype.once = function (e, t) {
+              return (a(t), this.on(e, h(this, e, t)), this);
+            }),
+            (n.prototype.prependOnceListener = function (e, t) {
+              return (a(t), this.prependListener(e, h(this, e, t)), this);
+            }),
+            (n.prototype.removeListener = function (e, t) {
+              var s, r, i, n, o;
+              if ((a(t), void 0 === (r = this._events))) return this;
+              if (void 0 === (s = r[e])) return this;
+              if (s === t || s.listener === t)
+                0 == --this._eventsCount
+                  ? (this._events = Object.create(null))
+                  : (delete r[e],
+                    r.removeListener &&
+                    this.emit("removeListener", e, s.listener || t));
+              else if ("function" != typeof s) {
+                for (i = -1, n = s.length - 1; n >= 0; n--)
+                  if (s[n] === t || s[n].listener === t) {
+                    ((o = s[n].listener), (i = n));
+                    break;
+                  }
+                if (i < 0) return this;
+                (0 === i
+                  ? s.shift()
+                  : (function (e, t) {
+                    for (; t + 1 < e.length; t++) e[t] = e[t + 1];
+                    e.pop();
+                  })(s, i),
+                  1 === s.length && (r[e] = s[0]),
+                  void 0 !== r.removeListener &&
+                  this.emit("removeListener", e, o || t));
+              }
+              return this;
+            }),
+            (n.prototype.off = n.prototype.removeListener),
+            (n.prototype.removeAllListeners = function (e) {
+              var t, s, r;
+              if (void 0 === (s = this._events)) return this;
+              if (void 0 === s.removeListener)
+                return (
+                  0 === arguments.length
+                    ? ((this._events = Object.create(null)),
+                      (this._eventsCount = 0))
+                    : void 0 !== s[e] &&
+                    (0 == --this._eventsCount
+                      ? (this._events = Object.create(null))
+                      : delete s[e]),
+                  this
+                );
+              if (0 === arguments.length) {
+                var i,
+                  n = Object.keys(s);
+                for (r = 0; r < n.length; ++r)
+                  "removeListener" !== (i = n[r]) &&
+                    this.removeAllListeners(i);
+                return (
+                  this.removeAllListeners("removeListener"),
+                  (this._events = Object.create(null)),
+                  (this._eventsCount = 0),
+                  this
+                );
+              }
+              if ("function" == typeof (t = s[e])) this.removeListener(e, t);
+              else if (void 0 !== t)
+                for (r = t.length - 1; r >= 0; r--)
+                  this.removeListener(e, t[r]);
+              return this;
+            }),
+            (n.prototype.listeners = function (e) {
+              return d(this, e, !0);
+            }),
+            (n.prototype.rawListeners = function (e) {
+              return d(this, e, !1);
+            }),
+            (n.listenerCount = function (e, t) {
+              return "function" == typeof e.listenerCount
+                ? e.listenerCount(t)
+                : g.call(e, t);
+            }),
+            (n.prototype.listenerCount = g),
+            (n.prototype.eventNames = function () {
+              return this._eventsCount > 0 ? t(this._events) : [];
+            }));
+        },
+        558: function (e) {
+          !(function () {
+            var t =
+              /^(?=((?:[a-zA-Z0-9+\-.]+:)?))\1(?=((?:\/\/[^\/?#]*)?))\2(?=((?:(?:[^?#\/]*\/)*[^;?#\/]*)?))\3((?:;[^?#]*)?)(\?[^#]*)?(#[^]*)?$/,
+              s = /^(?=([^\/?#]*))\1([^]*)$/,
+              r = /(?:\/|^)\.(?=\/)/g,
+              i = /(?:\/|^)\.\.\/(?!\.\.\/)[^\/]*(?=\/)/g,
+              n = {
+                buildAbsoluteURL: function (e, t, r) {
+                  if (((r = r || {}), (e = e.trim()), !(t = t.trim()))) {
+                    if (!r.alwaysNormalize) return e;
+                    var i = n.parseURL(e);
+                    if (!i)
+                      throw new Error("Error trying to parse base URL.");
+                    return (
+                      (i.path = n.normalizePath(i.path)),
+                      n.buildURLFromParts(i)
+                    );
+                  }
+                  var o = n.parseURL(t);
+                  if (!o)
+                    throw new Error("Error trying to parse relative URL.");
+                  if (o.scheme)
+                    return r.alwaysNormalize
+                      ? ((o.path = n.normalizePath(o.path)),
+                        n.buildURLFromParts(o))
+                      : t;
+                  var a = n.parseURL(e);
+                  if (!a) throw new Error("Error trying to parse base URL.");
+                  if (!a.netLoc && a.path && "/" !== a.path[0]) {
+                    var u = s.exec(a.path);
+                    ((a.netLoc = u[1]), (a.path = u[2]));
+                  }
+                  a.netLoc && !a.path && (a.path = "/");
+                  var l = {
+                    scheme: a.scheme,
+                    netLoc: o.netLoc,
+                    path: null,
+                    params: o.params,
+                    query: o.query,
+                    fragment: o.fragment,
+                  };
+                  if (!o.netLoc && ((l.netLoc = a.netLoc), "/" !== o.path[0]))
+                    if (o.path) {
+                      var c = a.path,
+                        h = c.substring(0, c.lastIndexOf("/") + 1) + o.path;
+                      l.path = n.normalizePath(h);
+                    } else
+                      ((l.path = a.path),
+                        o.params ||
+                        ((l.params = a.params),
+                          o.query || (l.query = a.query)));
                   return (
-                    o(e),
-                    e <= 0
-                      ? r(e)
-                      : void 0 !== t
-                        ? "string" == typeof s
-                          ? r(e).fill(t, s)
-                          : r(e).fill(t)
-                        : r(e)
+                    null === l.path &&
+                    (l.path = r.alwaysNormalize
+                      ? n.normalizePath(o.path)
+                      : o.path),
+                    n.buildURLFromParts(l)
                   );
-                })(e, t, s);
-              }),
-              (i.allocUnsafe = function (e) {
-                return a(e);
-              }),
-              (i.isBuffer = function (e) {
-                return null != e && !0 === e._isBuffer && e !== i.prototype;
-              }),
-              (i.isEncoding = function (e) {
-                switch (String(e).toLowerCase()) {
-                  case "hex":
-                  case "utf8":
-                  case "utf-8":
-                  case "ascii":
-                  case "latin1":
-                  case "binary":
-                  case "base64":
-                  case "ucs2":
-                  case "ucs-2":
-                  case "utf16le":
-                  case "utf-16le":
-                    return !0;
-                  default:
-                    return !1;
+                },
+                parseURL: function (e) {
+                  var s = t.exec(e);
+                  return s
+                    ? {
+                      scheme: s[1] || "",
+                      netLoc: s[2] || "",
+                      path: s[3] || "",
+                      params: s[4] || "",
+                      query: s[5] || "",
+                      fragment: s[6] || "",
+                    }
+                    : null;
+                },
+                normalizePath: function (e) {
+                  for (
+                    e = e.split("").reverse().join("").replace(r, "");
+                    e.length !== (e = e.replace(i, "")).length;
+                  );
+                  return e.split("").reverse().join("");
+                },
+                buildURLFromParts: function (e) {
+                  return (
+                    e.scheme +
+                    e.netLoc +
+                    e.path +
+                    e.params +
+                    e.query +
+                    e.fragment
+                  );
+                },
+              };
+            e.exports = n;
+          })();
+        },
+        424: (e, t) => {
+          "use strict";
+          t.h = i;
+          var s = 2147483647;
+          function r(e) {
+            if (e > s)
+              throw new RangeError(
+                'The value "' + e + '" is invalid for option "size"',
+              );
+            var t = new Uint8Array(e);
+            return ((t.__proto__ = i.prototype), t);
+          }
+          function i(e, t, s) {
+            if ("number" == typeof e) {
+              if ("string" == typeof t)
+                throw new TypeError(
+                  'The "string" argument must be of type string. Received type number',
+                );
+              return a(e);
+            }
+            return n(e, t, s);
+          }
+          function n(e, t, s) {
+            if ("string" == typeof e)
+              return (function (e, t) {
+                if (
+                  (("string" == typeof t && "" !== t) || (t = "utf8"),
+                    !i.isEncoding(t))
+                )
+                  throw new TypeError("Unknown encoding: " + t);
+                var s = 0 | c(e, t),
+                  n = r(s),
+                  o = n.write(e, t);
+                return (o !== s && (n = n.slice(0, o)), n);
+              })(e, t);
+            if (ArrayBuffer.isView(e)) return u(e);
+            if (null == e)
+              throw TypeError(
+                "The first argument must be one of type string, Buffer, ArrayBuffer, Array, or Array-like Object. Received type " +
+                typeof e,
+              );
+            if (y(e, ArrayBuffer) || (e && y(e.buffer, ArrayBuffer)))
+              return (function (e, t, s) {
+                if (t < 0 || e.byteLength < t)
+                  throw new RangeError(
+                    '"offset" is outside of buffer bounds',
+                  );
+                if (e.byteLength < t + (s || 0))
+                  throw new RangeError(
+                    '"length" is outside of buffer bounds',
+                  );
+                var r;
+                return (
+                  ((r =
+                    void 0 === t && void 0 === s
+                      ? new Uint8Array(e)
+                      : void 0 === s
+                        ? new Uint8Array(e, t)
+                        : new Uint8Array(e, t, s)).__proto__ = i.prototype),
+                  r
+                );
+              })(e, t, s);
+            if ("number" == typeof e)
+              throw new TypeError(
+                'The "value" argument must not be of type number. Received type number',
+              );
+            var n = e.valueOf && e.valueOf();
+            if (null != n && n !== e) return i.from(n, t, s);
+            var o = (function (e) {
+              if (i.isBuffer(e)) {
+                var t = 0 | l(e.length),
+                  s = r(t);
+                return (0 === s.length || e.copy(s, 0, 0, t), s);
+              }
+              return void 0 !== e.length
+                ? "number" != typeof e.length || D(e.length)
+                  ? r(0)
+                  : u(e)
+                : "Buffer" === e.type && Array.isArray(e.data)
+                  ? u(e.data)
+                  : void 0;
+            })(e);
+            if (o) return o;
+            if (
+              "undefined" != typeof Symbol &&
+              null != Symbol.toPrimitive &&
+              "function" == typeof e[Symbol.toPrimitive]
+            )
+              return i.from(e[Symbol.toPrimitive]("string"), t, s);
+            throw new TypeError(
+              "The first argument must be one of type string, Buffer, ArrayBuffer, Array, or Array-like Object. Received type " +
+              typeof e,
+            );
+          }
+          function o(e) {
+            if ("number" != typeof e)
+              throw new TypeError('"size" argument must be of type number');
+            if (e < 0)
+              throw new RangeError(
+                'The value "' + e + '" is invalid for option "size"',
+              );
+          }
+          function a(e) {
+            return (o(e), r(e < 0 ? 0 : 0 | l(e)));
+          }
+          function u(e) {
+            for (
+              var t = e.length < 0 ? 0 : 0 | l(e.length), s = r(t), i = 0;
+              i < t;
+              i += 1
+            )
+              s[i] = 255 & e[i];
+            return s;
+          }
+          function l(e) {
+            if (e >= s)
+              throw new RangeError(
+                "Attempt to allocate Buffer larger than maximum size: 0x" +
+                s.toString(16) +
+                " bytes",
+              );
+            return 0 | e;
+          }
+          function c(e, t) {
+            if (i.isBuffer(e)) return e.length;
+            if (ArrayBuffer.isView(e) || y(e, ArrayBuffer))
+              return e.byteLength;
+            if ("string" != typeof e)
+              throw new TypeError(
+                'The "string" argument must be one of type string, Buffer, or ArrayBuffer. Received type ' +
+                typeof e,
+              );
+            var s = e.length,
+              r = arguments.length > 2 && !0 === arguments[2];
+            if (!r && 0 === s) return 0;
+            for (var n = !1; ;)
+              switch (t) {
+                case "ascii":
+                case "latin1":
+                case "binary":
+                  return s;
+                case "utf8":
+                case "utf-8":
+                  return m(e).length;
+                case "ucs2":
+                case "ucs-2":
+                case "utf16le":
+                case "utf-16le":
+                  return 2 * s;
+                case "hex":
+                  return s >>> 1;
+                default:
+                  if (n) return r ? -1 : m(e).length;
+                  ((t = ("" + t).toLowerCase()), (n = !0));
+              }
+          }
+          function h(e, t, s, r) {
+            s = Number(s) || 0;
+            const i = e.length - s;
+            r ? (r = Number(r)) > i && (r = i) : (r = i);
+            const n = t.length;
+            let o;
+            for (r > n / 2 && (r = n / 2), o = 0; o < r; ++o) {
+              const r = parseInt(t.substr(2 * o, 2), 16);
+              if (D(r)) return o;
+              e[s + o] = r;
+            }
+            return o;
+          }
+          function d(e, t, s, r) {
+            return p(m(t, e.length - s), e, s, r);
+          }
+          function g(e, t, s, r) {
+            return p(
+              (function (e) {
+                const t = [];
+                for (let s = 0; s < e.length; ++s)
+                  t.push(255 & e.charCodeAt(s));
+                return t;
+              })(t),
+              e,
+              s,
+              r,
+            );
+          }
+          function f(e, t, s, r) {
+            return p(
+              (function (e, t) {
+                let s, r, i;
+                const n = [];
+                for (let o = 0; o < e.length && !((t -= 2) < 0); ++o)
+                  ((s = e.charCodeAt(o)),
+                    (r = s >> 8),
+                    (i = s % 256),
+                    n.push(i),
+                    n.push(r));
+                return n;
+              })(t, e.length - s),
+              e,
+              s,
+              r,
+            );
+          }
+          function p(e, t, s, r) {
+            let i;
+            for (i = 0; i < r && !(i + s >= t.length || i >= e.length); ++i)
+              t[i + s] = e[i];
+            return i;
+          }
+          function m(e, t) {
+            var s;
+            t = t || 1 / 0;
+            for (var r = e.length, i = null, n = [], o = 0; o < r; ++o) {
+              if ((s = e.charCodeAt(o)) > 55295 && s < 57344) {
+                if (!i) {
+                  if (s > 56319) {
+                    (t -= 3) > -1 && n.push(239, 191, 189);
+                    continue;
+                  }
+                  if (o + 1 === r) {
+                    (t -= 3) > -1 && n.push(239, 191, 189);
+                    continue;
+                  }
+                  i = s;
+                  continue;
                 }
-              }),
-              (i.concat = function (e, t) {
-                if (!Array.isArray(e))
+                if (s < 56320) {
+                  ((t -= 3) > -1 && n.push(239, 191, 189), (i = s));
+                  continue;
+                }
+                s = 65536 + (((i - 55296) << 10) | (s - 56320));
+              } else i && (t -= 3) > -1 && n.push(239, 191, 189);
+              if (((i = null), s < 128)) {
+                if ((t -= 1) < 0) break;
+                n.push(s);
+              } else if (s < 2048) {
+                if ((t -= 2) < 0) break;
+                n.push((s >> 6) | 192, (63 & s) | 128);
+              } else if (s < 65536) {
+                if ((t -= 3) < 0) break;
+                n.push(
+                  (s >> 12) | 224,
+                  ((s >> 6) & 63) | 128,
+                  (63 & s) | 128,
+                );
+              } else {
+                if (!(s < 1114112)) throw new Error("Invalid code point");
+                if ((t -= 4) < 0) break;
+                n.push(
+                  (s >> 18) | 240,
+                  ((s >> 12) & 63) | 128,
+                  ((s >> 6) & 63) | 128,
+                  (63 & s) | 128,
+                );
+              }
+            }
+            return n;
+          }
+          function y(e, t) {
+            return (
+              e instanceof t ||
+              (null != e &&
+                null != e.constructor &&
+                null != e.constructor.name &&
+                e.constructor.name === t.name)
+            );
+          }
+          function D(e) {
+            return e != e;
+          }
+          ("undefined" != typeof Symbol &&
+            null != Symbol.species &&
+            i[Symbol.species] === i &&
+            Object.defineProperty(i, Symbol.species, {
+              value: null,
+              configurable: !0,
+              enumerable: !1,
+              writable: !1,
+            }),
+            (i.from = function (e, t, s) {
+              return n(e, t, s);
+            }),
+            (i.prototype.__proto__ = Uint8Array.prototype),
+            (i.__proto__ = Uint8Array),
+            (i.alloc = function (e, t, s) {
+              return (function (e, t, s) {
+                return (
+                  o(e),
+                  e <= 0
+                    ? r(e)
+                    : void 0 !== t
+                      ? "string" == typeof s
+                        ? r(e).fill(t, s)
+                        : r(e).fill(t)
+                      : r(e)
+                );
+              })(e, t, s);
+            }),
+            (i.allocUnsafe = function (e) {
+              return a(e);
+            }),
+            (i.isBuffer = function (e) {
+              return null != e && !0 === e._isBuffer && e !== i.prototype;
+            }),
+            (i.isEncoding = function (e) {
+              switch (String(e).toLowerCase()) {
+                case "hex":
+                case "utf8":
+                case "utf-8":
+                case "ascii":
+                case "latin1":
+                case "binary":
+                case "base64":
+                case "ucs2":
+                case "ucs-2":
+                case "utf16le":
+                case "utf-16le":
+                  return !0;
+                default:
+                  return !1;
+              }
+            }),
+            (i.concat = function (e, t) {
+              if (!Array.isArray(e))
+                throw new TypeError(
+                  '"list" argument must be an Array of Buffers',
+                );
+              if (0 === e.length) return i.alloc(0);
+              var s;
+              if (void 0 === t)
+                for (t = 0, s = 0; s < e.length; ++s) t += e[s].length;
+              var r = i.allocUnsafe(t),
+                n = 0;
+              for (s = 0; s < e.length; ++s) {
+                var o = e[s];
+                if ((y(o, Uint8Array) && (o = i.from(o)), !i.isBuffer(o)))
                   throw new TypeError(
                     '"list" argument must be an Array of Buffers',
                   );
-                if (0 === e.length) return i.alloc(0);
-                var s;
-                if (void 0 === t)
-                  for (t = 0, s = 0; s < e.length; ++s) t += e[s].length;
-                var r = i.allocUnsafe(t),
-                  n = 0;
-                for (s = 0; s < e.length; ++s) {
-                  var o = e[s];
-                  if ((y(o, Uint8Array) && (o = i.from(o)), !i.isBuffer(o)))
-                    throw new TypeError(
-                      '"list" argument must be an Array of Buffers',
-                    );
-                  (o.copy(r, n), (n += o.length));
-                }
-                return r;
-              }),
-              (i.byteLength = c),
-              (i.prototype._isBuffer = !0),
-              (i.prototype.copy = function (e, t, s, r) {
-                if (!i.isBuffer(e))
-                  throw new TypeError("argument should be a Buffer");
-                if (
-                  (s || (s = 0),
+                (o.copy(r, n), (n += o.length));
+              }
+              return r;
+            }),
+            (i.byteLength = c),
+            (i.prototype._isBuffer = !0),
+            (i.prototype.copy = function (e, t, s, r) {
+              if (!i.isBuffer(e))
+                throw new TypeError("argument should be a Buffer");
+              if (
+                (s || (s = 0),
                   r || 0 === r || (r = this.length),
                   t >= e.length && (t = e.length),
                   t || (t = 0),
                   r > 0 && r < s && (r = s),
                   r === s)
-                )
-                  return 0;
-                if (0 === e.length || 0 === this.length) return 0;
-                if (t < 0) throw new RangeError("targetStart out of bounds");
-                if (s < 0 || s >= this.length)
-                  throw new RangeError("Index out of range");
-                if (r < 0) throw new RangeError("sourceEnd out of bounds");
-                (r > this.length && (r = this.length),
-                  e.length - t < r - s && (r = e.length - t + s));
-                var n = r - s;
-                if (
-                  this === e &&
-                  "function" == typeof Uint8Array.prototype.copyWithin
-                )
-                  this.copyWithin(t, s, r);
-                else if (this === e && s < t && t < r)
-                  for (var o = n - 1; o >= 0; --o) e[o + t] = this[o + s];
-                else Uint8Array.prototype.set.call(e, this.subarray(s, r), t);
-                return n;
-              }),
-              (i.prototype.write = function (e, t, s, r) {
-                if (void 0 === t) ((r = "utf8"), (s = this.length), (t = 0));
-                else if (void 0 === s && "string" == typeof t)
-                  ((r = t), (s = this.length), (t = 0));
-                else {
-                  if (!isFinite(t))
-                    throw new Error(
-                      "Buffer.write(string, encoding, offset[, length]) is no longer supported",
-                    );
-                  ((t >>>= 0),
-                    isFinite(s)
-                      ? ((s >>>= 0), void 0 === r && (r = "utf8"))
-                      : ((r = s), (s = void 0)));
-                }
-                const i = this.length - t;
-                if (
-                  ((void 0 === s || s > i) && (s = i),
-                  (e.length > 0 && (s < 0 || t < 0)) || t > this.length)
-                )
-                  throw new RangeError(
-                    "Attempt to write outside buffer bounds",
+              )
+                return 0;
+              if (0 === e.length || 0 === this.length) return 0;
+              if (t < 0) throw new RangeError("targetStart out of bounds");
+              if (s < 0 || s >= this.length)
+                throw new RangeError("Index out of range");
+              if (r < 0) throw new RangeError("sourceEnd out of bounds");
+              (r > this.length && (r = this.length),
+                e.length - t < r - s && (r = e.length - t + s));
+              var n = r - s;
+              if (
+                this === e &&
+                "function" == typeof Uint8Array.prototype.copyWithin
+              )
+                this.copyWithin(t, s, r);
+              else if (this === e && s < t && t < r)
+                for (var o = n - 1; o >= 0; --o) e[o + t] = this[o + s];
+              else Uint8Array.prototype.set.call(e, this.subarray(s, r), t);
+              return n;
+            }),
+            (i.prototype.write = function (e, t, s, r) {
+              if (void 0 === t) ((r = "utf8"), (s = this.length), (t = 0));
+              else if (void 0 === s && "string" == typeof t)
+                ((r = t), (s = this.length), (t = 0));
+              else {
+                if (!isFinite(t))
+                  throw new Error(
+                    "Buffer.write(string, encoding, offset[, length]) is no longer supported",
                   );
-                r || (r = "utf8");
-                let n = !1;
-                for (;;)
-                  switch (r) {
-                    case "hex":
-                      return h(this, e, t, s);
-                    case "utf8":
-                    case "utf-8":
-                      return d(this, e, t, s);
-                    case "ascii":
-                    case "latin1":
-                    case "binary":
-                      return g(this, e, t, s);
-                    case "ucs2":
-                    case "ucs-2":
-                    case "utf16le":
-                    case "utf-16le":
-                      return f(this, e, t, s);
-                    default:
-                      if (n) throw new TypeError("Unknown encoding: " + r);
-                      ((r = ("" + r).toLowerCase()), (n = !0));
-                  }
-              }));
-          },
-          365: (e) => {
-            const t = {
-              ANDROID_WEB: "android-web",
-              IOS_WEB: "iOS-web",
-              PC_NATIVE: "PC-web",
-              PC_WEB: "PC-web",
-            };
-            var s = {
-              getNetType: function () {
-                let e = (new RegExp("nettype\\/(\\w*)").exec(r()) || [
-                  ,
-                  "",
-                ])[1].toLowerCase();
-                if (!e && navigator.connection)
-                  switch (navigator.connection.type) {
-                    case "ethernet":
-                      e = "ethernet";
-                      break;
-                    case "cellular":
-                      e = "cellular";
-                      break;
-                    default:
-                      e = "wifi";
-                  }
-                return e;
-              },
-              getPlatform: function () {
-                return s.isAndroid() || s.isAndroidWebView()
-                  ? t.ANDROID_WEB
-                  : s.isIOS() || s.isIpad() || s.isIOSWebView()
-                    ? t.IOS_WEB
-                    : s.isElectron()
-                      ? t.PC_NATIVE
-                      : t.PC_WEB;
-              },
-              isX5: function () {
-                return (
-                  this.isAndroid() && /\s(TBS|X5Core)\/[\w\.\-]+/i.test(r())
+                ((t >>>= 0),
+                  isFinite(s)
+                    ? ((s >>>= 0), void 0 === r && (r = "utf8"))
+                    : ((r = s), (s = void 0)));
+              }
+              const i = this.length - t;
+              if (
+                ((void 0 === s || s > i) && (s = i),
+                  (e.length > 0 && (s < 0 || t < 0)) || t > this.length)
+              )
+                throw new RangeError(
+                  "Attempt to write outside buffer bounds",
                 );
-              },
-              isPC: function () {
-                return !n(i("os ")) && !n(i("android[/ ]"));
-              },
-              isIOS: function () {
-                return n(i("os "));
-              },
-              isIpad: function () {
-                return (
-                  r().match(/(ipad)/) ||
-                  ("MacIntel" === navigator.platform &&
-                    navigator.maxTouchPoints > 1)
-                );
-              },
-              isAndroid: function () {
-                return n(i("android[/ ]"));
-              },
-              isIOSSafari: function () {
-                return this.isIOS() && this.isSafari();
-              },
-              isIpadSafari: function () {
-                return this.isIpad() && this.isSafari();
-              },
-              isElectron: function () {
-                return /electron/i.test(r());
-              },
-              isMobile: function () {
-                return s.isAndroid() || s.isIOS();
-              },
-              isSafari: function () {
-                return /^((?!chrome|android).)*safari/i.test(r());
-              },
-              isFirefox: function () {
-                return /firefox/i.test(r());
-              },
-              isChrome: function () {
-                return /chrome/i.test(r());
-              },
-              isLocalHost: function () {
-                return "localhost" === location.hostname;
-              },
-              isAndroidWebView: function () {
-                const e = r();
-                return e.indexOf("wv") > -1 && e.indexOf("android") > -1;
-              },
-              isIOSWebView: function () {
-                const e = r();
-                return /\b(ipad|iphone|macintosh).*applewebKit(?!.*safari)/i.test(
-                  e,
-                );
-              },
-              isWebView: function () {
-                return s.isAndroidWebView() || s.isIOSWebView();
-              },
-              device: t,
-              getBrowser: function () {
-                return s.isX5()
-                  ? "X5"
-                  : s.isAndroidWebView()
-                    ? "Android-WebView"
-                    : s.isIOSWebView()
-                      ? "iOS-WebView"
-                      : s.isChrome()
-                        ? "Chrome"
-                        : s.isFirefox()
-                          ? "Firefox"
-                          : s.isIpadSafari()
-                            ? "iPad-Safari"
-                            : s.isIOSSafari()
-                              ? "iPhone-Safari"
-                              : s.isSafari()
-                                ? "Mac-Safari"
-                                : "Unknown";
-              },
-            };
-            function r() {
-              return navigator.userAgent.toLowerCase();
-            }
-            function i(e) {
-              return (
-                "" +
-                  (new RegExp(e + "(\\d+((\\.|_)\\d+)*)").exec(r()) || [
-                    ,
-                    0,
-                  ])[1] || void 0
-              );
-            }
-            function n(e) {
-              return parseFloat((e || "").replace(/\_/g, ".")) || 0;
-            }
-            e.exports = s;
-          },
+              r || (r = "utf8");
+              let n = !1;
+              for (; ;)
+                switch (r) {
+                  case "hex":
+                    return h(this, e, t, s);
+                  case "utf8":
+                  case "utf-8":
+                    return d(this, e, t, s);
+                  case "ascii":
+                  case "latin1":
+                  case "binary":
+                    return g(this, e, t, s);
+                  case "ucs2":
+                  case "ucs-2":
+                  case "utf16le":
+                  case "utf-16le":
+                    return f(this, e, t, s);
+                  default:
+                    if (n) throw new TypeError("Unknown encoding: " + r);
+                    ((r = ("" + r).toLowerCase()), (n = !0));
+                }
+            }));
         },
+        365: (e) => {
+          const t = {
+            ANDROID_WEB: "android-web",
+            IOS_WEB: "iOS-web",
+            PC_NATIVE: "PC-web",
+            PC_WEB: "PC-web",
+          };
+          var s = {
+            getNetType: function () {
+              let e = (new RegExp("nettype\\/(\\w*)").exec(r()) || [
+                ,
+                "",
+              ])[1].toLowerCase();
+              if (!e && navigator.connection)
+                switch (navigator.connection.type) {
+                  case "ethernet":
+                    e = "ethernet";
+                    break;
+                  case "cellular":
+                    e = "cellular";
+                    break;
+                  default:
+                    e = "wifi";
+                }
+              return e;
+            },
+            getPlatform: function () {
+              return s.isAndroid() || s.isAndroidWebView()
+                ? t.ANDROID_WEB
+                : s.isIOS() || s.isIpad() || s.isIOSWebView()
+                  ? t.IOS_WEB
+                  : s.isElectron()
+                    ? t.PC_NATIVE
+                    : t.PC_WEB;
+            },
+            isX5: function () {
+              return (
+                this.isAndroid() && /\s(TBS|X5Core)\/[\w\.\-]+/i.test(r())
+              );
+            },
+            isPC: function () {
+              return !n(i("os ")) && !n(i("android[/ ]"));
+            },
+            isIOS: function () {
+              return n(i("os "));
+            },
+            isIpad: function () {
+              return (
+                r().match(/(ipad)/) ||
+                ("MacIntel" === navigator.platform &&
+                  navigator.maxTouchPoints > 1)
+              );
+            },
+            isAndroid: function () {
+              return n(i("android[/ ]"));
+            },
+            isIOSSafari: function () {
+              return this.isIOS() && this.isSafari();
+            },
+            isIpadSafari: function () {
+              return this.isIpad() && this.isSafari();
+            },
+            isElectron: function () {
+              return /electron/i.test(r());
+            },
+            isMobile: function () {
+              return s.isAndroid() || s.isIOS();
+            },
+            isSafari: function () {
+              return /^((?!chrome|android).)*safari/i.test(r());
+            },
+            isFirefox: function () {
+              return /firefox/i.test(r());
+            },
+            isChrome: function () {
+              return /chrome/i.test(r());
+            },
+            isLocalHost: function () {
+              return "localhost" === location.hostname;
+            },
+            isAndroidWebView: function () {
+              const e = r();
+              return e.indexOf("wv") > -1 && e.indexOf("android") > -1;
+            },
+            isIOSWebView: function () {
+              const e = r();
+              return /\b(ipad|iphone|macintosh).*applewebKit(?!.*safari)/i.test(
+                e,
+              );
+            },
+            isWebView: function () {
+              return s.isAndroidWebView() || s.isIOSWebView();
+            },
+            device: t,
+            getBrowser: function () {
+              return s.isX5()
+                ? "X5"
+                : s.isAndroidWebView()
+                  ? "Android-WebView"
+                  : s.isIOSWebView()
+                    ? "iOS-WebView"
+                    : s.isChrome()
+                      ? "Chrome"
+                      : s.isFirefox()
+                        ? "Firefox"
+                        : s.isIpadSafari()
+                          ? "iPad-Safari"
+                          : s.isIOSSafari()
+                            ? "iPhone-Safari"
+                            : s.isSafari()
+                              ? "Mac-Safari"
+                              : "Unknown";
+            },
+          };
+          function r() {
+            return navigator.userAgent.toLowerCase();
+          }
+          function i(e) {
+            return (
+              "" +
+              (new RegExp(e + "(\\d+((\\.|_)\\d+)*)").exec(r()) || [
+                ,
+                0,
+              ])[1] || void 0
+            );
+          }
+          function n(e) {
+            return parseFloat((e || "").replace(/\_/g, ".")) || 0;
+          }
+          e.exports = s;
+        },
+      },
         t = {};
       function s(r) {
         var i = t[r];
@@ -9771,50 +9771,50 @@
           "use strict";
           s.d(r, { default: () => _s });
           const e = {
-              DC_SIGNAL: "SIGNAL",
-              DC_SIGNAL_BATCH: "SIGNAL_BATCH",
-              DC_OPEN: "OPEN",
-              DC_REQUEST: "REQUEST",
-              DC_PIECE_NOT_FOUND: "PIECE_NOT_FOUND",
-              DC_PIECE_ABORT: "PIECE_ABORT",
-              DC_PIECE_CANCEL: "PIECE_CANCEL",
-              DC_CLOSE: "CLOSE",
-              DC_DISCONNECT: "DISCONNECT",
-              DC_RESPONSE: "RESPONSE",
-              DC_ERROR: "ERROR",
-              DC_PIECE: "PIECE",
-              DC_PIECE_DATA: "PIECE_DATA",
-              DC_TIMEOUT: "TIMEOUT",
-              DC_PIECE_ACK: "PIECE_ACK",
-              DC_METADATA: "METADATA",
-              DC_PLAT_ANDROID: "ANDROID",
-              DC_PLAT_IOS: "IOS",
-              DC_PLAT_WEB: "WEB",
-              DC_CHOKE: "CHOKE",
-              DC_UNCHOKE: "UNCHOKE",
-              DC_HAVE: "HAVE",
-              DC_HAVE_REVERSE: "HAVE_REVERSE",
-              DC_LOST: "LOST",
-              DC_GET_PEERS: "GET_PEERS",
-              DC_PEERS: "PEERS",
-              DC_STATS: "STATS",
-              DC_PEER_SIGNAL: "PEER_SIGNAL",
-              DC_PLAYLIST: "PLAYLIST",
-              BM_LOST: "lost",
-              BM_ADDED_SEG_: "BM_ADDED_SEG_",
-              BM_ADDED_SN_: "BM_ADDED_SN_",
-              BM_SEG_ADDED: "BM_SEG_ADDED",
-              BM_FATAL_ERROR: "BM_FATAL_ERROR",
-              FRAG_CHANGED: "FRAG_CHANGED",
-              FRAG_LOADED: "FRAG_LOADED",
-              FRAG_LOADING: "FRAG_LOADING",
-              RESTART_P2P: "RESTART_P2P",
-              EXCEPTION: "exception",
-              SYN_OUTPUT: "SYN_OUTPUT",
-              SYN_ERROR: "SYN_ERROR",
-              SYN_PROGRESS: "SYN_PROGRESS",
-              MEDIA_REBUFFER: "MEDIA_REBUFFER",
-            },
+            DC_SIGNAL: "SIGNAL",
+            DC_SIGNAL_BATCH: "SIGNAL_BATCH",
+            DC_OPEN: "OPEN",
+            DC_REQUEST: "REQUEST",
+            DC_PIECE_NOT_FOUND: "PIECE_NOT_FOUND",
+            DC_PIECE_ABORT: "PIECE_ABORT",
+            DC_PIECE_CANCEL: "PIECE_CANCEL",
+            DC_CLOSE: "CLOSE",
+            DC_DISCONNECT: "DISCONNECT",
+            DC_RESPONSE: "RESPONSE",
+            DC_ERROR: "ERROR",
+            DC_PIECE: "PIECE",
+            DC_PIECE_DATA: "PIECE_DATA",
+            DC_TIMEOUT: "TIMEOUT",
+            DC_PIECE_ACK: "PIECE_ACK",
+            DC_METADATA: "METADATA",
+            DC_PLAT_ANDROID: "ANDROID",
+            DC_PLAT_IOS: "IOS",
+            DC_PLAT_WEB: "WEB",
+            DC_CHOKE: "CHOKE",
+            DC_UNCHOKE: "UNCHOKE",
+            DC_HAVE: "HAVE",
+            DC_HAVE_REVERSE: "HAVE_REVERSE",
+            DC_LOST: "LOST",
+            DC_GET_PEERS: "GET_PEERS",
+            DC_PEERS: "PEERS",
+            DC_STATS: "STATS",
+            DC_PEER_SIGNAL: "PEER_SIGNAL",
+            DC_PLAYLIST: "PLAYLIST",
+            BM_LOST: "lost",
+            BM_ADDED_SEG_: "BM_ADDED_SEG_",
+            BM_ADDED_SN_: "BM_ADDED_SN_",
+            BM_SEG_ADDED: "BM_SEG_ADDED",
+            BM_FATAL_ERROR: "BM_FATAL_ERROR",
+            FRAG_CHANGED: "FRAG_CHANGED",
+            FRAG_LOADED: "FRAG_LOADED",
+            FRAG_LOADING: "FRAG_LOADING",
+            RESTART_P2P: "RESTART_P2P",
+            EXCEPTION: "exception",
+            SYN_OUTPUT: "SYN_OUTPUT",
+            SYN_ERROR: "SYN_ERROR",
+            SYN_PROGRESS: "SYN_PROGRESS",
+            MEDIA_REBUFFER: "MEDIA_REBUFFER",
+          },
             t = {
               ...e,
               SW_PLAYLIST: "SW_PLAYLIST",
@@ -9923,8 +9923,8 @@
             const { sn: o, seg_id: a, size: u, level: l } = s;
             e.sendPartialBuffer(s, r, { from: i, incompletes: n }) &&
               (e.bitset.add(o, l, a, c.COMPLETE, u),
-              r.length < s.attachments
-                ? (function (e, t, s) {
+                r.length < s.attachments
+                  ? (function (e, t, s) {
                     e.addStreamListener(s, t.remotePeerId, (e, s, r, i, n) => {
                       (r
                         ? t.sendMsgPieceAbort(i, s, !0)
@@ -9932,7 +9932,7 @@
                         n && (t.uploading = !1));
                     });
                   })(t, e, !!s.reverse)
-                : (e.uploading = !1));
+                  : (e.uploading = !1));
           }
           const T = (e) => (0 === m(0, 1) ? [null, e] : [e, null]);
           function B(e, t, s) {
@@ -9971,7 +9971,7 @@
                 const t = await crypto.subtle.digest("SHA-256", e),
                   s = String.fromCharCode.apply(null, new Uint8Array(t));
                 return btoa(s);
-              } catch (e) {}
+              } catch (e) { }
           }
           function k(e, t, s) {
             if (!t) return { message: e, stack: "", filename: s };
@@ -9983,7 +9983,7 @@
             else
               try {
                 r = String(t);
-              } catch (e) {}
+              } catch (e) { }
             let i = "";
             return (
               (i = t.stack
@@ -10027,8 +10027,8 @@
             }
           }
           const N = () => {
-              if ("undefined" != typeof WebSocket) return WebSocket;
-            },
+            if ("undefined" != typeof WebSocket) return WebSocket;
+          },
             $ = {
               maxReconnectionDelay: 1e4,
               minReconnectionDelay: 1e3 + 4e3 * Math.random(),
@@ -10106,8 +10106,8 @@
                 (this._shouldReconnect = !1),
                 this._clearTimeouts(),
                 this._ws &&
-                  this._ws.readyState !== this.CLOSED &&
-                  this._ws.close(e, t));
+                this._ws.readyState !== this.CLOSED &&
+                this._ws.close(e, t));
             }
             reconnect(e, t) {
               ((this._shouldReconnect = !0),
@@ -10149,7 +10149,7 @@
               let r = 0;
               return (
                 this._retryCount > 0 &&
-                  ((r = t * Math.pow(e, this._retryCount - 1)),
+                ((r = t * Math.pow(e, this._retryCount - 1)),
                   r > s && (r = s)),
                 r
               );
@@ -10179,8 +10179,8 @@
               if (!(this._retryCount >= e)) {
                 if (
                   (this._retryCount++,
-                  this._removeListeners(),
-                  void 0 === (r = s) || !r || 2 !== r.CLOSING)
+                    this._removeListeners(),
+                    void 0 === (r = s) || !r || 2 !== r.CLOSING)
                 )
                   throw Error("No valid WebSocket class provided");
                 var r;
@@ -10190,8 +10190,8 @@
                     this._closeCalled
                       ? (this._connectLock = !1)
                       : ((this._ws = this._protocols
-                          ? new s(e, this._protocols)
-                          : new s(e)),
+                        ? new s(e, this._protocols)
+                        : new s(e)),
                         (this._ws.binaryType = this._binaryType),
                         (this._connectLock = !1),
                         this._addListeners(),
@@ -10214,7 +10214,7 @@
                 this._removeListeners();
                 try {
                   (this._ws.close(e, t), this._handleClose(new x(e, t, this)));
-                } catch (e) {}
+                } catch (e) { }
               }
             }
             _acceptOpen() {
@@ -10263,16 +10263,16 @@
             _removeListeners() {
               this._ws &&
                 (this._ws.removeEventListener("open", this._handleOpen),
-                this._ws.removeEventListener("close", this._handleClose),
-                this._ws.removeEventListener("message", this._handleMessage),
-                this._ws.removeEventListener("error", this._handleError));
+                  this._ws.removeEventListener("close", this._handleClose),
+                  this._ws.removeEventListener("message", this._handleMessage),
+                  this._ws.removeEventListener("error", this._handleError));
             }
             _addListeners() {
               this._ws &&
                 (this._ws.addEventListener("open", this._handleOpen),
-                this._ws.addEventListener("close", this._handleClose),
-                this._ws.addEventListener("message", this._handleMessage),
-                this._ws.addEventListener("error", this._handleError));
+                  this._ws.addEventListener("close", this._handleClose),
+                  this._ws.addEventListener("message", this._handleMessage),
+                  this._ws.addEventListener("error", this._handleError));
             }
             _clearTimeouts() {
               (clearTimeout(this._connectTimeout),
@@ -10360,9 +10360,9 @@
                   this._hookLogFunc((e, t) => {
                     this.reportUrl
                       ? (this.logCache.push({
-                          levelKey: e,
-                          message: `${A()}: ${t}`,
-                        }),
+                        levelKey: e,
+                        message: `${A()}: ${t}`,
+                      }),
                         this.logCache.length > 350 && this.logCache.shift())
                       : this.reporter && this.reporter.send(e, t);
                   }));
@@ -10377,18 +10377,18 @@
                     s,
                     r,
                   )),
-                  this.reporter._ws.addEventListener(
-                    "open",
-                    () => {
-                      ((this.reportUrl = void 0),
-                        this.logCache.unshift({ levelKey: "info", message: e }),
-                        this.reporter.sendBatch(this.logCache),
-                        setTimeout(() => {
-                          (this.reporter.destroy(), (this.reporter = null));
-                        }, i));
-                    },
-                    { once: !0 },
-                  ));
+                    this.reporter._ws.addEventListener(
+                      "open",
+                      () => {
+                        ((this.reportUrl = void 0),
+                          this.logCache.unshift({ levelKey: "info", message: e }),
+                          this.reporter.sendBatch(this.logCache),
+                          setTimeout(() => {
+                            (this.reporter.destroy(), (this.reporter = null));
+                          }, i));
+                      },
+                      { once: !0 },
+                    ));
               }
               _hookLogFunc(e) {
                 for (let t in U) {
@@ -10414,14 +10414,14 @@
             };
           let H;
           const V =
-              "function" == typeof queueMicrotask
-                ? queueMicrotask.bind(globalThis)
-                : (e) =>
-                    (H || (H = Promise.resolve())).then(e).catch((e) =>
-                      setTimeout(() => {
-                        throw e;
-                      }, 0),
-                    ),
+            "function" == typeof queueMicrotask
+              ? queueMicrotask.bind(globalThis)
+              : (e) =>
+                (H || (H = Promise.resolve())).then(e).catch((e) =>
+                  setTimeout(() => {
+                    throw e;
+                  }, 0),
+                ),
             G = 65536;
           function Z(e) {
             return e.replace(/a=ice-options:trickle\s\n/g, "");
@@ -10489,14 +10489,14 @@
                 }),
                 this.initiator || this.channelNegotiated
                   ? this._setupData({
-                      channel: this._pc.createDataChannel(
-                        this.channelName,
-                        this.channelConfig,
-                      ),
-                    })
+                    channel: this._pc.createDataChannel(
+                      this.channelName,
+                      this.channelConfig,
+                    ),
+                  })
                   : (this._pc.ondatachannel = (e) => {
-                      this._setupData(e);
-                    }),
+                    this._setupData(e);
+                  }),
                 this._needsNegotiation());
             }
             get bufferSize() {
@@ -10515,7 +10515,7 @@
                   }
                 if (
                   (e.renegotiate && this.initiator && this._needsNegotiation(),
-                  e.candidate)
+                    e.candidate)
                 )
                   if (
                     this._pc.remoteDescription &&
@@ -10523,7 +10523,7 @@
                   )
                     try {
                       this._addIceCandidate(e.candidate);
-                    } catch (e) {}
+                    } catch (e) { }
                   else this._pendingCandidates.push(e.candidate);
                 (e.sdp &&
                   this._pc
@@ -10535,22 +10535,22 @@
                         (this._pendingCandidates.forEach((e) => {
                           try {
                             this._addIceCandidate(e);
-                          } catch (e) {}
+                          } catch (e) { }
                         }),
-                        (this._pendingCandidates = []),
-                        "offer" === this._pc.remoteDescription.type &&
+                          (this._pendingCandidates = []),
+                          "offer" === this._pc.remoteDescription.type &&
                           this._createAnswer());
                     })
                     .catch((e) => {
                       ((e.debug = !0), this.destroy(e));
                     }),
                   e.sdp ||
-                    e.candidate ||
-                    e.renegotiate ||
-                    e.transceiverRequest ||
-                    this.destroy(
-                      new Error("signal() called with invalid signal data"),
-                    ));
+                  e.candidate ||
+                  e.renegotiate ||
+                  e.transceiverRequest ||
+                  this.destroy(
+                    new Error("signal() called with invalid signal data"),
+                  ));
               }
             }
             _addIceCandidate(e) {
@@ -10564,33 +10564,33 @@
             send(e) {
               "string" == typeof e
                 ? RTCDataChannel.prototype.send
-                    .toString()
-                    .includes("[native code]") && this._channel.send(e)
+                  .toString()
+                  .includes("[native code]") && this._channel.send(e)
                 : this._channel.send(e);
             }
             _needsNegotiation() {
               this._batchedNegotiation ||
                 ((this._batchedNegotiation = !0),
-                V(() => {
-                  ((this._batchedNegotiation = !1),
-                    (!this.initiator && this._firstNegotiation) ||
+                  V(() => {
+                    ((this._batchedNegotiation = !1),
+                      (!this.initiator && this._firstNegotiation) ||
                       this.negotiate(),
-                    (this._firstNegotiation = !1));
-                }));
+                      (this._firstNegotiation = !1));
+                  }));
             }
             negotiate() {
               (this.initiator
                 ? this._isNegotiating
                   ? (this._queuedNegotiation = !0)
                   : setTimeout(() => {
-                      this._createOffer();
-                    }, 0)
+                    this._createOffer();
+                  }, 0)
                 : this._isNegotiating
                   ? (this._queuedNegotiation = !0)
                   : this.emit("signal", {
-                      type: "renegotiate",
-                      renegotiate: !0,
-                    }),
+                    type: "renegotiate",
+                    renegotiate: !0,
+                  }),
                 (this._isNegotiating = !0));
             }
             destroy(e) {
@@ -10600,45 +10600,45 @@
               this.destroyed ||
                 this.destroying ||
                 ((this.destroying = !0),
-                V(() => {
-                  if (
-                    ((this.destroyed = !0),
-                    (this.destroying = !1),
-                    (this._connected = !1),
-                    (this._pcReady = !1),
-                    (this._channelReady = !1),
-                    (this._senderMap = null),
-                    clearInterval(this._closingInterval),
-                    (this._closingInterval = null),
-                    clearInterval(this._interval),
-                    (this._interval = null),
-                    (this._chunk = null),
-                    (this._cb = null),
-                    this._channel)
-                  ) {
-                    try {
-                      this._channel.close();
-                    } catch (e) {}
-                    ((this._channel.onmessage = null),
-                      (this._channel.onopen = null),
-                      (this._channel.onclose = null),
-                      (this._channel.onerror = null));
-                  }
-                  if (this._pc) {
-                    try {
-                      this._pc.close();
-                    } catch (e) {}
-                    ((this._pc.oniceconnectionstatechange = null),
-                      (this._pc.onicegatheringstatechange = null),
-                      (this._pc.onsignalingstatechange = null),
-                      (this._pc.onicecandidate = null),
-                      (this._pc.ondatachannel = null));
-                  }
-                  ((this._pc = null),
-                    (this._channel = null),
-                    e && this.emit("error", e),
-                    this.emit("close"));
-                }));
+                  V(() => {
+                    if (
+                      ((this.destroyed = !0),
+                        (this.destroying = !1),
+                        (this._connected = !1),
+                        (this._pcReady = !1),
+                        (this._channelReady = !1),
+                        (this._senderMap = null),
+                        clearInterval(this._closingInterval),
+                        (this._closingInterval = null),
+                        clearInterval(this._interval),
+                        (this._interval = null),
+                        (this._chunk = null),
+                        (this._cb = null),
+                        this._channel)
+                    ) {
+                      try {
+                        this._channel.close();
+                      } catch (e) { }
+                      ((this._channel.onmessage = null),
+                        (this._channel.onopen = null),
+                        (this._channel.onclose = null),
+                        (this._channel.onerror = null));
+                    }
+                    if (this._pc) {
+                      try {
+                        this._pc.close();
+                      } catch (e) { }
+                      ((this._pc.oniceconnectionstatechange = null),
+                        (this._pc.onicegatheringstatechange = null),
+                        (this._pc.onsignalingstatechange = null),
+                        (this._pc.onicecandidate = null),
+                        (this._pc.ondatachannel = null));
+                    }
+                    ((this._pc = null),
+                      (this._channel = null),
+                      e && this.emit("error", e),
+                      this.emit("close"));
+                  }));
             }
             _setupData(e) {
               if (!e.channel)
@@ -10648,7 +10648,7 @@
               ((this._channel = e.channel),
                 (this._channel.binaryType = "arraybuffer"),
                 "number" == typeof this._channel.bufferedAmountLowThreshold &&
-                  (this._channel.bufferedAmountLowThreshold = G),
+                (this._channel.bufferedAmountLowThreshold = G),
                 (this.channelName = this._channel.label),
                 (this._channel.onmessage = (e) => {
                   this._onChannelMessage(e);
@@ -10693,8 +10693,8 @@
                 (this._iceCompleteTimer = setTimeout(() => {
                   this._iceComplete ||
                     ((this._iceComplete = !0),
-                    this.emit("iceTimeout"),
-                    this.emit("_iceComplete"));
+                      this.emit("iceTimeout"),
+                      this.emit("_iceComplete"));
                 }, this.iceCompleteTimeout));
             }
             _createOffer() {
@@ -10770,50 +10770,50 @@
                 t = this._pc.iceGatheringState;
               (this.emit("iceStateChange", e, t),
                 ("connected" !== e && "completed" !== e) ||
-                  ((this._pcReady = !0), this._maybeReady()),
+                ((this._pcReady = !0), this._maybeReady()),
                 "failed" === e &&
-                  this.destroy(new Error("Ice connection failed.")),
+                this.destroy(new Error("Ice connection failed.")),
                 "closed" === e &&
-                  this.destroy(new Error("Ice connection closed.")));
+                this.destroy(new Error("Ice connection closed.")));
             }
             getStats(e) {
               const t = (e) => (
                 "[object Array]" === Object.prototype.toString.call(e.values) &&
-                  e.values.forEach((t) => {
-                    Object.assign(e, t);
-                  }),
+                e.values.forEach((t) => {
+                  Object.assign(e, t);
+                }),
                 e
               );
               0 === this._pc.getStats.length
                 ? this._pc.getStats().then(
+                  (s) => {
+                    const r = [];
+                    (s.forEach((e) => {
+                      r.push(t(e));
+                    }),
+                      e(null, r));
+                  },
+                  (t) => e(t),
+                )
+                : this._pc.getStats.length > 0
+                  ? this._pc.getStats(
                     (s) => {
+                      if (this.destroyed) return;
                       const r = [];
-                      (s.forEach((e) => {
-                        r.push(t(e));
+                      (s.result().forEach((e) => {
+                        const s = {};
+                        (e.names().forEach((t) => {
+                          s[t] = e.stat(t);
+                        }),
+                          (s.id = e.id),
+                          (s.type = e.type),
+                          (s.timestamp = e.timestamp),
+                          r.push(t(s)));
                       }),
                         e(null, r));
                     },
                     (t) => e(t),
                   )
-                : this._pc.getStats.length > 0
-                  ? this._pc.getStats(
-                      (s) => {
-                        if (this.destroyed) return;
-                        const r = [];
-                        (s.result().forEach((e) => {
-                          const s = {};
-                          (e.names().forEach((t) => {
-                            s[t] = e.stat(t);
-                          }),
-                            (s.id = e.id),
-                            (s.type = e.type),
-                            (s.timestamp = e.timestamp),
-                            r.push(t(s)));
-                        }),
-                          e(null, r));
-                      },
-                      (t) => e(t),
-                    )
                   : e(null, []);
             }
             _maybeReady() {
@@ -10840,10 +10840,10 @@
                         (r[e.id] = e),
                         ("localcandidate" !== e.type &&
                           "local-candidate" !== e.type) ||
-                          (i[e.id] = e),
+                        (i[e.id] = e),
                         ("candidatepair" !== e.type &&
                           "candidate-pair" !== e.type) ||
-                          (n[e.id] = e));
+                        (n[e.id] = e));
                     });
                     const a = (e) => {
                       o = !0;
@@ -10855,13 +10855,13 @@
                           ? ((this.localAddress = t.ipAddress),
                             (this.localPort = Number(t.portNumber)))
                           : "string" == typeof e.googLocalAddress &&
-                            ((t = e.googLocalAddress.split(":")),
+                          ((t = e.googLocalAddress.split(":")),
                             (this.localAddress = t[0]),
                             (this.localPort = Number(t[1]))),
                         this.localAddress &&
-                          (this.localFamily = this.localAddress.includes(":")
-                            ? "IPv6"
-                            : "IPv4"));
+                        (this.localFamily = this.localAddress.includes(":")
+                          ? "IPv6"
+                          : "IPv4"));
                       let s = r[e.remoteCandidateId];
                       (s && (s.ip || s.address)
                         ? ((this.remoteAddress = s.ip || s.address),
@@ -10870,13 +10870,13 @@
                           ? ((this.remoteAddress = s.ipAddress),
                             (this.remotePort = Number(s.portNumber)))
                           : "string" == typeof e.googRemoteAddress &&
-                            ((s = e.googRemoteAddress.split(":")),
+                          ((s = e.googRemoteAddress.split(":")),
                             (this.remoteAddress = s[0]),
                             (this.remotePort = Number(s[1]))),
                         this.remoteAddress &&
-                          (this.remoteFamily = this.remoteAddress.includes(":")
-                            ? "IPv6"
-                            : "IPv4"));
+                        (this.remoteFamily = this.remoteAddress.includes(":")
+                          ? "IPv6"
+                          : "IPv4"));
                     };
                     if (
                       (s.forEach((e) => {
@@ -10888,14 +10888,14 @@
                             (("candidatepair" === e.type ||
                               "candidate-pair" === e.type) &&
                               e.selected)) &&
-                            a(e));
+                          a(e));
                       }),
-                      o || (Object.keys(n).length && !Object.keys(i).length))
+                        o || (Object.keys(n).length && !Object.keys(i).length))
                     ) {
                       if (
                         ((this._connecting = !1),
-                        (this._connected = !0),
-                        this._chunk)
+                          (this._connected = !0),
+                          this._chunk)
                       ) {
                         try {
                           this.send(this._chunk);
@@ -10912,7 +10912,7 @@
                           () => this._onInterval(),
                           150,
                         )),
-                        this._interval.unref && this._interval.unref()),
+                          this._interval.unref && this._interval.unref()),
                         this.emit("connect"));
                       for (let e of this._pendingData) this.emit("data", e);
                       this._pendingData = [];
@@ -10931,26 +10931,26 @@
               this.destroyed ||
                 ("stable" === this._pc.signalingState &&
                   ((this._isNegotiating = !1),
-                  this._queuedNegotiation
-                    ? ((this._queuedNegotiation = !1), this._needsNegotiation())
-                    : this.emit("negotiated")),
-                this.emit("signalingStateChange", this._pc.signalingState));
+                    this._queuedNegotiation
+                      ? ((this._queuedNegotiation = !1), this._needsNegotiation())
+                      : this.emit("negotiated")),
+                  this.emit("signalingStateChange", this._pc.signalingState));
             }
             _onIceCandidate(e) {
               this.destroyed ||
                 (e.candidate && this.trickle
                   ? this.emit("signal", {
-                      type: "candidate",
-                      candidate: {
-                        candidate: e.candidate.candidate,
-                        sdpMLineIndex: e.candidate.sdpMLineIndex,
-                        sdpMid: e.candidate.sdpMid,
-                      },
-                    })
+                    type: "candidate",
+                    candidate: {
+                      candidate: e.candidate.candidate,
+                      sdpMLineIndex: e.candidate.sdpMLineIndex,
+                      sdpMid: e.candidate.sdpMid,
+                    },
+                  })
                   : e.candidate ||
-                    this._iceComplete ||
-                    ((this._iceComplete = !0), this.emit("_iceComplete")),
-                e.candidate && this._startIceCompleteTimeout());
+                  this._iceComplete ||
+                  ((this._iceComplete = !0), this.emit("_iceComplete")),
+                  e.candidate && this._startIceCompleteTimeout());
             }
             _onChannelMessage(e) {
               if (this.destroyed) return;
@@ -11123,13 +11123,13 @@
                 (this.logger.info(
                   `cancel download ${r} to ${this.remotePeerId} remain packets ${this.remainAttachments}`,
                 ),
-                (this.timeReceivePiece = 0),
-                this.sendJson({
-                  event: e.DC_PIECE_CANCEL,
-                  sn: t,
-                  level: s,
-                  seg_id: r,
-                }))
+                  (this.timeReceivePiece = 0),
+                  this.sendJson({
+                    event: e.DC_PIECE_CANCEL,
+                    sn: t,
+                    level: s,
+                    seg_id: r,
+                  }))
               );
             }
             addStreamListener(e, t, s) {
@@ -11162,19 +11162,19 @@
                     (!this.useBackupSignal &&
                       this.signalMsgs.length < 10 &&
                       this.signalMsgs.push(t),
-                    (this.sentSignal = !0),
-                    this.emit(e.DC_SIGNAL, t));
+                      (this.sentSignal = !0),
+                      this.emit(e.DC_SIGNAL, t));
                 }),
                 t.on("connect", () => {
                   for (
                     this.logger.info(
                       `datachannel CONNECTED from ${this.byPeerSignal ? "peer" : "server " + this.signalName} to ${this.remotePeerId}`,
                     ),
-                      this.connected = !0,
-                      this.incomingSignal = [],
-                      clearTimeout(this.connTimeout),
-                      this.signalMsgs = [],
-                      this.emit(e.DC_OPEN);
+                    this.connected = !0,
+                    this.incomingSignal = [],
+                    clearTimeout(this.connTimeout),
+                    this.signalMsgs = [],
+                    this.emit(e.DC_OPEN);
                     this.msgQueue.length > 0;
                   ) {
                     let e = this.msgQueue.shift();
@@ -11195,10 +11195,10 @@
                     let i,
                       n = r.event;
                     switch (
-                      ((i =
-                        n !== e.DC_PLAYLIST && n !== e.DC_PEER_SIGNAL
-                          ? `string: ${t}`
-                          : `event: ${n}`),
+                    ((i =
+                      n !== e.DC_PLAYLIST && n !== e.DC_PEER_SIGNAL
+                        ? `string: ${t}`
+                        : `event: ${n}`),
                       s.debug(
                         `datachannel receive ${i} from ${this.remotePeerId}`,
                       ),
@@ -11208,7 +11208,7 @@
                         if ((this.emit(r.event, r), !r.sn)) return;
                         this.config.live ||
                           (r.sn < this.startSN && (this.startSN = r.sn),
-                          r.sn > this.endSN && (this.endSN = r.sn));
+                            r.sn > this.endSN && (this.endSN = r.sn));
                         break;
                       case e.DC_PIECE:
                         ((this.downloading = !0),
@@ -11257,7 +11257,7 @@
                           (this._notifyDownloadListenersAbort(
                             "aborted by upstream peer",
                           ),
-                          this.emit(e.DC_PIECE_ABORT, r)),
+                            this.emit(e.DC_PIECE_ABORT, r)),
                           (this.downloading = !1),
                           (this.segId = void 0));
                         break;
@@ -11292,18 +11292,18 @@
                   this.connected &&
                     "disconnected" === t &&
                     (this.logger.warn(`${this.remotePeerId} disconnected`),
-                    this.emit(e.DC_DISCONNECT));
+                      this.emit(e.DC_DISCONNECT));
                 }));
             }
             sendJson(t) {
               if (!this.remotePeerId) return !1;
               t.event !== e.DC_PLAYLIST && t.event !== e.DC_PEER_SIGNAL
                 ? this.logger.debug(
-                    `dc bufferSize ${this._datachannel.bufferSize} send ${JSON.stringify(t)} to ${this.remotePeerId}`,
-                  )
+                  `dc bufferSize ${this._datachannel.bufferSize} send ${JSON.stringify(t)} to ${this.remotePeerId}`,
+                )
                 : this.logger.debug(
-                    `dc send event ${t.event} to ${this.remotePeerId}`,
-                  );
+                  `dc send event ${t.event} to ${this.remotePeerId}`,
+                );
               const s = JSON.stringify(t);
               return s.length > h
                 ? (this.logger.error("string to send is too large"), !1)
@@ -11394,14 +11394,14 @@
               return (
                 this.signalRejectCache === n ||
                 ((this.signalRejectCache = n),
-                this.sendJson({
-                  event: e.DC_PEER_SIGNAL,
-                  action: "reject",
-                  to_peer_id: t,
-                  from_peer_id: s,
-                  reason: r,
-                  fatal: i,
-                }))
+                  this.sendJson({
+                    event: e.DC_PEER_SIGNAL,
+                    action: "reject",
+                    to_peer_id: t,
+                    from_peer_id: s,
+                    reason: r,
+                    fatal: i,
+                  }))
               );
             }
             sendMetaData(t, s, r, i, n = !1, o = []) {
@@ -11435,12 +11435,12 @@
                 (this.bytesUploaded = 0),
                 e.ext || (e.ext = {}),
                 e.ext.from &&
-                  t.from &&
-                  t.from.length < 2500 &&
-                  (t.from = `${e.ext.from}-${t.from}`),
+                t.from &&
+                t.from.length < 2500 &&
+                (t.from = `${e.ext.from}-${t.from}`),
                 t.incompletes &&
-                  e.ext.incompletes &&
-                  (t.incompletes += e.ext.incompletes),
+                e.ext.incompletes &&
+                (t.incompletes += e.ext.incompletes),
                 (t = Object.assign({}, e.ext, t)));
               const s = { ...e, ext: t };
               return this.sendJson(s);
@@ -11505,8 +11505,8 @@
               };
               this.downloading
                 ? (this.logger.info(
-                    `${this.remotePeerId} add req ${t} in queue`,
-                  ),
+                  `${this.remotePeerId} add req ${t} in queue`,
+                ),
                   r ? this.sendReqQueue.unshift(n) : this.sendReqQueue.push(n))
                 : this._realRequestData(n);
             }
@@ -11586,7 +11586,7 @@
                   n,
                   this.pieceMsg,
                 ),
-                this.streamListeners.length > 0)
+                  this.streamListeners.length > 0)
               )
                 for (let e of this.streamListeners) {
                   const { handler: s } = e;
@@ -11642,9 +11642,9 @@
                 const e = performance.now() - this.timeSendRequest;
                 (e > 0 &&
                   ((this.weight = 1e5 / e),
-                  s.info(
-                    `handle Metadata from ${this.remotePeerId} initial weight ${this.weight}`,
-                  )),
+                    s.info(
+                      `handle Metadata from ${this.remotePeerId} initial weight ${this.weight}`,
+                    )),
                   (this.timeSendRequest = 0));
               }
               const r = t.channel;
@@ -11675,22 +11675,22 @@
               }
               if (
                 ((this.mobile = t.mobile || !1),
-                (this.mobileNet = t.mobile_net || !1),
-                (this.mobileWeb =
-                  (this.mobile && this.platform === e.DC_PLAT_WEB) || !1),
-                (this.sequential = t.sequential),
-                s.info(
-                  `${this.remotePeerId} platform ${this.platform} sequential ${this.sequential}`,
-                ),
-                t.peers &&
-                  ((this.peersConnected += t.peers),
+                  (this.mobileNet = t.mobile_net || !1),
+                  (this.mobileWeb =
+                    (this.mobile && this.platform === e.DC_PLAT_WEB) || !1),
+                  (this.sequential = t.sequential),
                   s.info(
-                    `${this.remotePeerId} now has ${this.peersConnected} peers`,
-                  )),
-                t.shared_peers &&
+                    `${this.remotePeerId} platform ${this.platform} sequential ${this.sequential}`,
+                  ),
+                  t.peers &&
+                  ((this.peersConnected += t.peers),
+                    s.info(
+                      `${this.remotePeerId} now has ${this.peersConnected} peers`,
+                    )),
+                  t.shared_peers &&
                   (this._currentSharedPeers = [...t.shared_peers]),
-                this.emit(e.DC_METADATA, t),
-                t.field && !this.config.live && t.sequential)
+                  this.emit(e.DC_METADATA, t),
+                  t.field && !this.config.live && t.sequential)
               ) {
                 const { field: e } = t;
                 if (Array.isArray(e)) this._handleField(e);
@@ -11701,7 +11701,7 @@
               e.forEach((e) => {
                 e >= 0 &&
                   (e < this.startSN && (this.startSN = e),
-                  e > this.endSN && (this.endSN = e));
+                    e > this.endSN && (this.endSN = e));
               });
             }
             _handleStats(e) {
@@ -11710,13 +11710,13 @@
               (t > 0 &&
                 this.peersConnected !== t &&
                 ((this.peersConnected = t),
-                this.logger.info(
-                  `${this.remotePeerId} now has ${this.peersConnected} peers`,
-                )),
+                  this.logger.info(
+                    `${this.remotePeerId} now has ${this.peersConnected} peers`,
+                  )),
                 e.level && (this.currentLevel = e.level),
                 e.pos && (this.currentPos = e.pos),
                 e.shared_peers &&
-                  ((this._currentSharedPeers = e.shared_peers),
+                ((this._currentSharedPeers = e.shared_peers),
                   (this.notFoundPeers = new Set(
                     [...this.notFoundPeers].filter((e) =>
                       this._currentSharedPeers.some((t) => t.id === e),
@@ -11740,14 +11740,14 @@
                 ((this.uploadSpeed = Math.round(
                   (s / (performance.now() - this.timeSendPiece)) * 2,
                 )),
-                (this.timeSendPiece = 0),
-                this.logger.info(
-                  `${this.remotePeerId} uploadSpeed is ${this.uploadSpeed}`,
-                )),
+                  (this.timeSendPiece = 0),
+                  this.logger.info(
+                    `${this.remotePeerId} uploadSpeed is ${this.uploadSpeed}`,
+                  )),
                 r > 0 &&
-                  this.logger.warn(`peer ${this.remotePeerId} miss ${r}`),
+                this.logger.warn(`peer ${this.remotePeerId} miss ${r}`),
                 this.bytesUploaded > 0 &&
-                  this.emit(e.DC_PIECE_ACK, { seg_id: t, size: s }));
+                this.emit(e.DC_PIECE_ACK, { seg_id: t, size: s }));
             }
             _prepareForBinary(e, t, s, r) {
               ((this.bufArr = []),
@@ -11785,8 +11785,8 @@
               if (
                 (e || !(s < 1e3)) &&
                 (this.miss++,
-                t.info(`${this.remotePeerId} miss ${this.miss}`),
-                this.miss >= 3 && !this.choked)
+                  t.info(`${this.remotePeerId} miss ${this.miss}`),
+                  this.miss >= 3 && !this.choked)
               ) {
                 this.choked = !0;
                 const e = 30 * this.miss;
@@ -11797,8 +11797,8 @@
                         t.warn(`datachannel ${this.channelId} is unchoked`));
                     }, 1e3 * e)))
                   : t.warn(
-                      `datachannel ${this.channelId} is choked permanently`,
-                    );
+                    `datachannel ${this.channelId} is choked permanently`,
+                  );
               }
             }
             get bufArrSize() {
@@ -11844,7 +11844,7 @@
               return 0 === this.timeReceivePiece
                 ? 0
                 : this.loadedBytes() /
-                    (performance.now() - this.timeReceivePiece);
+                (performance.now() - this.timeReceivePiece);
             }
             minRequiredSpeed(e) {
               return (this.pieceMsg.size - this.loadedBytes()) / e;
@@ -11888,8 +11888,8 @@
             constructor(e = {}) {
               if (
                 (super(),
-                (this.p2pEnabled = !(!1 === e.p2pEnabled || "0" === g("_p2p"))),
-                e.tag && e.tag.length > 20)
+                  (this.p2pEnabled = !(!1 === e.p2pEnabled || "0" === g("_p2p"))),
+                  e.tag && e.tag.length > 20)
               )
                 throw new Error("Tag is too long");
               if (e.appName && e.appName.length > 30)
@@ -12055,11 +12055,11 @@
                 ("object" == typeof r
                   ? (r.main || (r.main = s), (i = r.main))
                   : "string" == typeof r &&
-                    ((i = r), (t.wsSignalerAddr = { main: i })),
+                  ((i = r), (t.wsSignalerAddr = { main: i })),
                   i === s && (i = void 0),
                   i &&
-                    !t.wsSignalerAddr.backup &&
-                    (e = u().parseURL(i).netLoc.substring(2)));
+                  !t.wsSignalerAddr.backup &&
+                  (e = u().parseURL(i).netLoc.substring(2)));
               } else t.wsSignalerAddr = { main: s, byDefault: !0 };
               return e;
             }
@@ -12084,9 +12084,9 @@
             }
             setupWindowListeners(e) {
               const t =
-                  ["iPad", "iPhone"].indexOf(navigator.platform) >= 0
-                    ? "pagehide"
-                    : "beforeunload",
+                ["iPad", "iPhone"].indexOf(navigator.platform) >= 0
+                  ? "pagehide"
+                  : "beforeunload",
                 s = () => {
                   (this.fetcher && this.fetcher.postStatsWithBeacon(),
                     this.p2pEnabled && this.disableP2P(),
@@ -12175,17 +12175,17 @@
                 ("string" == typeof e
                   ? ((s = document.querySelector(e)),
                     ue(s) ||
-                      (s = (function (e) {
-                        const t = document.getElementById(e);
-                        if (ue(t)) return t;
-                        if (!t) return null;
-                        const s = t.getElementsByTagName("*");
-                        for (let e = 0; e < s.length; e++)
-                          if (ue(s[e])) return s[e];
-                        return null;
-                      })(e)))
+                    (s = (function (e) {
+                      const t = document.getElementById(e);
+                      if (ue(t)) return t;
+                      if (!t) return null;
+                      const s = t.getElementsByTagName("*");
+                      for (let e = 0; e < s.length; e++)
+                        if (ue(s[e])) return s[e];
+                      return null;
+                    })(e)))
                   : e instanceof HTMLMediaElement && (s = e)),
-              !s)
+                !s)
             ) {
               const e = [
                 ...document.getElementsByTagName("video"),
@@ -12247,9 +12247,9 @@
             ICEPreflight: !0,
             useDiskCache: !0,
             startFromSegmentOffset: 3,
-            getStats: function (e, t, s) {},
-            getPeerId: function (e) {},
-            getPeersInfo: function (e) {},
+            getStats: function (e, t, s) { },
+            getPeerId: function (e) { },
+            getPeersInfo: function (e) { },
             httpLoadTime: 0,
             sharePlaylist: !1,
             useHttpRange: !0,
@@ -12269,9 +12269,9 @@
           };
           function fe(e) {
             const t = new Promise((t, s) => {
-                ((e.oncomplete = e.onsuccess = () => t(e.result)),
-                  (e.onabort = e.onerror = () => s(e.error)));
-              }),
+              ((e.oncomplete = e.onsuccess = () => t(e.result)),
+                (e.onabort = e.onerror = () => s(e.error)));
+            }),
               s = new Promise((e, t) =>
                 setTimeout(() => {
                   t("indexedDB timeout");
@@ -12284,8 +12284,8 @@
             const r = pe[e] || {};
             r.promise ||
               ((r.promise = new Promise((e) => (r.resolve = e))),
-              (pe[e] = r),
-              De(e, t, r.resolve, s));
+                (pe[e] = r),
+                De(e, t, r.resolve, s));
             const i = await r.promise;
             return (delete r.promise, i);
           }
@@ -12426,17 +12426,17 @@
                     .catch((e) => {
                       (this._handleFataError(),
                         e &&
-                          (s.warn(`putSeg ${e}`),
+                        (s.warn(`putSeg ${e}`),
                           ("QuotaExceededError" === e.name ||
                             (e.inner &&
                               "QuotaExceededError" === e.inner.name)) &&
-                            this.currBufSize()
-                              .then((e) => {
-                                this._trimDisk(e, !0);
-                              })
-                              .catch((e) => {
-                                this.logger.error(`trimDisk ${e}`);
-                              })),
+                          this.currBufSize()
+                            .then((e) => {
+                              this._trimDisk(e, !0);
+                            })
+                            .catch((e) => {
+                              this.logger.error(`trimDisk ${e}`);
+                            })),
                         r());
                     });
                 });
@@ -12445,7 +12445,7 @@
             _handleFataError() {
               (this.countErrors++,
                 this.countErrors >= 3 &&
-                  (this.engine.emit(e.BM_FATAL_ERROR), (this.countErrors = 0)));
+                (this.engine.emit(e.BM_FATAL_ERROR), (this.countErrors = 0)));
             }
             _decreaseBufSize(e) {
               this.currBufSize()
@@ -12471,7 +12471,7 @@
                 this.logger.warn("clear segment store");
                 try {
                   this._clearDisk(e);
-                } catch (e) {}
+                } catch (e) { }
                 this.isCleared = !0;
               }
             }
@@ -12518,14 +12518,14 @@
                 return new Promise((s) => {
                   void 0 !== t
                     ? Ce(t, this.segmentsStore)
-                        .then((t) => {
-                          t && t.length > 0 && t.some((t) => t.segId === e)
-                            ? s(!0)
-                            : s(!1);
-                        })
-                        .catch((e) => {
-                          (this.logger.warn(`hasSegOfId ${e}`), s(!1));
-                        })
+                      .then((t) => {
+                        t && t.length > 0 && t.some((t) => t.segId === e)
+                          ? s(!0)
+                          : s(!1);
+                      })
+                      .catch((e) => {
+                        (this.logger.warn(`hasSegOfId ${e}`), s(!1));
+                      })
                     : s(!1);
                 });
               }
@@ -12541,23 +12541,23 @@
                 return new Promise((r) => {
                   void 0 !== s
                     ? Ce(s, this.segmentsStore)
-                        .then((s) => {
-                          if (((this.countErrors = 0), s && s.length > 0)) {
-                            const i = s.find((t) => t.segId === e);
-                            if (!i) return void r(null);
-                            if (!w(i.data))
-                              return (
-                                t.error(`getSegById ${i.sn} is not buffer`),
-                                void r(null)
-                              );
-                            r(Pe.toSegment(i));
-                          } else r(null);
-                        })
-                        .catch((e) => {
-                          (t.warn(`getSegById ${e}`),
-                            this._handleFataError(),
-                            r(null));
-                        })
+                      .then((s) => {
+                        if (((this.countErrors = 0), s && s.length > 0)) {
+                          const i = s.find((t) => t.segId === e);
+                          if (!i) return void r(null);
+                          if (!w(i.data))
+                            return (
+                              t.error(`getSegById ${i.sn} is not buffer`),
+                              void r(null)
+                            );
+                          r(Pe.toSegment(i));
+                        } else r(null);
+                      })
+                      .catch((e) => {
+                        (t.warn(`getSegById ${e}`),
+                          this._handleFataError(),
+                          r(null));
+                      })
                     : r(null);
                 });
               }
@@ -12591,16 +12591,16 @@
                                 }))
                             : i(e)
                           : be(
-                              s,
-                              [await this._segmentToCache(e)],
-                              this.segmentsStore,
-                            )
-                              .then(() => {
-                                (this._increaseBufSize(r), i(e));
-                              })
-                              .catch((e) => {
-                                n(e);
-                              });
+                            s,
+                            [await this._segmentToCache(e)],
+                            this.segmentsStore,
+                          )
+                            .then(() => {
+                              (this._increaseBufSize(r), i(e));
+                            })
+                            .catch((e) => {
+                              n(e);
+                            });
                       })
                       .catch((e) => {
                         n(e);
@@ -12614,7 +12614,7 @@
                 const { logger: i } = this;
                 (s && ((r = t - 104857600), r < 0 && (r = 0)),
                   t < r ||
-                    (i.warn(`_trimDisk currentSize ${t} upBound ${r}`),
+                  (i.warn(`_trimDisk currentSize ${t} upBound ${r}`),
                     (function (e = Ee()) {
                       return e("readonly", (e) => {
                         if (e.getAllKeys) return fe(e.getAllKeys());
@@ -12699,8 +12699,8 @@
               _clearDisk(e) {
                 try {
                   super._clearDisk(e);
-                } catch (e) {}
-                _e(this.id2SnStore).catch((e) => {});
+                } catch (e) { }
+                _e(this.id2SnStore).catch((e) => { });
               }
             };
           class Te extends n() {
@@ -12715,8 +12715,8 @@
                   s === Q().device.PC_WEB || s === Q().device.PC_NATIVE
                     ? t.memoryCacheLimit.pc
                     : t.memoryCacheLimit.mobile),
-                (this.isLive = t.live),
-                this.isLive)
+                  (this.isLive = t.live),
+                  this.isLive)
               )
                 this.maxBufSize = 47185920;
               else {
@@ -12753,21 +12753,21 @@
             async putSeg(e) {
               this.destroyed ||
                 ((this.isCleared = !1),
-                this._currBufSize >= 1.5 * this.maxBufSize &&
-                  ((this._currBufSize = this._calSegPoolSize()),
                   this._currBufSize >= 1.5 * this.maxBufSize &&
+                  ((this._currBufSize = this._calSegPoolSize()),
+                    this._currBufSize >= 1.5 * this.maxBufSize &&
                     (this.clear(), (this.overflowed = !1))),
-                w(e.data)
-                  ? this._addSeg(e)
-                  : this.logger.error(`putSeg ${e.segId} is not buffer`));
+                  w(e.data)
+                    ? this._addSeg(e)
+                    : this.logger.error(`putSeg ${e.segId} is not buffer`));
             }
             clear() {
               this.isCleared ||
                 (this.logger.warn("clear segment cache"),
-                this._segPool.clear(),
-                (this._currBufSize = 0),
-                (this.isCleared = !0),
-                (this.overflowed = !1));
+                  this._segPool.clear(),
+                  (this._currBufSize = 0),
+                  (this.isCleared = !0),
+                  (this.overflowed = !1));
             }
             destroy() {
               (this.clear(), this.removeAllListeners(), (this.destroyed = !0));
@@ -12811,8 +12811,8 @@
                 const a = this._segPool.size;
                 if (
                   (this.emit(`${e.BM_ADDED_SN_}${t.sn}`, t),
-                  this.emit(e.BM_SEG_ADDED, t),
-                  this._currBufSize < this.maxBufSize || a <= 5)
+                    this.emit(e.BM_SEG_ADDED, t),
+                    this._currBufSize < this.maxBufSize || a <= 5)
                 )
                   return;
                 let u = Array.from(this._segPool.keys());
@@ -12881,7 +12881,7 @@
               return Le(e, s);
             } catch (t) {
               ((s.message = e.message), (s.stack = e.stack));
-              const r = function () {};
+              const r = function () { };
               return (
                 (r.prototype = Object.create(Object.getPrototypeOf(e))),
                 Le(new r(), s)
@@ -12921,7 +12921,7 @@
                 (this.length = this.buf.length));
             }
             readFields(e, t, s = this.length) {
-              for (; this.pos < s; ) {
+              for (; this.pos < s;) {
                 const s = this.readVarint(),
                   r = s >> 3,
                   i = this.pos;
@@ -12962,38 +12962,38 @@
                                   let i, n;
                                   if (
                                     ((n = r[s.pos++]),
-                                    (i = (112 & n) >> 4),
-                                    n < 128)
+                                      (i = (112 & n) >> 4),
+                                      n < 128)
                                   )
                                     return xe(e, i, t);
                                   if (
                                     ((n = r[s.pos++]),
-                                    (i |= (127 & n) << 3),
-                                    n < 128)
+                                      (i |= (127 & n) << 3),
+                                      n < 128)
                                   )
                                     return xe(e, i, t);
                                   if (
                                     ((n = r[s.pos++]),
-                                    (i |= (127 & n) << 10),
-                                    n < 128)
+                                      (i |= (127 & n) << 10),
+                                      n < 128)
                                   )
                                     return xe(e, i, t);
                                   if (
                                     ((n = r[s.pos++]),
-                                    (i |= (127 & n) << 17),
-                                    n < 128)
+                                      (i |= (127 & n) << 17),
+                                      n < 128)
                                   )
                                     return xe(e, i, t);
                                   if (
                                     ((n = r[s.pos++]),
-                                    (i |= (127 & n) << 24),
-                                    n < 128)
+                                      (i |= (127 & n) << 24),
+                                      n < 128)
                                   )
                                     return xe(e, i, t);
                                   if (
                                     ((n = r[s.pos++]),
-                                    (i |= (1 & n) << 31),
-                                    n < 128)
+                                      (i |= (1 & n) << 31),
+                                      n < 128)
                                   )
                                     return xe(e, i, t);
                                   throw new Error(
@@ -13013,65 +13013,65 @@
                 e - t >= 12 && Oe
                   ? Oe.decode(this.buf.subarray(t, e))
                   : (function (e, t, s) {
-                      let r = "",
-                        i = t;
-                      for (; i < s; ) {
-                        const t = e[i];
-                        let n,
-                          o,
-                          a,
-                          u = null,
-                          l = t > 239 ? 4 : t > 223 ? 3 : t > 191 ? 2 : 1;
-                        if (i + l > s) break;
-                        (1 === l
-                          ? t < 128 && (u = t)
-                          : 2 === l
+                    let r = "",
+                      i = t;
+                    for (; i < s;) {
+                      const t = e[i];
+                      let n,
+                        o,
+                        a,
+                        u = null,
+                        l = t > 239 ? 4 : t > 223 ? 3 : t > 191 ? 2 : 1;
+                      if (i + l > s) break;
+                      (1 === l
+                        ? t < 128 && (u = t)
+                        : 2 === l
+                          ? ((n = e[i + 1]),
+                            128 == (192 & n) &&
+                            ((u = ((31 & t) << 6) | (63 & n)),
+                              u <= 127 && (u = null)))
+                          : 3 === l
                             ? ((n = e[i + 1]),
+                              (o = e[i + 2]),
                               128 == (192 & n) &&
-                                ((u = ((31 & t) << 6) | (63 & n)),
-                                u <= 127 && (u = null)))
-                            : 3 === l
-                              ? ((n = e[i + 1]),
-                                (o = e[i + 2]),
-                                128 == (192 & n) &&
-                                  128 == (192 & o) &&
-                                  ((u =
-                                    ((15 & t) << 12) |
-                                    ((63 & n) << 6) |
-                                    (63 & o)),
-                                  (u <= 2047 || (u >= 55296 && u <= 57343)) &&
-                                    (u = null)))
-                              : 4 === l &&
-                                ((n = e[i + 1]),
-                                (o = e[i + 2]),
-                                (a = e[i + 3]),
-                                128 == (192 & n) &&
-                                  128 == (192 & o) &&
-                                  128 == (192 & a) &&
-                                  ((u =
-                                    ((15 & t) << 18) |
-                                    ((63 & n) << 12) |
-                                    ((63 & o) << 6) |
-                                    (63 & a)),
-                                  (u <= 65535 || u >= 1114112) && (u = null))),
-                          null === u
-                            ? ((u = 65533), (l = 1))
-                            : u > 65535 &&
-                              ((u -= 65536),
-                              (r += String.fromCharCode(
-                                ((u >>> 10) & 1023) | 55296,
-                              )),
-                              (u = 56320 | (1023 & u))),
-                          (r += String.fromCharCode(u)),
-                          (i += l));
-                      }
-                      return r;
-                    })(this.buf, t, e)
+                              128 == (192 & o) &&
+                              ((u =
+                                ((15 & t) << 12) |
+                                ((63 & n) << 6) |
+                                (63 & o)),
+                                (u <= 2047 || (u >= 55296 && u <= 57343)) &&
+                                (u = null)))
+                            : 4 === l &&
+                            ((n = e[i + 1]),
+                              (o = e[i + 2]),
+                              (a = e[i + 3]),
+                              128 == (192 & n) &&
+                              128 == (192 & o) &&
+                              128 == (192 & a) &&
+                              ((u =
+                                ((15 & t) << 18) |
+                                ((63 & n) << 12) |
+                                ((63 & o) << 6) |
+                                (63 & a)),
+                                (u <= 65535 || u >= 1114112) && (u = null))),
+                        null === u
+                          ? ((u = 65533), (l = 1))
+                          : u > 65535 &&
+                          ((u -= 65536),
+                            (r += String.fromCharCode(
+                              ((u >>> 10) & 1023) | 55296,
+                            )),
+                            (u = 56320 | (1023 & u))),
+                        (r += String.fromCharCode(u)),
+                        (i += l));
+                    }
+                    return r;
+                  })(this.buf, t, e)
               );
             }
             skip(e) {
               const t = 7 & e;
-              if (0 === t) for (; this.buf[this.pos++] > 127; );
+              if (0 === t) for (; this.buf[this.pos++] > 127;);
               else if (2 === t) this.pos = this.readVarint() + this.pos;
               else if (5 === t) this.pos += 4;
               else {
@@ -13084,7 +13084,7 @@
             }
             realloc(e) {
               let t = this.length || 16;
-              for (; t < this.pos + e; ) t *= 2;
+              for (; t < this.pos + e;) t *= 2;
               if (t !== this.length) {
                 const e = new Uint8Array(t);
                 (e.set(this.buf),
@@ -13103,57 +13103,57 @@
             writeVarint(e) {
               (e = +e || 0) > 268435455 || e < 0
                 ? (function (e, t) {
-                    let s, r;
-                    if (
-                      (e >= 0
-                        ? ((s = (e % 4294967296) | 0),
-                          (r = (e / 4294967296) | 0))
-                        : ((s = ~(-e % 4294967296)),
-                          (r = ~(-e / 4294967296)),
-                          4294967295 ^ s
-                            ? (s = (s + 1) | 0)
-                            : ((s = 0), (r = (r + 1) | 0))),
+                  let s, r;
+                  if (
+                    (e >= 0
+                      ? ((s = (e % 4294967296) | 0),
+                        (r = (e / 4294967296) | 0))
+                      : ((s = ~(-e % 4294967296)),
+                        (r = ~(-e / 4294967296)),
+                        4294967295 ^ s
+                          ? (s = (s + 1) | 0)
+                          : ((s = 0), (r = (r + 1) | 0))),
                       e >= 0x10000000000000000 || e < -0x10000000000000000)
-                    )
-                      throw new Error("Given varint doesn't fit into 10 bytes");
-                    (t.realloc(10),
-                      (function (e, t, s) {
-                        ((s.buf[s.pos++] = (127 & e) | 128),
-                          (e >>>= 7),
-                          (s.buf[s.pos++] = (127 & e) | 128),
-                          (e >>>= 7),
-                          (s.buf[s.pos++] = (127 & e) | 128),
-                          (e >>>= 7),
-                          (s.buf[s.pos++] = (127 & e) | 128),
-                          (e >>>= 7),
-                          (s.buf[s.pos] = 127 & e));
-                      })(s, 0, t),
-                      (function (e, t) {
-                        const s = (7 & e) << 4;
-                        ((t.buf[t.pos++] |= s | ((e >>>= 3) ? 128 : 0)),
+                  )
+                    throw new Error("Given varint doesn't fit into 10 bytes");
+                  (t.realloc(10),
+                    (function (e, t, s) {
+                      ((s.buf[s.pos++] = (127 & e) | 128),
+                        (e >>>= 7),
+                        (s.buf[s.pos++] = (127 & e) | 128),
+                        (e >>>= 7),
+                        (s.buf[s.pos++] = (127 & e) | 128),
+                        (e >>>= 7),
+                        (s.buf[s.pos++] = (127 & e) | 128),
+                        (e >>>= 7),
+                        (s.buf[s.pos] = 127 & e));
+                    })(s, 0, t),
+                    (function (e, t) {
+                      const s = (7 & e) << 4;
+                      ((t.buf[t.pos++] |= s | ((e >>>= 3) ? 128 : 0)),
+                        e &&
+                        ((t.buf[t.pos++] =
+                          (127 & e) | ((e >>>= 7) ? 128 : 0)),
                           e &&
+                          ((t.buf[t.pos++] =
+                            (127 & e) | ((e >>>= 7) ? 128 : 0)),
+                            e &&
                             ((t.buf[t.pos++] =
                               (127 & e) | ((e >>>= 7) ? 128 : 0)),
-                            e &&
+                              e &&
                               ((t.buf[t.pos++] =
                                 (127 & e) | ((e >>>= 7) ? 128 : 0)),
-                              e &&
-                                ((t.buf[t.pos++] =
-                                  (127 & e) | ((e >>>= 7) ? 128 : 0)),
-                                e &&
-                                  ((t.buf[t.pos++] =
-                                    (127 & e) | ((e >>>= 7) ? 128 : 0)),
-                                  e && (t.buf[t.pos++] = 127 & e))))));
-                      })(r, t));
-                  })(e, this)
+                                e && (t.buf[t.pos++] = 127 & e))))));
+                    })(r, t));
+                })(e, this)
                 : (this.realloc(4),
                   (this.buf[this.pos++] = (127 & e) | (e > 127 ? 128 : 0)),
                   e <= 127 ||
+                  ((this.buf[this.pos++] =
+                    (127 & (e >>>= 7)) | (e > 127 ? 128 : 0)),
+                    e <= 127 ||
                     ((this.buf[this.pos++] =
                       (127 & (e >>>= 7)) | (e > 127 ? 128 : 0)),
-                    e <= 127 ||
-                      ((this.buf[this.pos++] =
-                        (127 & (e >>>= 7)) | (e > 127 ? 128 : 0)),
                       e <= 127 || (this.buf[this.pos++] = (e >>> 7) & 127))));
             }
             writeBoolean(e) {
@@ -13180,18 +13180,18 @@
                   } else
                     i &&
                       ((e[s++] = 239),
-                      (e[s++] = 191),
-                      (e[s++] = 189),
-                      (i = null));
+                        (e[s++] = 191),
+                        (e[s++] = 189),
+                        (i = null));
                   r < 128
                     ? (e[s++] = r)
                     : (r < 2048
-                        ? (e[s++] = (r >> 6) | 192)
-                        : (r < 65536
-                            ? (e[s++] = (r >> 12) | 224)
-                            : ((e[s++] = (r >> 18) | 240),
-                              (e[s++] = ((r >> 12) & 63) | 128)),
-                          (e[s++] = ((r >> 6) & 63) | 128)),
+                      ? (e[s++] = (r >> 6) | 192)
+                      : (r < 65536
+                        ? (e[s++] = (r >> 12) | 224)
+                        : ((e[s++] = (r >> 18) | 240),
+                          (e[s++] = ((r >> 12) & 63) | 128)),
+                        (e[s++] = ((r >> 6) & 63) | 128)),
                       (e[s++] = (63 & r) | 128));
                 }
                 return s;
@@ -13323,24 +13323,24 @@
                                               ? (t.log_url = s.readString())
                                               : 22 === e
                                                 ? (t.report_url =
-                                                    s.readString())
+                                                  s.readString())
                                                 : 23 === e
                                                   ? (t.debug = s.readBoolean())
                                                   : 24 === e
                                                     ? (t.fuse_rate =
-                                                        s.readVarint(!0))
+                                                      s.readVarint(!0))
                                                     : 25 === e
                                                       ? (t.token =
-                                                          s.readString())
+                                                        s.readString())
                                                       : 26 === e
                                                         ? (t.token2 =
-                                                            s.readString())
+                                                          s.readString())
                                                         : 27 === e
                                                           ? (t.slogan =
-                                                              s.readBoolean())
+                                                            s.readBoolean())
                                                           : 30 === e &&
-                                                            (t.overload =
-                                                              s.readBoolean());
+                                                          (t.overload =
+                                                            s.readBoolean());
           }
           function ze(e, t) {
             if (e.exclusions)
@@ -13382,38 +13382,38 @@
               ? (t.ret = s.readVarint(!0))
               : 2 === e
                 ? ((t.channel_response = (function (e, t) {
-                    return e.readFields(qe, { peers: [], stun: [] }, t);
-                  })(s, s.readVarint() + s.pos)),
+                  return e.readFields(qe, { peers: [], stun: [] }, t);
+                })(s, s.readVarint() + s.pos)),
                   (t.data = "channel_response"))
                 : 3 === e
                   ? ((t.peers_response = (function (e, t) {
-                      return e.readFields(Ue, { peers: [] }, t);
-                    })(s, s.readVarint() + s.pos)),
+                    return e.readFields(Ue, { peers: [] }, t);
+                  })(s, s.readVarint() + s.pos)),
                     (t.data = "peers_response"))
                   : 4 === e &&
-                    ((t.err_data = (function (e, t) {
-                      return e.readFields(He, { code: 0 }, t);
-                    })(s, s.readVarint() + s.pos)),
+                  ((t.err_data = (function (e, t) {
+                    return e.readFields(He, { code: 0 }, t);
+                  })(s, s.readVarint() + s.pos)),
                     (t.data = "err_data"));
           }
           const Ge = class {
-              constructor(e) {
-                ((this.currentIndex = 0), (this.domains = [...e]));
-              }
-              getCurrentDomain() {
-                return this.domains[this.currentIndex];
-              }
-              switchToNextDomain() {
-                return (
-                  (this.currentIndex =
-                    (this.currentIndex + 1) % this.domains.length),
-                  0 !== this.currentIndex
-                );
-              }
-              getAllDomains() {
-                return [...this.domains];
-              }
-            },
+            constructor(e) {
+              ((this.currentIndex = 0), (this.domains = [...e]));
+            }
+            getCurrentDomain() {
+              return this.domains[this.currentIndex];
+            }
+            switchToNextDomain() {
+              return (
+                (this.currentIndex =
+                  (this.currentIndex + 1) % this.domains.length),
+                0 !== this.currentIndex
+              );
+            }
+            getAllDomains() {
+              return [...this.domains];
+            }
+          },
             Ze = "TRACKER_EXPT",
             Xe = {
               cn: ["Z3ouY2RuYnllLmNvbQ=="],
@@ -13522,9 +13522,9 @@
                             "color: dodgerblue; padding:20px 0; font-size: xx-large",
                             "font-size: medium; padding-bottom:15px",
                           ),
-                        r.info && console.info(`${r.info}`),
-                        r.warn && console.warn(`${r.warn}`),
-                        -1 === e.ret)
+                          r.info && console.info(`${r.info}`),
+                          r.warn && console.warn(`${r.warn}`),
+                          -1 === e.ret)
                       ) {
                         const { code: t, msg: r } = e.data;
                         s(ke(new Error(r), Ze, { retry: t >= 5e3 }));
@@ -13536,10 +13536,10 @@
                       ) {
                         if (
                           ((this.peerId = this.id = r.id),
-                          r.report_interval < 20 && (r.report_interval = 20),
-                          (this.reportInterval = r.report_interval),
-                          this.btStats(),
-                          !this.announceInfo.asn && r.asn)
+                            r.report_interval < 20 && (r.report_interval = 20),
+                            (this.reportInterval = r.report_interval),
+                            this.btStats(),
+                            !this.announceInfo.asn && r.asn)
                         ) {
                           const { country: e, asn: t } = r;
                           (this.engine.emitEvent("geographicInfo", {
@@ -13580,8 +13580,8 @@
               let e = { off: !0 };
               (this.statsRequesting || (e = { ...e, ...this._makeStatsBody() }),
                 this.peerId &&
-                  navigator.sendBeacon &&
-                  navigator.sendBeacon(this.statsURL, nt(e, We)));
+                navigator.sendBeacon &&
+                navigator.sendBeacon(this.statsURL, nt(e, We)));
             }
             postStats(t = !1) {
               const { logger: s } = this.engine;
@@ -13630,7 +13630,7 @@
                       (this.statsRequesting = !1),
                       this.reportFails++,
                       this.reportFails >= 3 &&
-                        (clearInterval(this.heartbeater),
+                      (clearInterval(this.heartbeater),
                         this.engine.emit(e.RESTART_P2P)));
                   },
                 ),
@@ -13640,34 +13640,34 @@
             btGetPeers(e, t = !1) {
               const { logger: s } = this.engine;
               let r = {
-                  exclusions: e,
-                  ratio: this.health.healthRatio,
-                  urgent: t || void 0,
-                },
+                exclusions: e,
+                ratio: this.health.healthRatio,
+                urgent: t || void 0,
+              },
                 i = {};
               return (
                 this.engine.getExtraForPeersRequest &&
-                  (i = this.engine.getExtraForPeersRequest()),
+                (i = this.engine.getExtraForPeersRequest()),
                 (r = Object.assign({}, r, i)),
                 new Promise((e, t) => {
                   this.reportFails >= 3
                     ? t(new Error("reportFails >= 3"))
                     : it(
-                        this.getPeersURL,
-                        this._requestHeader,
-                        r,
-                        ze,
-                        null,
-                        (s) => {
-                          -1 === s.ret ? t(s.data.msg) : e(s.data);
-                        },
-                        (e) => {
-                          (s.error(`getPeers error ${e}`), t(e));
-                        },
-                        () => {
-                          this.health.resetTraffic();
-                        },
-                      );
+                      this.getPeersURL,
+                      this._requestHeader,
+                      r,
+                      ze,
+                      null,
+                      (s) => {
+                        -1 === s.ret ? t(s.data.msg) : e(s.data);
+                      },
+                      (e) => {
+                        (s.error(`getPeers error ${e}`), t(e));
+                      },
+                      () => {
+                        this.health.resetTraffic();
+                      },
+                    );
                 })
               );
             }
@@ -13729,14 +13729,14 @@
             }
             _makeStatsBody() {
               let e = {
-                  totalConns: this.engine.tracker.totalConns + 1,
-                  failConns: this.failConns,
-                  rebuffers: this.errsBufStalled || void 0,
-                  requests: this.mediaRequests || void 0,
-                  http: Math.round(this[Je]) || 0,
-                  p2p: Math.round(this[Ye]) || 0,
-                  share: Math.round(this[Ke]) || 0,
-                },
+                totalConns: this.engine.tracker.totalConns + 1,
+                failConns: this.failConns,
+                rebuffers: this.errsBufStalled || void 0,
+                requests: this.mediaRequests || void 0,
+                http: Math.round(this[Je]) || 0,
+                p2p: Math.round(this[Ye]) || 0,
+                share: Math.round(this[Ke]) || 0,
+              },
                 t = {};
               (this.engine.getExtraForStats &&
                 (t = this.engine.getExtraForStats()),
@@ -13756,12 +13756,12 @@
               let e = {};
               return (
                 this.native &&
-                  (e = {
-                    ...e,
-                    "X-SW-Key": rt(this.key),
-                    "User-Agent": "electron",
-                    "X-SW-ID": this.announceInfo.bundle,
-                  }),
+                (e = {
+                  ...e,
+                  "X-SW-Key": rt(this.key),
+                  "User-Agent": "electron",
+                  "X-SW-ID": this.announceInfo.bundle,
+                }),
                 e
               );
             }
@@ -13849,18 +13849,18 @@
             function r(e, t, s, r, i) {
               return tt(i - 930, s);
             }
-            for (;;)
+            for (; ;)
               try {
                 if (
                   377468 ==
                   (parseInt(r(0, 0, 944, 0, 939)) / 1) *
-                    (parseInt(r(0, 0, 936, 0, 930)) / 2) +
-                    parseInt(r(0, 0, 929, 0, 935)) / 3 +
-                    parseInt(r(0, 0, 939, 0, 941)) / 4 +
-                    -parseInt(tt(4, -995)) / 5 +
-                    parseInt(s(94, 0, 0, 0, 91)) / 6 +
-                    -parseInt(s(93, 0, 0, 0, 92)) / 7 +
-                    -parseInt(s(102, 0, 0, 0, 107)) / 8
+                  (parseInt(r(0, 0, 936, 0, 930)) / 2) +
+                  parseInt(r(0, 0, 929, 0, 935)) / 3 +
+                  parseInt(r(0, 0, 939, 0, 941)) / 4 +
+                  -parseInt(tt(4, -995)) / 5 +
+                  parseInt(s(94, 0, 0, 0, 91)) / 6 +
+                  -parseInt(s(93, 0, 0, 0, 92)) / 7 +
+                  -parseInt(s(102, 0, 0, 0, 107)) / 8
                 )
                   break;
                 t.push(t.shift());
@@ -13910,24 +13910,24 @@
             _realSend(e) {
               0 !== e.length &&
                 ((this.posting = !0),
-                (this.msgQueue = []),
-                fetch(this.addr, { method: "POST", body: JSON.stringify(e) })
-                  .then(() => {
-                    ((this.posting = !1),
-                      this.msgQueue.length > 0 &&
+                  (this.msgQueue = []),
+                  fetch(this.addr, { method: "POST", body: JSON.stringify(e) })
+                    .then(() => {
+                      ((this.posting = !1),
+                        this.msgQueue.length > 0 &&
                         this._realSend([...this.msgQueue]));
-                  })
-                  .catch((e) => {
-                    (this.logger.error(e), (this.posting = !1));
-                  }));
+                    })
+                    .catch((e) => {
+                      (this.logger.error(e), (this.posting = !1));
+                    }));
             }
             close() {
               this.connected &&
                 ((this.closed = !0),
-                (this.connected = !1),
-                this.abortController &&
+                  (this.connected = !1),
+                  this.abortController &&
                   (this.abortController.abort(), (this.abortController = null)),
-                this.onclose && this.onclose());
+                  this.onclose && this.onclose());
             }
             destroy() {
               (this.close(), this.removeAllListeners());
@@ -13949,7 +13949,7 @@
                   (JSON.stringify(e) === JSON.stringify(this.lastData) &&
                     t < 10 &&
                     (this.logger.warn(`wait ${10 - t}s for next polling`),
-                    await y(1e3 * (10 - t))),
+                      await y(1e3 * (10 - t))),
                     (this.lastData = e),
                     this._longPolling());
                 })
@@ -13963,201 +13963,201 @@
             }
           }
           const at = class {
-              constructor(e, t, s, r = "main") {
-                ((this.logger = e),
-                  (this.config = t),
-                  (this.wsAddr = s),
-                  (this.serverVersion = 0),
-                  (this.pingInterval = 95e3),
-                  (this.name = r),
-                  (this.normalClosed = !1),
-                  (this.connecting = !0),
-                  (this.lastSendTs = performance.now()),
-                  (this.pollingClient = new ot(e, s)));
-                try {
-                  this._ws = this._init();
-                } catch (t) {
-                  (e.error(t), this._startPolling());
-                }
+            constructor(e, t, s, r = "main") {
+              ((this.logger = e),
+                (this.config = t),
+                (this.wsAddr = s),
+                (this.serverVersion = 0),
+                (this.pingInterval = 95e3),
+                (this.name = r),
+                (this.normalClosed = !1),
+                (this.connecting = !0),
+                (this.lastSendTs = performance.now()),
+                (this.pollingClient = new ot(e, s)));
+              try {
+                this._ws = this._init();
+              } catch (t) {
+                (e.error(t), this._startPolling());
               }
-              get batchSupported() {
-                return this.serverVersion >= 50;
-              }
-              _init() {
-                const e = {
-                  maxRetries: this.config.wsMaxRetries,
-                  minReconnectionDelay: m(15e3, 6e4),
-                  maxReconnectionDelay: 6e5,
-                  maxEnqueuedMessages: 20,
-                  connectionTimeout: 7e3,
-                };
-                let t = new j(this.wsAddr, void 0, e);
-                return (
-                  t.addEventListener("open", () => {
-                    (this.logger.info(
-                      `signal ${this.name} ${this.wsAddr} connection opened`,
-                    ),
-                      (this.normalClosed = !1),
-                      (this.connecting = !1),
-                      this.pollingClient.connected
-                        ? this.pollingClient.close()
-                        : this.onopen && this.onopen(),
-                      this._startPing(this.pingInterval));
-                  }),
-                  (t.push = t.send),
-                  (t.send = (e) => {
-                    this.lastSendTs = performance.now();
-                    let s = JSON.stringify(e);
-                    t.push(s);
-                  }),
-                  t.addEventListener("message", (e) => {
-                    let t = e.data;
-                    const s = JSON.parse(t),
-                      r = s.action;
-                    if ("pong" !== r) {
-                      if ("ver" !== r)
-                        return "close" === r
-                          ? (this.logger.warn(
-                              `server close signal ${this.name} reason ${s.reason}`,
-                            ),
-                            void this.close())
-                          : void ("signals" !== r
-                              ? this.onmessage && this.onmessage(s, this.name)
-                              : this._onSignalBatch(s.data));
-                      this.serverVersion = s.ver;
-                    } else clearTimeout(this.pongTimer);
-                  }),
-                  t.addEventListener("close", (e) => {
-                    const { code: t, reason: s } = e;
-                    (this.logger.warn(
-                      `signal ${this.name} ${this.wsAddr} closed ${t} ${s}`,
-                    ),
-                      t >= 5e3 || t < 4e3
-                        ? (this.onclose && this.onclose(), this._stopPing())
-                        : this.close(),
-                      (this.connecting = !1));
-                  }),
-                  t.addEventListener("error", (e) => {
-                    (this._stopPing(),
-                      this.onerror && this.onerror(e),
-                      this._startPolling());
-                  }),
-                  t
-                );
-              }
-              _startPolling() {
-                this.normalClosed ||
-                  this.pollingClient.connected ||
-                  (this.logger.info(`${this.name} start polling`),
+            }
+            get batchSupported() {
+              return this.serverVersion >= 50;
+            }
+            _init() {
+              const e = {
+                maxRetries: this.config.wsMaxRetries,
+                minReconnectionDelay: m(15e3, 6e4),
+                maxReconnectionDelay: 6e5,
+                maxEnqueuedMessages: 20,
+                connectionTimeout: 7e3,
+              };
+              let t = new j(this.wsAddr, void 0, e);
+              return (
+                t.addEventListener("open", () => {
+                  (this.logger.info(
+                    `signal ${this.name} ${this.wsAddr} connection opened`,
+                  ),
+                    (this.normalClosed = !1),
+                    (this.connecting = !1),
+                    this.pollingClient.connected
+                      ? this.pollingClient.close()
+                      : this.onopen && this.onopen(),
+                    this._startPing(this.pingInterval));
+                }),
+                (t.push = t.send),
+                (t.send = (e) => {
+                  this.lastSendTs = performance.now();
+                  let s = JSON.stringify(e);
+                  t.push(s);
+                }),
+                t.addEventListener("message", (e) => {
+                  let t = e.data;
+                  const s = JSON.parse(t),
+                    r = s.action;
+                  if ("pong" !== r) {
+                    if ("ver" !== r)
+                      return "close" === r
+                        ? (this.logger.warn(
+                          `server close signal ${this.name} reason ${s.reason}`,
+                        ),
+                          void this.close())
+                        : void ("signals" !== r
+                          ? this.onmessage && this.onmessage(s, this.name)
+                          : this._onSignalBatch(s.data));
+                    this.serverVersion = s.ver;
+                  } else clearTimeout(this.pongTimer);
+                }),
+                t.addEventListener("close", (e) => {
+                  const { code: t, reason: s } = e;
+                  (this.logger.warn(
+                    `signal ${this.name} ${this.wsAddr} closed ${t} ${s}`,
+                  ),
+                    t >= 5e3 || t < 4e3
+                      ? (this.onclose && this.onclose(), this._stopPing())
+                      : this.close(),
+                    (this.connecting = !1));
+                }),
+                t.addEventListener("error", (e) => {
+                  (this._stopPing(),
+                    this.onerror && this.onerror(e),
+                    this._startPolling());
+                }),
+                t
+              );
+            }
+            _startPolling() {
+              this.normalClosed ||
+                this.pollingClient.connected ||
+                (this.logger.info(`${this.name} start polling`),
                   this.pollingClient.start(),
                   this._setupPolling(this.pollingClient));
-              }
-              sendDebug(e, t, s) {
-                this._send({
-                  action: "debug",
-                  details: t,
-                  ping: s || void 0,
-                  to: e,
-                });
-              }
-              sendSignal(e, t) {
-                const s = { action: "signal", to: e, data: t };
-                return (this._send(s), this.name);
-              }
-              sendSignalBatch(e, t) {
-                if (this.batchSupported && t.length > 1)
-                  this._send({ action: "signals", to: e, data: t });
-                else for (let s of t) this.sendSignal(e, s);
-                return this.name;
-              }
-              sendReject(e, t, s) {
-                if (this.rejectIdCache === e) return;
-                this.rejectIdCache = e;
-                const r = { action: "reject", to: e, reason: t, fatal: s };
-                this._send(r);
-              }
-              _send(e) {
-                this.pollingClient.connected
-                  ? this.pollingClient.send(e)
-                  : this._ws && this._ws.send(e);
-              }
-              _startPing(e) {
-                this.connected &&
-                  (this.pingTimer = setTimeout(() => {
-                    const e = 95e3 - (performance.now() - this.lastSendTs);
-                    if (e >= 0) return this._startPing(e);
-                    (this._ws &&
-                      this._ws.push(JSON.stringify({ action: "ping" })),
-                      (this.pongTimer = setTimeout(() => {
-                        (this.logger.warn(
-                          `signal ${this.name} wait for pong timeout, reconnect`,
-                        ),
-                          this.close(),
-                          this.reconnect());
-                      }, 15e3)),
-                      this._startPing(this.pingInterval));
-                  }, e));
-              }
-              _stopPing() {
-                (clearTimeout(this.pingTimer), clearTimeout(this.pongTimer));
-              }
-              close() {
-                (this.logger.info(`close signal ${this.name}`),
-                  this._stopPing(),
-                  (() => {
-                    this._ws && this._ws.close(1e3);
-                  })(),
-                  this.pollingClient.close(),
-                  (this.normalClosed = !0));
-              }
-              reconnect() {
-                return !(
-                  !this._ws ||
-                  this.connecting ||
-                  ((this.connecting = !0),
+            }
+            sendDebug(e, t, s) {
+              this._send({
+                action: "debug",
+                details: t,
+                ping: s || void 0,
+                to: e,
+              });
+            }
+            sendSignal(e, t) {
+              const s = { action: "signal", to: e, data: t };
+              return (this._send(s), this.name);
+            }
+            sendSignalBatch(e, t) {
+              if (this.batchSupported && t.length > 1)
+                this._send({ action: "signals", to: e, data: t });
+              else for (let s of t) this.sendSignal(e, s);
+              return this.name;
+            }
+            sendReject(e, t, s) {
+              if (this.rejectIdCache === e) return;
+              this.rejectIdCache = e;
+              const r = { action: "reject", to: e, reason: t, fatal: s };
+              this._send(r);
+            }
+            _send(e) {
+              this.pollingClient.connected
+                ? this.pollingClient.send(e)
+                : this._ws && this._ws.send(e);
+            }
+            _startPing(e) {
+              this.connected &&
+                (this.pingTimer = setTimeout(() => {
+                  const e = 95e3 - (performance.now() - this.lastSendTs);
+                  if (e >= 0) return this._startPing(e);
+                  (this._ws &&
+                    this._ws.push(JSON.stringify({ action: "ping" })),
+                    (this.pongTimer = setTimeout(() => {
+                      (this.logger.warn(
+                        `signal ${this.name} wait for pong timeout, reconnect`,
+                      ),
+                        this.close(),
+                        this.reconnect());
+                    }, 15e3)),
+                    this._startPing(this.pingInterval));
+                }, e));
+            }
+            _stopPing() {
+              (clearTimeout(this.pingTimer), clearTimeout(this.pongTimer));
+            }
+            close() {
+              (this.logger.info(`close signal ${this.name}`),
+                this._stopPing(),
+                (() => {
+                  this._ws && this._ws.close(1e3);
+                })(),
+                this.pollingClient.close(),
+                (this.normalClosed = !0));
+            }
+            reconnect() {
+              return !(
+                !this._ws ||
+                this.connecting ||
+                ((this.connecting = !0),
                   (this.normalClosed = !1),
                   this.logger.info(`reconnect signal ${this.name}`),
                   this._ws.reconnect(),
                   0)
-                );
-              }
-              destroy() {
-                (this.close(), (this._ws = null), this.pollingClient.destroy());
-              }
-              get connected() {
-                return !!this.pollingClient.connected || this._connected;
-              }
-              get _connected() {
-                return !!this._ws && this._ws.readyState === j.OPEN;
-              }
-              _setupPolling(e) {
-                ((e.onopen = (e) => {
-                  (e && (this.serverVersion = e),
-                    this.logger.info(`${this.name} polling opened`),
-                    (this.connecting = !1),
-                    this.onopen && this.onopen());
+              );
+            }
+            destroy() {
+              (this.close(), (this._ws = null), this.pollingClient.destroy());
+            }
+            get connected() {
+              return !!this.pollingClient.connected || this._connected;
+            }
+            get _connected() {
+              return !!this._ws && this._ws.readyState === j.OPEN;
+            }
+            _setupPolling(e) {
+              ((e.onopen = (e) => {
+                (e && (this.serverVersion = e),
+                  this.logger.info(`${this.name} polling opened`),
+                  (this.connecting = !1),
+                  this.onopen && this.onopen());
+              }),
+                (e.onerror = (e) => {
+                  this._connected || (this.onerror && this.onerror(e));
                 }),
-                  (e.onerror = (e) => {
-                    this._connected || (this.onerror && this.onerror(e));
-                  }),
-                  (e.onclose = () => {
-                    this._connected || (this.onclose && this.onclose());
-                  }),
-                  (e.onmessage = (e) => {
-                    if (this.onmessage)
-                      for (let t of e)
-                        "signals" === t.action
-                          ? this._onSignalBatch(t.data)
-                          : this.onmessage(t, this.name);
-                  }));
-              }
-              _onSignalBatch(e) {
-                if (this.onmessage)
-                  for (let t of e)
-                    (t.action || (t.action = "signal"),
-                      this.onmessage(t, this.name));
-              }
-            },
+                (e.onclose = () => {
+                  this._connected || (this.onclose && this.onclose());
+                }),
+                (e.onmessage = (e) => {
+                  if (this.onmessage)
+                    for (let t of e)
+                      "signals" === t.action
+                        ? this._onSignalBatch(t.data)
+                        : this.onmessage(t, this.name);
+                }));
+            }
+            _onSignalBatch(e) {
+              if (this.onmessage)
+                for (let t of e)
+                  (t.action || (t.action = "signal"),
+                    this.onmessage(t, this.name));
+            }
+          },
             ut = class {
               constructor(e, t, s, r) {
                 ((this.logger = e),
@@ -14179,8 +14179,8 @@
                   (s.onopen = () => {
                     ((this.normalClosed = !1),
                       !this._connected &&
-                        this.onopen &&
-                        ((this._connected = !0), this.onopen()));
+                      this.onopen &&
+                      ((this._connected = !0), this.onopen()));
                   }),
                   (s.onmessage = (e) => {
                     this.onmessage && this.onmessage(e, s.name);
@@ -14221,8 +14221,8 @@
                   : this.backupConnected
                     ? this.backupWS.sendReject(e, t, s)
                     : this.logger.warn(
-                        "no signal available, send reject failed",
-                      );
+                      "no signal available, send reject failed",
+                    );
               }
               sendDebug(e, t, s) {
                 this.mainConnected && this.mainWS.sendDebug(e, t, s);
@@ -14245,13 +14245,13 @@
                 let t = !1;
                 return (
                   this.mainWS &&
-                    "backup" !== e &&
-                    this.mainWS.reconnect() &&
-                    (t = !0),
+                  "backup" !== e &&
+                  this.mainWS.reconnect() &&
+                  (t = !0),
                   this.backupWS &&
-                    "main" !== e &&
-                    this.backupWS.reconnect() &&
-                    (t = !0),
+                  "main" !== e &&
+                  this.backupWS.reconnect() &&
+                  (t = !0),
                   t
                 );
               }
@@ -14319,34 +14319,34 @@
             }
           }
           const ct = class {
-              static CHARSET =
-                "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-              static BITS_PER_BYTE = 8;
-              static BITS_PER_BASE64_CHAR = 6;
-              static decode(e) {
-                let t = 0,
-                  s = 0,
-                  r = "";
-                for (const i of e) {
-                  if ("=" === i) break;
-                  const e = this.CHARSET.indexOf(i);
-                  for (
-                    t = (t << this.BITS_PER_BASE64_CHAR) | e,
-                      s += this.BITS_PER_BASE64_CHAR;
-                    s >= this.BITS_PER_BYTE;
-                  )
-                    ((s -= this.BITS_PER_BYTE),
-                      (r += ((t >> s) & ((1 << this.BITS_PER_BYTE) - 1))
-                        .toString(16)
-                        .padStart(2, "0")
-                        .toUpperCase()));
-                }
-                let i = "";
-                for (let e = 0; e < r.length; e++)
-                  ((i += r[e]), e % 2 == 1 && e !== r.length - 1 && (i += ":"));
-                return i;
+            static CHARSET =
+              "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+            static BITS_PER_BYTE = 8;
+            static BITS_PER_BASE64_CHAR = 6;
+            static decode(e) {
+              let t = 0,
+                s = 0,
+                r = "";
+              for (const i of e) {
+                if ("=" === i) break;
+                const e = this.CHARSET.indexOf(i);
+                for (
+                  t = (t << this.BITS_PER_BASE64_CHAR) | e,
+                  s += this.BITS_PER_BASE64_CHAR;
+                  s >= this.BITS_PER_BYTE;
+                )
+                  ((s -= this.BITS_PER_BYTE),
+                    (r += ((t >> s) & ((1 << this.BITS_PER_BYTE) - 1))
+                      .toString(16)
+                      .padStart(2, "0")
+                      .toUpperCase()));
               }
-            },
+              let i = "";
+              for (let e = 0; e < r.length; e++)
+                ((i += r[e]), e % 2 == 1 && e !== r.length - 1 && (i += ":"));
+              return i;
+            }
+          },
             ht = "typ host",
             dt = "generation 0",
             gt = "network-cost",
@@ -14526,10 +14526,10 @@
                     if (s) return (clearTimeout(r), void (i = !1));
                     i ||
                       ((i = !0),
-                      (r = setTimeout(function () {
-                        (e.call(t, n), (i = !1), (r = null));
-                      }, 1e3 * n)),
-                      (n *= 1.1));
+                        (r = setTimeout(function () {
+                          (e.call(t, n), (i = !1), (r = null));
+                        }, 1e3 * n)),
+                        (n *= 1.1));
                   };
                 })(this._requestMorePeers, this, m(35, 45))),
                 (this.maxConns = this.isMobile ? 15 : 20),
@@ -14559,23 +14559,23 @@
                   const r = e.peers || [];
                   (s.notifyPeersLoaded(r.length),
                     (e.wifi_only || n) &&
-                      this.isMobile &&
-                      ((s.downloadOnly = !0),
+                    this.isMobile &&
+                    ((s.downloadOnly = !0),
                       this.logger.info("downloadOnly mode")));
                   const o = i.main;
                   let a = i.backup;
                   if (
                     (e.signal && !e.signal2 && (a = void 0),
-                    (this.signalerWs = this._initSignalerWs(
-                      e.signal || o,
-                      e.signal2 || a,
-                      e.token,
-                      e.token2,
-                    )),
-                    0 === r.length ? this.requestMorePeers() : (this.peers = r),
-                    t.emitEvent("peerId", this.peerId),
-                    e.stun && e.stun.length > 0 && (this.stuns = e.stun),
-                    e.debug && (this.logger.enableDebug(), e.log_url))
+                      (this.signalerWs = this._initSignalerWs(
+                        e.signal || o,
+                        e.signal2 || a,
+                        e.token,
+                        e.token2,
+                      )),
+                      0 === r.length ? this.requestMorePeers() : (this.peers = r),
+                      t.emitEvent("peerId", this.peerId),
+                      e.stun && e.stun.length > 0 && (this.stuns = e.stun),
+                      e.debug && (this.logger.enableDebug(), e.log_url))
                   ) {
                     ((this.logUploader = new z(
                       e.log_url,
@@ -14592,12 +14592,12 @@
                   }
                   (t.onTrackerResume && t.onTrackerResume(e),
                     e.fuse_rate &&
-                      ((this.maxConnsActive = this.fuseRate = e.fuse_rate),
+                    ((this.maxConnsActive = this.fuseRate = e.fuse_rate),
                       (this.maxConns =
                         this.maxConnsActive + (this.isMobile ? 3 : 7)),
                       (this.maxPeersBySignalServer = 7)),
                     e.overload &&
-                      ((this.overloaded = !0),
+                    ((this.overloaded = !0),
                       (this.maxPeersBySignalServer = 3),
                       this.logger.warn("server overloaded, degrade signaling")),
                     this.logger.info(
@@ -14608,8 +14608,8 @@
                   if (
                     this.scheduler &&
                     ("TRACKER_EXPT" === s.code && t.emitEvent(e.EXCEPTION, s),
-                    this.scheduler.notifyPeersLoaded(0),
-                    s.retry)
+                      this.scheduler.notifyPeersLoaded(0),
+                      s.retry)
                   )
                     if (s.immediate) this.resumeP2P();
                     else {
@@ -14630,7 +14630,7 @@
                 this.scheduler.destroy(),
                 (this.scheduler = null),
                 this.signalerWs &&
-                  (this.signalerWs.destroy(), (this.signalerWs = null)),
+                (this.signalerWs.destroy(), (this.signalerWs = null)),
                 (this.peers = []));
               for (let e of this.DCMap.values()) e.destroy(!0);
               (this.DCMap.clear(),
@@ -14639,7 +14639,7 @@
                 this.failedDCMap.clear(),
                 this.notFoundDCSet.clear(),
                 this.logUploader &&
-                  (this.logUploader.destroy(), (this.logUploader = null)),
+                (this.logUploader.destroy(), (this.logUploader = null)),
                 this.logger.warn("tracker stop p2p"));
             }
             destroy() {
@@ -14668,10 +14668,10 @@
                 if (0 !== this.peers.length) {
                   for (
                     this._checkDCMap(),
-                      e.info(
-                        `try connect to ${this.peers.length} peers, map size ${this.DCMap.size} limit ${this.maxConnsActive} peersNum ${t}`,
-                      ),
-                      this.peersTemp = [];
+                    e.info(
+                      `try connect to ${this.peers.length} peers, map size ${this.DCMap.size} limit ${this.maxConnsActive} peersNum ${t}`,
+                    ),
+                    this.peersTemp = [];
                     this.peers.length > 0 && !this.isReachActiveLimit;
                   ) {
                     let t = this.peers.shift();
@@ -14682,13 +14682,13 @@
                         if (
                           (this.signalerWs.connected ||
                             ((s = !0),
-                            e.info(`skip peer ${t.id} without intermediator`)),
-                          [...this.DCMap.values()].filter(
-                            (e) => !e.byPeerSignal && !e.connected,
-                          ).length >= this.maxPeersBySignalServer &&
+                              e.info(`skip peer ${t.id} without intermediator`)),
+                            [...this.DCMap.values()].filter(
+                              (e) => !e.byPeerSignal && !e.connected,
+                            ).length >= this.maxPeersBySignalServer &&
                             ((s = !0),
-                            e.warn(`skip peer ${t.id} by signal server`)),
-                          s)
+                              e.warn(`skip peer ${t.id} by signal server`)),
+                            s)
                         ) {
                           this.peersTemp.push(t);
                           continue;
@@ -14765,15 +14765,15 @@
                     `datachannel ${t.channelId} failed fatal ${e} ${s}`,
                   ),
                     this.scheduler &&
-                      (this.scheduler.deletePeer(t),
+                    (this.scheduler.deletePeer(t),
                       this._destroyAndDeletePeer(t.remotePeerId, e),
                       this.fetcher &&
-                        (t.connected || (e && this.fetcher.increFailConns()),
+                      (t.connected || (e && this.fetcher.increFailConns()),
                         e &&
-                          this.failedDCMap.set(
-                            t.remotePeerId,
-                            `DC_FAILED ${s}`,
-                          ),
+                        this.failedDCMap.set(
+                          t.remotePeerId,
+                          `DC_FAILED ${s}`,
+                        ),
                         this._doSignalFusing(this.totalConns),
                         this._doPeersRequest())));
                 })
@@ -14787,8 +14787,8 @@
                         e &&
                         o &&
                         (this.failedDCMap.set(n, "DC_TIMEOUT"),
-                        this.fetcher && this.fetcher.increFailConns()),
-                      !this.isReachActiveLimit &&
+                          this.fetcher && this.fetcher.increFailConns()),
+                        !this.isReachActiveLimit &&
                         !e &&
                         o &&
                         this._tryBackupSignal(t, n, r, t.signalName))
@@ -14806,7 +14806,7 @@
                     `datachannel ${t.channelId} closed fatal ${e}`,
                   ),
                     this.scheduler &&
-                      (this.scheduler.deletePeer(t),
+                    (this.scheduler.deletePeer(t),
                       this._doSignalFusing(this.totalConns)),
                     this._destroyAndDeletePeer(t.remotePeerId, e),
                     e && this.failedDCMap.set(t.remotePeerId, "DC_CLOSE"),
@@ -14833,16 +14833,16 @@
                   const i = this.totalConns;
                   (this._doSignalFusing(i),
                     i >= this.maxConns &&
-                      this.fuseRate < 0 &&
-                      this.fetcher.postStats(!0) &&
-                      this.logger.warn(`peers reach ${i}, report`));
+                    this.fuseRate < 0 &&
+                    this.fetcher.postStats(!0) &&
+                    this.logger.warn(`peers reach ${i}, report`));
                 });
             }
             _doPeersRequest() {
               (this.peers.length < this.maxConnsActive - this.DCMap.size &&
                 this._gatherSharedPeersFromPeers(),
                 (0 === this.peers.length || this.totalConns < this.minConns) &&
-                  this.requestMorePeers(),
+                this.requestMorePeers(),
                 this._tryConnectToAllPeers());
             }
             _doSignalFusing(e) {
@@ -14853,10 +14853,10 @@
                   this.totalConns > 0 && this.fetcher.postStats(!0),
                   this.signalerWs.close())
                 : !t &&
-                  e <= this.minConns &&
-                  !this.signalerWs.connecting &&
-                  this.signalerWs.reconnect() &&
-                  (this.logger.warn(`low conns ${e}, reconnect signaler`),
+                e <= this.minConns &&
+                !this.signalerWs.connecting &&
+                this.signalerWs.reconnect() &&
+                (this.logger.warn(`low conns ${e}, reconnect signaler`),
                   this.fetcher.postStats(!0));
             }
             _initSignalerWs(t, s, r, i) {
@@ -14902,7 +14902,7 @@
                 (o.onerror = (t) => {
                   (t.message && this.logger.warn(`signal err: ${t.message}`),
                     t.message &&
-                      this.engine.emitEvent(e.EXCEPTION, ke(t, "SIGNAL_EXPT")));
+                    this.engine.emitEvent(e.EXCEPTION, ke(t, "SIGNAL_EXPT")));
                 }),
                 o
               );
@@ -14926,12 +14926,12 @@
                 ) ||
                 e.useBackupSignal ||
                 ((e.intermediator = void 0),
-                (e.signalName = this.signalerWs.sendSignalBatch(
-                  t,
-                  s,
-                  "backup",
-                )),
-                0)
+                  (e.signalName = this.signalerWs.sendSignalBatch(
+                    t,
+                    s,
+                    "backup",
+                  )),
+                  0)
               );
             }
             _handleSignalMsg(e, t, s, r) {
@@ -14964,10 +14964,10 @@
                 if (
                   (n.waitForPeer &&
                     (n.waitingPeers--,
-                    0 === n.waitingPeers && n.notifyPeersLoaded(0)),
-                  this.requestMorePeers(),
-                  this._tryConnectToAllPeers(),
-                  s)
+                      0 === n.waitingPeers && n.notifyPeersLoaded(0)),
+                    this.requestMorePeers(),
+                    this._tryConnectToAllPeers(),
+                    s)
                 ) {
                   const t = this.DCMap.get(s);
                   t && t.notFoundPeers.add(e);
@@ -14978,19 +14978,19 @@
               let i = t;
               "string" == typeof i
                 ? (i = ((e) => {
-                    if ("C" === e[0])
-                      return {
-                        type: "candidate",
-                        candidate: {
-                          candidate: wt(e),
-                          sdpMLineIndex: 0,
-                          sdpMid: "0",
-                        },
-                      };
-                    const t = e.slice(1),
-                      s = "O" === e[0];
-                    return { type: s ? "offer" : "answer", sdp: _t(t, s) };
-                  })(i))
+                  if ("C" === e[0])
+                    return {
+                      type: "candidate",
+                      candidate: {
+                        candidate: wt(e),
+                        sdpMLineIndex: 0,
+                        sdpMid: "0",
+                      },
+                    };
+                  const t = e.slice(1),
+                    s = "O" === e[0];
+                  return { type: s ? "offer" : "answer", sdp: _t(t, s) };
+                })(i))
                 : (t = void 0);
               const n = i.type,
                 { logger: o } = this;
@@ -15020,7 +15020,7 @@
                 }
                 if (
                   (o.debug(`receive node ${e} connection request`),
-                  this.DCMap.size >= this.maxConns)
+                    this.DCMap.size >= this.maxConns)
                 ) {
                   const t = `reach limit ${this.maxConns}`;
                   return (
@@ -15071,8 +15071,8 @@
               const s = this.peers.length,
                 r = this.totalConns;
               (r < this.minConns &&
-              (0 === s || r + s <= this.maxConnsActive) &&
-              this.signalerWs.connected
+                (0 === s || r + s <= this.maxConnsActive) &&
+                this.signalerWs.connected
                 ? (t.info(`requestMorePeers after delay ${e} peersNum ${r}`),
                   this._requestPeersFromServer(r))
                 : t.info(`skip requestMorePeers peersNum ${r} try peers ${s}`),
@@ -15083,9 +15083,9 @@
               (this.failedDCMap.size > 50 &&
                 (this.failedDCMap = new Map([...this.failedDCMap].slice(-50))),
                 this.notFoundDCSet.size > 20 &&
-                  (this.notFoundDCSet = new Set(
-                    [...this.notFoundDCSet].slice(-20),
-                  )),
+                (this.notFoundDCSet = new Set(
+                  [...this.notFoundDCSet].slice(-20),
+                )),
                 this.fetcher
                   .btGetPeers(
                     [
@@ -15101,8 +15101,8 @@
                       (t.info(
                         `requestMorePeers resp ${JSON.stringify(e, null, 2)}`,
                       ),
-                      (this.peers = this._filterPeers(e.peers)),
-                      this._tryConnectToAllPeers());
+                        (this.peers = this._filterPeers(e.peers)),
+                        this._tryConnectToAllPeers());
                   })
                   .catch((e) => {
                     t.error(`requestMorePeers error ${e}`);
@@ -15152,7 +15152,7 @@
                   (this.logger.warn(
                     `delete ${t.remotePeerId} not connected for ${s} in DCMap`,
                   ),
-                  this._destroyAndDeletePeer(t.remotePeerId, !1));
+                    this._destroyAndDeletePeer(t.remotePeerId, !1));
               }
             }
             _filterFullPeers() {
@@ -15161,11 +15161,11 @@
                 .filter(
                   (e) =>
                     e.peersConnected <
-                      (this.fuseRate < 0
-                        ? e.mobileWeb
-                          ? 14
-                          : 19
-                        : this.maxConns) && !e.super,
+                    (this.fuseRate < 0
+                      ? e.mobileWeb
+                        ? 14
+                        : 19
+                      : this.maxConns) && !e.super,
                 );
             }
             _filterImmaturePeers(e, t, s) {
@@ -15191,10 +15191,10 @@
               const s = [];
               return (
                 t &&
-                  t.length > 0 &&
-                  (this.logger.info(
-                    `receive ${t.length} peers from ${e.remotePeerId}`,
-                  ),
+                t.length > 0 &&
+                (this.logger.info(
+                  `receive ${t.length} peers from ${e.remotePeerId}`,
+                ),
                   t.forEach((t) => {
                     t.intermediator = e.remotePeerId;
                   }),
@@ -15212,14 +15212,14 @@
                   i = this._filterFullPeers();
                 e.getPeers().forEach((e) => {
                   s > this.minConns + 1 &&
-                  (r - e.dataExchangeTs > 120 || r - e.gotStatsTs >= 103)
+                    (r - e.dataExchangeTs > 120 || r - e.gotStatsTs >= 103)
                     ? (this.logger.warn(
-                        `close dead peer ${e.remotePeerId} level ${e.currentLevel}`,
-                      ),
+                      `close dead peer ${e.remotePeerId} level ${e.currentLevel}`,
+                    ),
                       e.close(!1),
                       s--)
                     : e.connected &&
-                      e.sendMsgStats(s, this._filterImmaturePeers(i, e, r), t);
+                    e.sendMsgStats(s, this._filterImmaturePeers(i, e, r), t);
                 });
               }, 5e4);
             }
@@ -15235,11 +15235,11 @@
                 e.push(...r);
               }),
                 e.length > 0 &&
-                  (this.logger.info(`gather shared peers total ${e.length}`),
+                (this.logger.info(`gather shared peers total ${e.length}`),
                   0 === this._handleRequestedPeers(e, !0) &&
-                    s.forEach((e) => {
-                      e.clearCurrentSharedPeers();
-                    })));
+                  s.forEach((e) => {
+                    e.clearCurrentSharedPeers();
+                  })));
             }
           }
           const Pt = At;
@@ -15247,13 +15247,13 @@
             constructor(e = {}, t = null) {
               if (
                 (super(e),
-                e.validateSegment ||
+                  e.validateSegment ||
                   (e.validateSegment = function (e, t) {
                     return !0;
                   }),
-                (this.hlsjs = t),
-                (this.config = Object.assign({ useDiskCache: !e.live }, ge, e)),
-                t)
+                  (this.hlsjs = t),
+                  (this.config = Object.assign({ useDiskCache: !e.live }, ge, e)),
+                  t)
               ) {
                 this.HLSEvents = t.constructor.Events;
                 const e = t.constructor.version;
@@ -15289,11 +15289,11 @@
               const e = super.getExtraForStats();
               return (
                 !this.config.live &&
-                  this.media &&
-                  (e.pos = Math.round(this.media.currentTime)),
+                this.media &&
+                (e.pos = Math.round(this.media.currentTime)),
                 this.multiBitrate &&
-                  this.currentLevel !== this.lastLevel &&
-                  ((e.level = this.currentLevel + ""),
+                this.currentLevel !== this.lastLevel &&
+                ((e.level = this.currentLevel + ""),
                   (this.lastLevel = this.currentLevel)),
                 e
               );
@@ -15322,19 +15322,19 @@
                 throw new Error("bufMgr state is invalid");
               "SegmentStore" === this.bufMgr.name &&
                 (this.removeAllListeners(t.BM_FATAL_ERROR),
-                this.once(t.BM_FATAL_ERROR, () => {
-                  (s.warn("SegmentStoreFatalError, switch to SegmentCache"),
-                    this.bufMgr.destroy(),
-                    (this.bufMgr = new Ie(this, r)),
-                    e && e(this.bufMgr));
-                }));
+                  this.once(t.BM_FATAL_ERROR, () => {
+                    (s.warn("SegmentStoreFatalError, switch to SegmentCache"),
+                      this.bufMgr.destroy(),
+                      (this.bufMgr = new Ie(this, r)),
+                      e && e(this.bufMgr));
+                  }));
             }
             generateTag() {
               let e = (0, K.getBrowser)();
               return (
                 e.includes("iPhone") &&
-                  "HlsSwP2pEngine" === this.engineName &&
-                  (e = `${e}_p`),
+                "HlsSwP2pEngine" === this.engineName &&
+                (e = `${e}_p`),
                 this.playerName && (e = `${e}_${this.playerName}`),
                 e
               );
@@ -15349,7 +15349,7 @@
                 }
               }),
                 s.live ||
-                  (this.media && (s.pos = Math.round(this.media.currentTime))),
+                (this.media && (s.pos = Math.round(this.media.currentTime))),
                 (s.tag = void 0 === i.tag ? this.generateTag() : i.tag));
               let n = new et(
                 this,
@@ -15374,7 +15374,7 @@
               const o = `${s.type} fatal ${s.fatal} details ${s.details} reason ${s.reason}`;
               if (
                 (s.fatal ? r.error(o) : r.warn(o),
-                "networkError" === s.type &&
+                  "networkError" === s.type &&
                   "HlsjsP2pEngine" === this.engineName)
               )
                 return;
@@ -15387,7 +15387,7 @@
                     ("HlsjsP2pEngine" === this.engineName &&
                       this.fetcher &&
                       this.fetcher.increRebuffers(),
-                    i && i.scheduler)
+                      i && i.scheduler)
                   ) {
                     const e = i.scheduler;
                     r.warn(
@@ -15433,10 +15433,10 @@
             get uri() {
               return (
                 !this._uri &&
-                  this.reluri &&
-                  (this._uri = a.buildAbsoluteURL(this.baseuri, this.reluri, {
-                    alwaysNormalize: !0,
-                  })),
+                this.reluri &&
+                (this._uri = a.buildAbsoluteURL(this.baseuri, this.reluri, {
+                  alwaysNormalize: !0,
+                })),
                 this._uri
               );
             }
@@ -15460,10 +15460,10 @@
             get url() {
               return (
                 !this._url &&
-                  this.relurl &&
-                  (this._url = a.buildAbsoluteURL(this.baseurl, this.relurl, {
-                    alwaysNormalize: !0,
-                  })),
+                this.relurl &&
+                (this._url = a.buildAbsoluteURL(this.baseurl, this.relurl, {
+                  alwaysNormalize: !0,
+                })),
                 this._url
               );
             }
@@ -15493,10 +15493,10 @@
             get decryptdata() {
               return (
                 this._decryptdata ||
-                  (this._decryptdata = this.fragmentDecryptdataFromLevelkey(
-                    this.levelkey,
-                    this.sn,
-                  )),
+                (this._decryptdata = this.fragmentDecryptdataFromLevelkey(
+                  this.levelkey,
+                  this.sn,
+                )),
                 this._decryptdata
               );
             }
@@ -15527,10 +15527,10 @@
               let s = e;
               return (
                 e &&
-                  e.method &&
-                  e.uri &&
-                  !e.iv &&
-                  ((s = new Tt()),
+                e.method &&
+                e.uri &&
+                !e.iv &&
+                ((s = new Tt()),
                   (s.method = e.method),
                   (s.baseuri = e.baseuri),
                   (s.reluri = e.reluri),
@@ -15606,7 +15606,7 @@
             static parseAttrList(e) {
               let t,
                 s = {};
-              for (kt.lastIndex = 0; null !== (t = kt.exec(e)); ) {
+              for (kt.lastIndex = 0; null !== (t = kt.exec(e));) {
                 let e = t[2],
                   r = '"';
                 (0 === e.indexOf(r) &&
@@ -15746,7 +15746,7 @@
                 }),
                   (t.unknownCodecs = e));
               }
-              for (xt.lastIndex = 0; null != (s = xt.exec(e)); ) {
+              for (xt.lastIndex = 0; null != (s = xt.exec(e));) {
                 const e = {},
                   n = (e.attrs = new Ot(s[1]));
                 e.url = zt.resolve(s[2], t);
@@ -15758,8 +15758,8 @@
                   (e.name = n.NAME),
                   i([].concat((n.CODECS || "").split(/[ ,]+/)), e),
                   e.videoCodec &&
-                    -1 !== e.videoCodec.indexOf("avc1") &&
-                    (e.videoCodec = zt.convertAVC1ToAVCOTI(e.videoCodec)),
+                  -1 !== e.videoCodec.indexOf("avc1") &&
+                  (e.videoCodec = zt.convertAVC1ToAVCOTI(e.videoCodec)),
                   r.push(e));
               }
               return r;
@@ -15768,21 +15768,21 @@
               let i,
                 n = [],
                 o = 0;
-              for (Nt.lastIndex = 0; null !== (i = Nt.exec(e)); ) {
+              for (Nt.lastIndex = 0; null !== (i = Nt.exec(e));) {
                 const e = {},
                   a = new Ot(i[1]);
                 if (a.TYPE === s) {
                   if (
                     ((e.groupId = a["GROUP-ID"]),
-                    (e.name = a.NAME),
-                    (e.type = s),
-                    (e.default = "YES" === a.DEFAULT),
-                    (e.autoselect = "YES" === a.AUTOSELECT),
-                    (e.forced = "YES" === a.FORCED),
-                    a.URI && (e.url = zt.resolve(a.URI, t)),
-                    (e.lang = a.LANGUAGE),
-                    e.name || (e.name = e.lang),
-                    r.length)
+                      (e.name = a.NAME),
+                      (e.type = s),
+                      (e.default = "YES" === a.DEFAULT),
+                      (e.autoselect = "YES" === a.AUTOSELECT),
+                      (e.forced = "YES" === a.FORCED),
+                      a.URI && (e.url = zt.resolve(a.URI, t)),
+                      (e.lang = a.LANGUAGE),
+                      e.name || (e.name = e.lang),
+                      r.length)
                   ) {
                     const t = zt.findGroup(r, e.groupId);
                     e.audioCodec = t ? t.codec : r[0].codec;
@@ -15803,7 +15803,7 @@
                 l = null,
                 c = new Bt(),
                 h = null;
-              for ($t.lastIndex = 0; null !== (s = $t.exec(e)); ) {
+              for ($t.lastIndex = 0; null !== (s = $t.exec(e));) {
                 const e = s[1];
                 if (e) {
                   c.duration = parseFloat(e);
@@ -15876,15 +15876,15 @@
                         p = d.hexadecimalInteger("IV");
                       g &&
                         ((a = new Tt()),
-                        f &&
+                          f &&
                           ["AES-128", "SAMPLE-AES", "SAMPLE-AES-CENC"].indexOf(
                             g,
                           ) >= 0 &&
                           ((a.method = g),
-                          (a.baseuri = t),
-                          (a.reluri = f),
-                          (a.key = null),
-                          (a.iv = p)));
+                            (a.baseuri = t),
+                            (a.reluri = f),
+                            (a.key = null),
+                            (a.iv = p)));
                       break;
                     case "START":
                       let r = new Ot(e).decimalFloatingPoint("TIME-OFFSET");
@@ -15915,11 +15915,11 @@
                 (o.startCC = o.fragments[0] ? o.fragments[0].cc : 0),
                 (o.endCC = u),
                 !o.initSegment &&
-                  o.fragments.length &&
-                  o.fragments.every((e) => qt.test(e.relurl)) &&
-                  (console.warn(
-                    "MP4 fragments found but no init segment (probably no MAP, incomplete M3U8), trying to fetch SIDX",
-                  ),
+                o.fragments.length &&
+                o.fragments.every((e) => qt.test(e.relurl)) &&
+                (console.warn(
+                  "MP4 fragments found but no init segment (probably no MAP, incomplete M3U8), trying to fetch SIDX",
+                ),
                   (c = new Bt()),
                   (c.relurl = o.fragments[0].relurl),
                   (c.baseurl = t),
@@ -15928,15 +15928,15 @@
                   (o.initSegment = c),
                   (o.needSidxRanges = !0)),
                 h &&
-                  (function (e, t) {
-                    let s = e[t];
-                    for (let r = t - 1; r >= 0; r--) {
-                      const t = e[r];
-                      ((t.programDateTime =
-                        s.programDateTime - 1e3 * t.duration),
-                        (s = t));
-                    }
-                  })(o.fragments, h),
+                (function (e, t) {
+                  let s = e[t];
+                  for (let r = t - 1; r >= 0; r--) {
+                    const t = e[r];
+                    ((t.programDateTime =
+                      s.programDateTime - 1e3 * t.duration),
+                      (s = t));
+                  }
+                })(o.fragments, h),
                 o
               );
             }
@@ -15945,10 +15945,10 @@
             (e.rawProgramDateTime
               ? (e.programDateTime = Date.parse(e.rawProgramDateTime))
               : t &&
-                t.programDateTime &&
-                (e.programDateTime = t.endProgramDateTime),
+              t.programDateTime &&
+              (e.programDateTime = t.endProgramDateTime),
               Number.isFinite(e.programDateTime) ||
-                ((e.programDateTime = null), (e.rawProgramDateTime = null)));
+              ((e.programDateTime = null), (e.rawProgramDateTime = null)));
           }
           class Wt {
             constructor(e = !1, t) {
@@ -16017,7 +16017,7 @@
                   segId: s,
                   size: i,
                 }),
-                this.isLive && this._trimBitset(e));
+                  this.isLive && this._trimBitset(e));
             }
             array(e) {
               const t = this._createOrGetSet(e);
@@ -16100,56 +16100,56 @@
             }
           }
           const Vt = class {
-              constructor() {
-                this.peerMap = new Map();
-              }
-              isEmpty() {
-                return 0 === this.peerMap.size;
-              }
-              size() {
-                return this.peerMap.size;
-              }
-              clear() {
-                this.peerMap.clear();
-              }
-              getPeers() {
-                return [...this.peerMap.values()];
-              }
-              getPeerValues() {
-                return this.peerMap.values();
-              }
-              hasPeer(e) {
-                return this.peerMap.has(e);
-              }
-              addPeer(e, t) {
-                this.peerMap.set(e, t);
-              }
-              getPeerIds() {
-                return [...this.peerMap.keys()];
-              }
-              removePeer(e) {
-                this.peerMap.delete(e);
-              }
-              getPeersOrderByWeight() {
-                const e = this.getAvailablePeers();
-                return (
-                  e.sort((e, t) =>
-                    0 === t.weight
-                      ? 1
-                      : 0 === e.weight
-                        ? -1
-                        : t.weight - e.weight,
-                  ),
-                  e
-                );
-              }
-              getPeer(e) {
-                return this.peerMap.get(e);
-              }
-              getAvailablePeers() {
-                return this.getPeers().filter((e) => e.isAvailableUrgently);
-              }
-            },
+            constructor() {
+              this.peerMap = new Map();
+            }
+            isEmpty() {
+              return 0 === this.peerMap.size;
+            }
+            size() {
+              return this.peerMap.size;
+            }
+            clear() {
+              this.peerMap.clear();
+            }
+            getPeers() {
+              return [...this.peerMap.values()];
+            }
+            getPeerValues() {
+              return this.peerMap.values();
+            }
+            hasPeer(e) {
+              return this.peerMap.has(e);
+            }
+            addPeer(e, t) {
+              this.peerMap.set(e, t);
+            }
+            getPeerIds() {
+              return [...this.peerMap.keys()];
+            }
+            removePeer(e) {
+              this.peerMap.delete(e);
+            }
+            getPeersOrderByWeight() {
+              const e = this.getAvailablePeers();
+              return (
+                e.sort((e, t) =>
+                  0 === t.weight
+                    ? 1
+                    : 0 === e.weight
+                      ? -1
+                      : t.weight - e.weight,
+                ),
+                e
+              );
+            }
+            getPeer(e) {
+              return this.peerMap.get(e);
+            }
+            getAvailablePeers() {
+              return this.getPeers().filter((e) => e.isAvailableUrgently);
+            }
+          },
             Gt = Symbol("shareOnly");
           class Zt extends n() {
             constructor(e, t) {
@@ -16175,7 +16175,7 @@
             getStatsForPeer() {
               return {};
             }
-            _handlePieceAborted() {}
+            _handlePieceAborted() { }
             chokePeerRequest(t) {
               const s = { event: e.DC_CHOKE };
               t ? t.sendJson(s) : this._broadcastToPeers(s);
@@ -16196,7 +16196,7 @@
             deletePeer(e) {
               (e.downloading && this._handlePieceAborted(e.remotePeerId),
                 this.peerManager.hasPeer(e.remotePeerId) &&
-                  this.peerManager.removePeer(e.remotePeerId),
+                this.peerManager.removePeer(e.remotePeerId),
                 this._peersStats(this.peerManager.getPeerIds()));
             }
             getPeers() {
@@ -16227,7 +16227,7 @@
                 t = this.getIdlePeer().length;
               if (
                 (e.info(`peers: ${this.peersNum} idle peers: ${t}`),
-                t < this.peersNum)
+                  t < this.peersNum)
               ) {
                 const t = this.peerManager.getPeers(),
                   s = t.filter((e) => e.downloading);
@@ -16255,7 +16255,7 @@
                     this.onBufferManagerSegAdded(e);
                   }));
             }
-            onBufferManagerSegAdded(e) {}
+            onBufferManagerSegAdded(e) { }
             _broadcastLost(t, s, r, i) {
               this.config.live ||
                 this._broadcastToPeers(
@@ -16270,15 +16270,15 @@
                 clearTimeout(this.checkTimer),
                 e.warn("destroy BtScheduler"));
             }
-            notifyPeersLoaded(e) {}
+            notifyPeersLoaded(e) { }
             _setupDC(t) {
               const { logger: s } = this;
               t.on(e.DC_PIECE_ACK, (e) => {
                 e.size &&
                   (this.engine.fetcher.reportUploaded(e.size),
-                  s.info(
-                    `uploaded ${e.seg_id} size ${e.size} to ${t.remotePeerId}`,
-                  ));
+                    s.info(
+                      `uploaded ${e.seg_id} size ${e.size} to ${t.remotePeerId}`,
+                    ));
               })
                 .on(e.DC_PIECE_ABORT, (e) => {
                   (s.warn(
@@ -16292,7 +16292,7 @@
                     (this.logger.warn(
                       `close disconnected peer ${t.remotePeerId}`,
                     ),
-                    t.close(!1));
+                      t.close(!1));
                 });
             }
             _broadcastToPeers(e, t) {
@@ -16329,8 +16329,8 @@
                 return ((this.targetPeers.reversePeer = r[0]), !0);
               return t.length > 0
                 ? (e.hasForwardBuffer
-                    ? (this.targetPeers.reversePeer = t[0])
-                    : (this.targetPeers.forwardPeer = t[0]),
+                  ? (this.targetPeers.reversePeer = t[0])
+                  : (this.targetPeers.forwardPeer = t[0]),
                   !0)
                 : ((this.targetPeers = B(t, s, r)),
                   this.targetPeers.some((e) => !!e));
@@ -16375,13 +16375,13 @@
             }
           }
           const Yt = (e, t, s, r, i = !1) => {
-              const [n, o, a] = Kt(e, t, s, r);
-              return i && n.length >= 1
-                ? T(n[0])
-                : n.length >= 2
-                  ? [n[0], n[1]]
-                  : B(n, o, a);
-            },
+            const [n, o, a] = Kt(e, t, s, r);
+            return i && n.length >= 1
+              ? T(n[0])
+              : n.length >= 2
+                ? [n[0], n[1]]
+                : B(n, o, a);
+          },
             Kt = (e, t, s, r) => {
               const i = [],
                 { COMPLETE: n, PARTIAL_FORWARD: o, PARTIAL_REVERSE: a } = c;
@@ -16442,7 +16442,7 @@
             removeEventListener(e, t) {
               this.removeListener(e, t);
             }
-            overrideMimeType() {}
+            overrideMimeType() { }
             getAllResponseHeaders() {
               if (!this.responseHeaders) return null;
               let e = "";
@@ -16464,7 +16464,7 @@
                 (this.status = 0),
                 this.emit("loadend"));
             }
-            send() {}
+            send() { }
             _emitEvent(e) {
               this.emit(e, { type: e, target: this });
             }
@@ -16479,7 +16479,7 @@
             )
               try {
                 return (new self.ReadableStream({}), !0);
-              } catch (e) {}
+              } catch (e) { }
             return !1;
           }
           class rs {
@@ -16498,7 +16498,7 @@
                   this.context =
                   this.config =
                   this.request =
-                    null),
+                  null),
                 this.abortInternal(),
                 (this.response = null),
                 (this.fetchSetup =
@@ -16506,26 +16506,26 @@
                   this.fakeXhr =
                   this.controller =
                   this.stats =
-                    null));
+                  null));
             }
             abortInternal() {
               this.controller &&
                 !this.stats.loading.end &&
                 ((this.stats.aborted = !0),
-                this.callbacks &&
+                  this.callbacks &&
                   this.callbacks.onUpdate &&
                   this.callbacks.onUpdate(void 0, !1, !0),
-                this.controller.abort());
+                  this.controller.abort());
             }
             abort() {
               (this.abortInternal(),
                 this.callbacks &&
-                  this.callbacks.onAbort &&
-                  this.callbacks.onAbort(
-                    this.stats,
-                    this.context,
-                    this.response,
-                  ));
+                this.callbacks.onAbort &&
+                this.callbacks.onAbort(
+                  this.stats,
+                  this.context,
+                  this.response,
+                ));
             }
             load(e, t, s) {
               if (this.destroyed) return;
@@ -16541,10 +16541,10 @@
                 };
                 return (
                   e.rangeEnd &&
-                    s.headers.set(
-                      "Range",
-                      "bytes=" + e.rangeStart + "-" + String(e.rangeEnd - 1),
-                    ),
+                  s.headers.set(
+                    "Range",
+                    "bytes=" + e.rangeStart + "-" + String(e.rangeEnd - 1),
+                  ),
                   s
                 );
               })(e, (this.controller || {}).signal);
@@ -16558,7 +16558,7 @@
                 (this.config = t),
                 (this.callbacks = s),
                 this.xhrSetup &&
-                  (this.xhrSetup(this.fakeXhr, e.url),
+                (this.xhrSetup(this.fakeXhr, e.url),
                   (i = (function (e, t) {
                     e.withCredentials && (t.credentials = "include");
                     for (let [s, r] of e.headers) t.headers.set(s, r);
@@ -16570,7 +16570,7 @@
                 (this.requestTimeout = setTimeout(() => {
                   (this.abortInternal(),
                     this.destroyed ||
-                      (this.fakeXhr._emitEvent("timeout"),
+                    (this.fakeXhr._emitEvent("timeout"),
                       this.fakeXhr._emitEvent("loadend"),
                       s.onTimeout && s.onTimeout(r, e, this.response)));
                 }, this.fakeXhr.timeout || t.timeout)));
@@ -16589,15 +16589,15 @@
                     const o = Math.max(self.performance.now(), r.loading.start);
                     if (
                       (self.clearTimeout(this.requestTimeout),
-                      (t.timeout = u),
-                      (this.requestTimeout = self.setTimeout(
-                        () => {
-                          (this.abortInternal(),
-                            s.onTimeout && s.onTimeout(r, e, this.response));
-                        },
-                        u - (o - r.loading.start),
-                      )),
-                      !i.ok)
+                        (t.timeout = u),
+                        (this.requestTimeout = self.setTimeout(
+                          () => {
+                            (this.abortInternal(),
+                              s.onTimeout && s.onTimeout(r, e, this.response));
+                          },
+                          u - (o - r.loading.start),
+                        )),
+                        !i.ok)
                     ) {
                       const { status: e, statusText: t } = i;
                       throw new ns(t || "fetch, bad network response", e, i);
@@ -16620,7 +16620,7 @@
                     try {
                       const e = i.headers.get("Content-Range").split("/");
                       2 === e.length && (a = parseInt(e[1], 10));
-                    } catch (e) {}
+                    } catch (e) { }
                     const { fakeXhr: h } = this;
                     return (
                       (h.readyState = h.HEADERS_RECEIVED),
@@ -16630,11 +16630,11 @@
                         ? (c && c(r.total, a),
                           this.loadProgressively(i, r, e, l))
                         : (h.emit(
-                            "progress",
-                            new ProgressEvent("progress", {
-                              lengthComputable: !1,
-                            }),
-                          ),
+                          "progress",
+                          new ProgressEvent("progress", {
+                            lengthComputable: !1,
+                          }),
+                        ),
                           n
                             ? i.arrayBuffer()
                             : "json" === e.responseType
@@ -16680,9 +16680,9 @@
                     if (
                       (d.readyState !== d.LOADING &&
                         ((d.readyState = d.LOADING),
-                        d.emit("readystatechange")),
-                      s && (n += s.length),
-                      i)
+                          d.emit("readystatechange")),
+                        s && (n += s.length),
+                        i)
                     ) {
                       if (u.byteLength > 0)
                         if (n <= this.packetSize) {
@@ -16727,22 +16727,22 @@
                     }
                     if (
                       ((t.loaded += s.length),
-                      d.emit(
-                        "progress",
-                        new ProgressEvent("progress", {
-                          lengthComputable: !0,
-                          loaded: t.loaded,
-                          total: t.total,
-                        }),
-                      ),
-                      this.callbacks.onLoaded &&
+                        d.emit(
+                          "progress",
+                          new ProgressEvent("progress", {
+                            lengthComputable: !0,
+                            loaded: t.loaded,
+                            total: t.total,
+                          }),
+                        ),
+                        this.callbacks.onLoaded &&
                         this.callbacks.onLoaded(
                           { total: t.total, loaded: t.loaded, first: !l },
                           this.context,
                         ),
-                      (l = !0),
-                      (u = o.h.concat([u, s])),
-                      n >= this.packetSize)
+                        (l = !0),
+                        (u = o.h.concat([u, s])),
+                        n >= this.packetSize)
                     ) {
                       n -= this.packetSize;
                       const e = (0, o.h)(this.packetSize);
@@ -16877,26 +16877,26 @@
               let s = performance.now();
               e <= 0
                 ? setTimeout(() => {
-                    this._handleTimeout(!1, !1);
-                  }, 0)
+                  this._handleTimeout(!1, !1);
+                }, 0)
                 : ((this.firstPieceTimer = setTimeout(() => {
-                    if (this.firstReceived) return;
-                    const e = () => {
-                      (this.logger.warn(
-                        `switch to http, firstReceived ${this.firstReceived}`,
-                      ),
-                        this._handleTimeout(!1));
-                    };
-                    if (this.timeReceivePiece > 0) {
-                      const t = (this.timeReceivePiece - s) / 2;
-                      t > 0
-                        ? (this.firstPieceTimer = setTimeout(() => {
-                            (this.firstReceived && !this._shouldSwitch()) ||
-                              e();
-                          }, t))
-                        : e();
-                    } else e();
-                  }, e / 2)),
+                  if (this.firstReceived) return;
+                  const e = () => {
+                    (this.logger.warn(
+                      `switch to http, firstReceived ${this.firstReceived}`,
+                    ),
+                      this._handleTimeout(!1));
+                  };
+                  if (this.timeReceivePiece > 0) {
+                    const t = (this.timeReceivePiece - s) / 2;
+                    t > 0
+                      ? (this.firstPieceTimer = setTimeout(() => {
+                        (this.firstReceived && !this._shouldSwitch()) ||
+                          e();
+                      }, t))
+                      : e();
+                  } else e();
+                }, e / 2)),
                   (this.deadline = s + e),
                   this._startTimer(e, t));
             }
@@ -16909,8 +16909,8 @@
                 e.xhrSetup && (this.xhrSetup = e.xhrSetup),
                 e.headers && (this.headers = e.headers),
                 e.segId &&
-                  !this.pieceMsg.seg_id &&
-                  (this.pieceMsg.seg_id = e.segId));
+                !this.pieceMsg.seg_id &&
+                (this.pieceMsg.seg_id = e.segId));
             }
             get hasForwardPeer() {
               return !!this.forwardPeer;
@@ -16935,9 +16935,9 @@
                 !this.alreadyOutput &&
                 !!this._checkPieceSize(t) &&
                 ((this.forwardPeer = e),
-                this.reversePeer && this._print(),
-                this._setupPeer(e, !1, t),
-                !0)
+                  this.reversePeer && this._print(),
+                  this._setupPeer(e, !1, t),
+                  !0)
               );
             }
             setReversePeer(e, t) {
@@ -16945,9 +16945,9 @@
                 !this.alreadyOutput &&
                 !!this._checkPieceSize(t) &&
                 ((this.reversePeer = e),
-                this.forwardPeer && this._print(),
-                this._setupPeer(e, !0, t),
-                !0)
+                  this.forwardPeer && this._print(),
+                  this._setupPeer(e, !0, t),
+                  !0)
               );
             }
             setPeer(e, t, s) {
@@ -16958,7 +16958,7 @@
               (this._detachPeer(e),
                 t ? (this.reversePeer = null) : (this.forwardPeer = null),
                 (this.isEmpty || this.deadline > 0) &&
-                  this._handleTimeout(!1, !1));
+                this._handleTimeout(!1, !1));
             }
             terminate() {
               this._handleTimeout(!1, !1);
@@ -16989,12 +16989,12 @@
                 this.isForwardBufferFull ||
                 this.forwardCanceled ||
                 (this.forwardPeer.cancelDownload(s, r, t),
-                (this.forwardCanceled = !0)),
+                  (this.forwardCanceled = !0)),
                 e ||
-                  !this.reversePeer ||
-                  this.isReverseBufferFull ||
-                  this.reverseCanceled ||
-                  (this.reversePeer.cancelDownload(s, r, t),
+                !this.reversePeer ||
+                this.isReverseBufferFull ||
+                this.reverseCanceled ||
+                (this.reversePeer.cancelDownload(s, r, t),
                   (this.reverseCanceled = !0)));
             }
             detachPeers() {
@@ -17021,7 +17021,7 @@
                 clearTimeout(this.firstPieceTimer),
                 this._cancelP2p(),
                 this.httpLoader &&
-                  (this.logger.warn("abort syn httpLoader"),
+                (this.logger.warn("abort syn httpLoader"),
                   this.httpLoader.abort(),
                   (this.httpLoader = void 0)));
             }
@@ -17041,22 +17041,22 @@
             }
             _receivePacket(t, s, r, i = !0) {
               const {
-                  seg_id: n,
-                  sn: a,
-                  level: u,
-                  size: l,
-                  ext: c,
-                } = this.pieceMsg,
+                seg_id: n,
+                sn: a,
+                level: u,
+                size: l,
+                ext: c,
+              } = this.pieceMsg,
                 h = s - 1;
               if (
                 (this.bufArr[h]
                   ? (this.logger.warn(
-                      `syn bufArr ${n} already has ${h} size ${r.byteLength}`,
-                    ),
+                    `syn bufArr ${n} already has ${h} size ${r.byteLength}`,
+                  ),
                     (this.bufArr[h] = r))
                   : (i
-                      ? (this.p2pLoaded += r.byteLength)
-                      : (this.httpLoaded += r.byteLength),
+                    ? (this.p2pLoaded += r.byteLength)
+                    : (this.httpLoaded += r.byteLength),
                     this.emit(e.SYN_PROGRESS, {
                       total: l,
                       loaded: this.p2pLoaded + this.httpLoaded,
@@ -17068,12 +17068,12 @@
                     (this.bufArr[h] = r),
                     t ? (this.reverseOffset = h) : (this.forwardOffset = h),
                     this._notifyStreamListeners(t, r, h)),
-                this.forwardOffset !== this.reverseOffset - 1)
+                  this.forwardOffset !== this.reverseOffset - 1)
               )
                 return !0;
               (this.rangeRequesting ||
                 (this.forwardPeer && (this.forwardPeer.miss = 0),
-                this.reversePeer && (this.reversePeer.miss = 0)),
+                  this.reversePeer && (this.reversePeer.miss = 0)),
                 clearTimeout(this.timer),
                 this._notifyStreamListenersRemain());
               const d = performance.now() - this.timeStart,
@@ -17116,7 +17116,7 @@
                 (this.logger.warn(
                   `checkPieceSize ${s || r} size not match ${t} ${e}`,
                 ),
-                !1)
+                  !1)
               );
             }
             _setupPeer(t, s, r) {
@@ -17124,28 +17124,28 @@
               (0 === this.timeStart && (this.timeStart = performance.now()),
                 r && !this.pieceMsg.size && (this.pieceMsg.size = r));
               const n = (e, s, r, n, o, a) => {
-                  if (this.destroyed) return;
-                  if (!this._validateMsg(e, a.level, s))
-                    return void i.error(
-                      `onPieceData ${s || e} size ${r.byteLength} not match ${JSON.stringify(this.pieceMsg)} from ${t.remotePeerId}`,
-                    );
-                  if (n < this.pieceMsg.attachments && r.byteLength !== h)
-                    return (
-                      i.error(`${s} dataSn ${n} size is ${r.byteLength}`),
-                      this._onSynError(0),
-                      void this._disconnectPeers()
-                    );
-                  const { reverse: u } = a;
-                  this._receivePacket(u, n, r) &&
-                    !this.waitingRemain &&
-                    !this.rangeRequesting &&
-                    this.deadline > 0 &&
-                    this._shouldSwitch() &&
-                    (i.warn("should switch to http"),
+                if (this.destroyed) return;
+                if (!this._validateMsg(e, a.level, s))
+                  return void i.error(
+                    `onPieceData ${s || e} size ${r.byteLength} not match ${JSON.stringify(this.pieceMsg)} from ${t.remotePeerId}`,
+                  );
+                if (n < this.pieceMsg.attachments && r.byteLength !== h)
+                  return (
+                    i.error(`${s} dataSn ${n} size is ${r.byteLength}`),
+                    this._onSynError(0),
+                    void this._disconnectPeers()
+                  );
+                const { reverse: u } = a;
+                this._receivePacket(u, n, r) &&
+                  !this.waitingRemain &&
+                  !this.rangeRequesting &&
+                  this.deadline > 0 &&
+                  this._shouldSwitch() &&
+                  (i.warn("should switch to http"),
                     clearTimeout(this.timer),
                     clearTimeout(this.firstPieceTimer),
                     this._handleTimeout(!1, !1));
-                },
+              },
                 o = (e) => {
                   if (this.destroyed) return;
                   const {
@@ -17161,7 +17161,7 @@
                     (i.warn(
                       `onPiece ${JSON.stringify(e)} not match ${JSON.stringify(this.pieceMsg)}`,
                     ),
-                    (l = !1)),
+                      (l = !1)),
                     this._checkPieceSize(r) || (l = !1));
                   const { ext: c } = this.pieceMsg;
                   if (
@@ -17172,24 +17172,24 @@
                       (this.logger.warn(
                         `syn ${a || n} hash not match ${u.hash} ${c.hash}`,
                       ),
-                      (l = !1)),
-                    !l)
+                        (l = !1)),
+                      !l)
                   )
                     return (t.cancelDownload(n, o, a), void this.deletePeer(t));
                   0 === this.bufArr.length
                     ? ((this.pieceMsg = {
-                        ...this.pieceMsg,
-                        seg_id: a,
-                        size: r,
-                        attachments: s,
-                        ext: u,
-                      }),
+                      ...this.pieceMsg,
+                      seg_id: a,
+                      size: r,
+                      attachments: s,
+                      ext: u,
+                    }),
                       (this.reverseOffset = s),
                       (this.bufArr = new Array(s)),
                       (this.timeReceivePiece = performance.now()))
                     : !this.pieceMsg.ext.hash &&
-                      u.hash &&
-                      (this.pieceMsg.ext.hash = u.hash);
+                    u.hash &&
+                    (this.pieceMsg.ext.hash = u.hash);
                 },
                 a = (e) => {
                   this.destroyed || this.deletePeer(t);
@@ -17321,8 +17321,8 @@
               return (
                 t.length < this.pieceMsg.attachments
                   ? ((s = this.isFull
-                      ? "WaitPartialDouble"
-                      : "WaitPartialSingle"),
+                    ? "WaitPartialDouble"
+                    : "WaitPartialSingle"),
                     (r = 1))
                   : ((s = this.isFull ? "SynFullDouble" : "SynFullSingle"),
                     (r = 0)),
@@ -17368,7 +17368,7 @@
                 onBodyStart: (e, r) => {
                   if (
                     (0 === r && s.warn(`range request fileSize ${r}`),
-                    this.destroyed)
+                      this.destroyed)
                   )
                     return;
                   const { size: i } = this.pieceMsg;
@@ -17377,7 +17377,7 @@
                     (r > 0 && r !== i
                       ? (s.error(`onBodyStart fileSize ${r} != ${i}`), (t = !0))
                       : e !== a &&
-                        (s.error(`onBodyStart size ${e} != expectedSize ${a}`),
+                      (s.error(`onBodyStart size ${e} != expectedSize ${a}`),
                         (t = !0)),
                       t && "{}" !== JSON.stringify(o) && this._onSynError(1));
                   } else
@@ -17386,7 +17386,7 @@
                 onError: (e) => {
                   this.destroyed ||
                     (s.error(`httpLoader error ${e.text}`),
-                    this._onSynError(1));
+                      this._onSynError(1));
                 },
                 onTimeout: () => {
                   this.destroyed ||
@@ -17422,7 +17422,7 @@
                   : this.forwardStreamListeners;
               (e ? this.reverseBufList.push(t) : this.forwardBufList.push(t),
                 o &&
-                  (this.forwardBufList.push([...this.reverseBufList].reverse()),
+                (this.forwardBufList.push([...this.reverseBufList].reverse()),
                   this.reverseBufList.push(
                     [...this.forwardBufList].reverse(),
                   )));
@@ -17468,8 +17468,8 @@
                 !(this.meanHttpSpeed * i >= e) &&
                 (((i + t - performance.now()) * this.meanHttpSpeed - e) /
                   (this.meanHttpSpeed - s)) *
-                  s <
-                  r
+                s <
+                r
               );
             }
             _cal(e, t) {
@@ -17515,7 +17515,7 @@
             _receiveDCHave(e, t, s, r, i) {
               (this.bitset.has(e, t) || this.bitCounts.incre(e, t),
                 i > r.currentLost &&
-                  (r.bitset.deleteOlderThan(i, t), (r.currentLost = i)));
+                (r.bitset.deleteOlderThan(i, t), (r.currentLost = i)));
             }
             _setupDC(e) {
               (super._setupDC(e),
@@ -17523,18 +17523,18 @@
                   .on(t.DC_HAVE, (t) => {
                     if (e.bitset && t.sn >= 0) {
                       const {
-                          sn: s,
-                          level: r,
-                          complete: i,
-                          seg_id: n,
-                          size: o,
-                          curr_lost_sn: a,
-                        } = t,
+                        sn: s,
+                        level: r,
+                        complete: i,
+                        seg_id: n,
+                        size: o,
+                        curr_lost_sn: a,
+                      } = t,
                         u = i ? c.COMPLETE : c.PARTIAL_FORWARD;
                       (e.bitset.add(s, r, n, u, o),
                         this._receiveDCHave(s, r, n, e, a),
                         e.isAvailableUrgently &&
-                          this._handleDCHave(e, s, r, n, o, u));
+                        this._handleDCHave(e, s, r, n, o, u));
                     }
                   })
                   .on(t.DC_HAVE_REVERSE, (t) => {
@@ -17550,7 +17550,7 @@
                         e.bitset.add(s, r, i, c.PARTIAL_REVERSE, n),
                         this._receiveDCHave(s, r, i, e, o),
                         e.isAvailableUrgently &&
-                          this._handleDCHave(e, s, r, i, n, c.PARTIAL_REVERSE));
+                        this._handleDCHave(e, s, r, i, n, c.PARTIAL_REVERSE));
                     }
                   })
                   .on(t.DC_LOST, (t) => {
@@ -17590,10 +17590,10 @@
                     let o = t.seg_id;
                     o || (o = await this.bufMgr.getSegIdBySN(r));
                     const a = () => {
-                        (this.bitset.delete(r, i),
-                          e.sendPieceNotFound(r, o, { level: i }),
-                          this._broadcastLost(r, o, i, e));
-                      },
+                      (this.bitset.delete(r, i),
+                        e.sendPieceNotFound(r, o, { level: i }),
+                        this._broadcastLost(r, o, i, e));
+                    },
                       u = await this.bufMgr.getSegById(o),
                       l = de(r, i),
                       c = this.requestingMap.get(l);
@@ -17688,8 +17688,8 @@
                 if (!u.shouldWaitForRemain(o)) {
                   if (
                     (i.warn(`syn prefetch timeout at ${e}`),
-                    (u.prefetchTimeout = !0),
-                    u.isFull)
+                      (u.prefetchTimeout = !0),
+                      u.isFull)
                   )
                     return this.httpRangeSupported;
                   const r = this.peerManager.getPeersOrderByWeight();
@@ -17729,7 +17729,7 @@
               let a;
               i !== c.PARTIAL_REVERSE && (a = i === c.COMPLETE);
               const u =
-                  this.currLostSN > 0 && a && n ? this.currLostSN : void 0,
+                this.currLostSN > 0 && a && n ? this.currLostSN : void 0,
                 l = this.requestingMap.get(de(e, t));
               for (let h of this.getPeers())
                 (l && l.hasPeer(h)) ||
@@ -17742,8 +17742,8 @@
                     size: r,
                     curr_lost_sn: u,
                   }),
-                  h.notifySet.add(o),
-                  n && b(h.notifySet, 20));
+                    h.notifySet.add(o),
+                    n && b(h.notifySet, 20));
             }
             checkPeers() {
               const { logger: e, config: t, engine: s } = this;
@@ -17845,13 +17845,13 @@
                               a = t.bitset.getSize(d, i);
                             r.setPeer(t, n, a) &&
                               (o++,
-                              t.requestDataBySN(d, !1, {
-                                level: i,
-                                reverse: n,
-                              }),
-                              e.info(
-                                `request prefetch ${d} level ${i} from peer ${t.remotePeerId} downloadNum ${t.downloadNum} reverse ${n}`,
-                              ));
+                                t.requestDataBySN(d, !1, {
+                                  level: i,
+                                  reverse: n,
+                                }),
+                                e.info(
+                                  `request prefetch ${d} level ${i} from peer ${t.remotePeerId} downloadNum ${t.downloadNum} reverse ${n}`,
+                                ));
                           }
                         }));
                     }
@@ -17881,17 +17881,17 @@
                     o = Number(i[0]);
                   r.hasPeerId(e) &&
                     (this.logger.info(`delete ${e} in synthesizer`),
-                    r.deletePeer(t),
-                    this.bitCounts.decre(n, o),
-                    t.bitset.delete(n, o));
+                      r.deletePeer(t),
+                      this.bitCounts.decre(n, o),
+                      t.bitset.delete(n, o));
                 }
             }
             updateLoaded(e, t, s) {
               this.bitset.hasCompleteOr(e, t) ||
                 (this.bitset.add(e, t, s, c.COMPLETE),
-                this.bitCounts.delete(e, t),
-                this.requestingMap.delete(de(e, t)),
-                this.config.live && this.checkPeers());
+                  this.bitCounts.delete(e, t),
+                  this.requestingMap.delete(de(e, t)),
+                  this.config.live && this.checkPeers());
             }
             broadcastPlaylist(e, t) {
               if (!this.config.live) return;
@@ -17931,8 +17931,8 @@
               let i = r();
               return (
                 !i &&
-                  this.gotPlaylist &&
-                  (this.logger.info("getPlaylist wait 240ms"),
+                this.gotPlaylist &&
+                (this.logger.info("getPlaylist wait 240ms"),
                   await y(240),
                   (this.gotPlaylist = !1),
                   (i = r())),
@@ -17945,8 +17945,8 @@
               if (!t || (t.src !== s && 0 === t.currentTime)) {
                 if (
                   (this.logger.info("try get video element"),
-                  (t = ae(this.config.mediaElem, s)),
-                  !t)
+                    (t = ae(this.config.mediaElem, s)),
+                    !t)
                 )
                   return 4;
                 this.engine.media = t;
@@ -17981,7 +17981,7 @@
                 (this.logger.info(
                   `syn output ${e} http ${t} p2p ${s} time ${r}`,
                 ),
-                !this.config.validateSegment(e, new Uint8Array(i)))
+                  !this.config.validateSegment(e, new Uint8Array(i)))
               )
                 return !1;
               if (n) {
@@ -18046,7 +18046,7 @@
                   (e &&
                     !this.prefetchOnly &&
                     this.logger.warn("rebuffer reach limit"),
-                  (this.prefetchOnly = e));
+                    (this.prefetchOnly = e));
               });
             }
             getStatsForPeer() {
@@ -18075,24 +18075,24 @@
                 (u
                   ? u.setExtra(r)
                   : ((u = new as(
-                      this.coordinator,
-                      this.logger,
-                      e,
-                      t,
-                      s,
-                      this.httpRangeSupported,
-                      r,
-                    )),
+                    this.coordinator,
+                    this.logger,
+                    e,
+                    t,
+                    s,
+                    this.httpRangeSupported,
+                    r,
+                  )),
                     this._setupSynthesizer(u),
                     this.requestingMap.set(a, u)),
-                u.prefetchTimeout && i < 1e3 * this.allowP2pLimit && !n && !o)
+                  u.prefetchTimeout && i < 1e3 * this.allowP2pLimit && !n && !o)
               )
                 return u.setTimeout(0);
               (i > 700 &&
                 (n &&
                   u.setForwardPeer(n) &&
                   n.requestDataById(s, e, !0, { level: t }),
-                o &&
+                  o &&
                   u.setReversePeer(o) &&
                   o.requestDataById(s, e, !0, { level: t, reverse: !0 })),
                 u.setTimeout(u.isEmpty ? 0 : i, !0));
@@ -18106,7 +18106,7 @@
               let r = !1;
               return (
                 s &&
-                  (this.logger.warn(`disconnect loading peer ${s}`),
+                (this.logger.warn(`disconnect loading peer ${s}`),
                   s.split(":").forEach((e) => {
                     if (t && e === t) return;
                     r = !0;
@@ -18142,9 +18142,9 @@
             receiveBytes(e, t) {
               e.byteLength &&
                 ((this.sink = o.h.concat([this.sink, e])),
-                this.bufferList.push(e),
-                t && (this.finished = !0),
-                this._notifyStreamListeners(e));
+                  this.bufferList.push(e),
+                  t && (this.finished = !0),
+                  this._notifyStreamListeners(e));
             }
             getCompleteBuffer() {
               return this.sink.buffer;
@@ -18196,216 +18196,216 @@
             return e.shouldRetry ? e.shouldRetry(e, t, s, r, n) : n;
           }
           const gs = class {
-              constructor(e) {
-                ((this.xhrSetup = (e && e.xhrSetup) || null),
-                  (this.stats = I()),
-                  (this.retryDelay = 0),
-                  (this.config = null),
-                  (this.callbacks = null),
-                  (this.context = null),
-                  (this.loader = null));
-              }
-              destroy() {
-                ((this.destroyed = !0),
-                  (this.callbacks = null),
-                  this.abortInternal(),
-                  (this.loader = null),
-                  (this.config = null),
-                  (this.context = null),
-                  (this.xhrSetup = null));
-              }
-              abortInternal() {
-                const e = this.loader;
-                (self.clearTimeout(this.requestTimeout),
-                  self.clearTimeout(this.retryTimeout),
-                  e &&
-                    ((e.onreadystatechange = null),
-                    (e.onprogress = null),
-                    4 !== e.readyState &&
-                      ((this.stats.aborted = !0), e.abort())));
-              }
-              abort() {
-                (this.abortInternal(),
-                  this.callbacks &&
-                    this.callbacks.onAbort &&
-                    this.callbacks.onAbort(
-                      this.stats,
-                      this.context,
-                      this.loader,
-                    ));
-              }
-              load(e, t, s) {
-                ((this.context = e),
-                  (this.config = t),
-                  (this.callbacks = s),
-                  this.loadInternal());
-              }
-              loadInternal() {
-                if (this.destroyed) return;
-                const { config: e, context: t } = this;
-                if (!e || !t) return;
-                const s = (this.loader = new self.XMLHttpRequest()),
-                  r = this.stats;
-                ((r.loading.first = 0), (r.loaded = 0), (r.aborted = !1));
-                const i = this.xhrSetup;
-                i
-                  ? Promise.resolve()
-                      .then(() => {
-                        if (this.loader === s && !this.stats.aborted)
-                          return i(s, t.url);
-                      })
-                      .catch((e) => {
-                        if (this.loader === s && !this.stats.aborted)
-                          return (s.open("GET", t.url, !0), i(s, t.url));
-                      })
-                      .then(() => {
-                        this.loader !== s ||
-                          this.stats.aborted ||
-                          this.openAndSendXhr(s, t, e);
-                      })
-                      .catch((e) => {
-                        this.callbacks.onError(
-                          { code: s.status, text: e.message },
-                          t,
-                          s,
-                          r,
-                        );
-                      })
-                  : this.openAndSendXhr(s, t, e);
-              }
-              openAndSendXhr(e, t, s) {
-                e.readyState || e.open("GET", t.url, !0);
-                const r = t.headers,
-                  { maxTimeToFirstByteMs: i, maxLoadTimeMs: n } = s.loadPolicy;
-                if (r) for (const t in r) e.setRequestHeader(t, r[t]);
-                (t.rangeEnd &&
-                  e.setRequestHeader(
-                    "Range",
-                    "bytes=" + t.rangeStart + "-" + (t.rangeEnd - 1),
-                  ),
-                  (e.onreadystatechange = this.readystatechange.bind(this)),
-                  (e.onprogress = this.loadprogress.bind(this)),
-                  (e.responseType = t.responseType),
-                  self.clearTimeout(this.requestTimeout),
-                  (s.timeout = i && Number.isFinite(i) ? i : n),
-                  (this.requestTimeout = self.setTimeout(
-                    this.loadtimeout.bind(this),
-                    s.timeout,
-                  )),
-                  e.send());
-              }
-              readystatechange() {
-                const { context: e, loader: t, stats: s } = this;
-                if (!e || !t) return;
-                const r = t.readyState,
-                  i = this.config;
-                if (
-                  !s.aborted &&
-                  r >= 2 &&
-                  (0 === s.loading.first &&
-                    ((s.tfirst = s.loading.first =
-                      Math.max(self.performance.now(), s.loading.start)),
+            constructor(e) {
+              ((this.xhrSetup = (e && e.xhrSetup) || null),
+                (this.stats = I()),
+                (this.retryDelay = 0),
+                (this.config = null),
+                (this.callbacks = null),
+                (this.context = null),
+                (this.loader = null));
+            }
+            destroy() {
+              ((this.destroyed = !0),
+                (this.callbacks = null),
+                this.abortInternal(),
+                (this.loader = null),
+                (this.config = null),
+                (this.context = null),
+                (this.xhrSetup = null));
+            }
+            abortInternal() {
+              const e = this.loader;
+              (self.clearTimeout(this.requestTimeout),
+                self.clearTimeout(this.retryTimeout),
+                e &&
+                ((e.onreadystatechange = null),
+                  (e.onprogress = null),
+                  4 !== e.readyState &&
+                  ((this.stats.aborted = !0), e.abort())));
+            }
+            abort() {
+              (this.abortInternal(),
+                this.callbacks &&
+                this.callbacks.onAbort &&
+                this.callbacks.onAbort(
+                  this.stats,
+                  this.context,
+                  this.loader,
+                ));
+            }
+            load(e, t, s) {
+              ((this.context = e),
+                (this.config = t),
+                (this.callbacks = s),
+                this.loadInternal());
+            }
+            loadInternal() {
+              if (this.destroyed) return;
+              const { config: e, context: t } = this;
+              if (!e || !t) return;
+              const s = (this.loader = new self.XMLHttpRequest()),
+                r = this.stats;
+              ((r.loading.first = 0), (r.loaded = 0), (r.aborted = !1));
+              const i = this.xhrSetup;
+              i
+                ? Promise.resolve()
+                  .then(() => {
+                    if (this.loader === s && !this.stats.aborted)
+                      return i(s, t.url);
+                  })
+                  .catch((e) => {
+                    if (this.loader === s && !this.stats.aborted)
+                      return (s.open("GET", t.url, !0), i(s, t.url));
+                  })
+                  .then(() => {
+                    this.loader !== s ||
+                      this.stats.aborted ||
+                      this.openAndSendXhr(s, t, e);
+                  })
+                  .catch((e) => {
+                    this.callbacks.onError(
+                      { code: s.status, text: e.message },
+                      t,
+                      s,
+                      r,
+                    );
+                  })
+                : this.openAndSendXhr(s, t, e);
+            }
+            openAndSendXhr(e, t, s) {
+              e.readyState || e.open("GET", t.url, !0);
+              const r = t.headers,
+                { maxTimeToFirstByteMs: i, maxLoadTimeMs: n } = s.loadPolicy;
+              if (r) for (const t in r) e.setRequestHeader(t, r[t]);
+              (t.rangeEnd &&
+                e.setRequestHeader(
+                  "Range",
+                  "bytes=" + t.rangeStart + "-" + (t.rangeEnd - 1),
+                ),
+                (e.onreadystatechange = this.readystatechange.bind(this)),
+                (e.onprogress = this.loadprogress.bind(this)),
+                (e.responseType = t.responseType),
+                self.clearTimeout(this.requestTimeout),
+                (s.timeout = i && Number.isFinite(i) ? i : n),
+                (this.requestTimeout = self.setTimeout(
+                  this.loadtimeout.bind(this),
+                  s.timeout,
+                )),
+                e.send());
+            }
+            readystatechange() {
+              const { context: e, loader: t, stats: s } = this;
+              if (!e || !t) return;
+              const r = t.readyState,
+                i = this.config;
+              if (
+                !s.aborted &&
+                r >= 2 &&
+                (0 === s.loading.first &&
+                  ((s.tfirst = s.loading.first =
+                    Math.max(self.performance.now(), s.loading.start)),
                     i.timeout !== i.loadPolicy.maxLoadTimeMs &&
-                      (self.clearTimeout(this.requestTimeout),
+                    (self.clearTimeout(this.requestTimeout),
                       (i.timeout = i.loadPolicy.maxLoadTimeMs),
                       (this.requestTimeout = self.setTimeout(
                         this.loadtimeout.bind(this),
                         i.loadPolicy.maxLoadTimeMs -
-                          (s.loading.first - s.loading.start),
+                        (s.loading.first - s.loading.start),
                       )))),
                   4 === r)
-                ) {
-                  (self.clearTimeout(this.requestTimeout),
-                    (t.onreadystatechange = null),
-                    (t.onprogress = null));
-                  const r = t.status,
-                    n = "text" === t.responseType ? t.responseText : null;
-                  if (r >= 200 && r < 300) {
-                    const i = n || t.response;
-                    if (null != i) {
-                      s.tload = s.loading.end = Math.max(
-                        self.performance.now(),
-                        s.loading.first,
-                      );
-                      const n =
-                        "arraybuffer" === t.responseType
-                          ? i.byteLength
-                          : i.length;
-                      if (
-                        ((s.loaded = s.total = n),
+              ) {
+                (self.clearTimeout(this.requestTimeout),
+                  (t.onreadystatechange = null),
+                  (t.onprogress = null));
+                const r = t.status,
+                  n = "text" === t.responseType ? t.responseText : null;
+                if (r >= 200 && r < 300) {
+                  const i = n || t.response;
+                  if (null != i) {
+                    s.tload = s.loading.end = Math.max(
+                      self.performance.now(),
+                      s.loading.first,
+                    );
+                    const n =
+                      "arraybuffer" === t.responseType
+                        ? i.byteLength
+                        : i.length;
+                    if (
+                      ((s.loaded = s.total = n),
                         (s.bwEstimate =
                           (8e3 * s.total) / (s.loading.end - s.loading.first)),
                         !this.callbacks)
-                      )
-                        return;
-                      const o = this.callbacks.onProgress;
-                      if ((o && o(s, e, i, t), !this.callbacks)) return;
-                      const a = { url: t.responseURL, data: i, code: r };
-                      return void this.callbacks.onSuccess(a, s, e, t);
-                    }
+                    )
+                      return;
+                    const o = this.callbacks.onProgress;
+                    if ((o && o(s, e, i, t), !this.callbacks)) return;
+                    const a = { url: t.responseURL, data: i, code: r };
+                    return void this.callbacks.onSuccess(a, s, e, t);
                   }
-                  const o = i.loadPolicy.errorRetry;
-                  ds(o, s.retry, !1, { url: e.url, data: void 0, code: r })
-                    ? this.retry(o)
-                    : this.callbacks.onError(
-                        { code: r, text: t.statusText },
-                        e,
-                        t,
-                        s,
-                      );
                 }
+                const o = i.loadPolicy.errorRetry;
+                ds(o, s.retry, !1, { url: e.url, data: void 0, code: r })
+                  ? this.retry(o)
+                  : this.callbacks.onError(
+                    { code: r, text: t.statusText },
+                    e,
+                    t,
+                    s,
+                  );
               }
-              loadtimeout() {
-                if (!this.config) return;
-                const e = this.config.loadPolicy.timeoutRetry;
-                if (ds(e, this.stats.retry, !0)) this.retry(e);
-                else {
-                  const e = this.callbacks;
-                  e &&
-                    (this.abortInternal(),
+            }
+            loadtimeout() {
+              if (!this.config) return;
+              const e = this.config.loadPolicy.timeoutRetry;
+              if (ds(e, this.stats.retry, !0)) this.retry(e);
+              else {
+                const e = this.callbacks;
+                e &&
+                  (this.abortInternal(),
                     e.onTimeout(this.stats, this.context, this.loader));
-                }
               }
-              retry(e) {
-                const { context: t, stats: s } = this;
-                ((this.retryDelay = (function (e, t) {
-                  const s = "linear" === e.backoff ? 1 : Math.pow(2, t);
-                  return Math.min(s * e.retryDelayMs, e.maxRetryDelayMs);
-                })(e, s.retry)),
-                  s.retry++,
-                  this.abortInternal(),
-                  (this.loader = null),
-                  self.clearTimeout(this.retryTimeout),
-                  (this.retryTimeout = self.setTimeout(
-                    this.loadInternal.bind(this),
-                    this.retryDelay,
-                  )));
+            }
+            retry(e) {
+              const { context: t, stats: s } = this;
+              ((this.retryDelay = (function (e, t) {
+                const s = "linear" === e.backoff ? 1 : Math.pow(2, t);
+                return Math.min(s * e.retryDelayMs, e.maxRetryDelayMs);
+              })(e, s.retry)),
+                s.retry++,
+                this.abortInternal(),
+                (this.loader = null),
+                self.clearTimeout(this.retryTimeout),
+                (this.retryTimeout = self.setTimeout(
+                  this.loadInternal.bind(this),
+                  this.retryDelay,
+                )));
+            }
+            loadprogress(e) {
+              const t = this.stats;
+              ((t.loaded = e.loaded),
+                e.lengthComputable && (t.total = e.total));
+            }
+            getCacheAge() {
+              let e = null;
+              if (
+                this.loader &&
+                hs.test(this.loader.getAllResponseHeaders())
+              ) {
+                const t = this.loader.getResponseHeader("age");
+                e = t ? parseFloat(t) : null;
               }
-              loadprogress(e) {
-                const t = this.stats;
-                ((t.loaded = e.loaded),
-                  e.lengthComputable && (t.total = e.total));
-              }
-              getCacheAge() {
-                let e = null;
-                if (
-                  this.loader &&
-                  hs.test(this.loader.getAllResponseHeaders())
-                ) {
-                  const t = this.loader.getResponseHeader("age");
-                  e = t ? parseFloat(t) : null;
-                }
-                return e;
-              }
-              getResponseHeader(e) {
-                return this.loader &&
-                  new RegExp(`^${e}:\\s*[\\d.]+\\s*$`, "im").test(
-                    this.loader.getAllResponseHeaders(),
-                  )
-                  ? this.loader.getResponseHeader(e)
-                  : null;
-              }
-            },
+              return e;
+            }
+            getResponseHeader(e) {
+              return this.loader &&
+                new RegExp(`^${e}:\\s*[\\d.]+\\s*$`, "im").test(
+                  this.loader.getAllResponseHeaders(),
+                )
+                ? this.loader.getResponseHeader(e)
+                : null;
+            }
+          },
             fs = class extends ls {
               constructor(e, t) {
                 (super(e, t),
@@ -18499,7 +18499,7 @@
                     e &&
                       this.httpRangeSupported &&
                       (r.warn(`${l} is requesting, terminate syn wait for seg`),
-                      e.terminate());
+                        e.terminate());
                     let i = setTimeout(() => {
                       (r.info(`notify seg ${l} timeout`),
                         (i = -1),
@@ -18510,11 +18510,11 @@
                         (e &&
                           e.level === c &&
                           (clearTimeout(i),
-                          r.info(`notify seg ${e.sn}`),
-                          s.postMessage({
-                            action: t.SW_GET_MEDIA,
-                            data: { url: o, buffer: e.data },
-                          })));
+                            r.info(`notify seg ${e.sn}`),
+                            s.postMessage({
+                              action: t.SW_GET_MEDIA,
+                              data: { url: o, buffer: e.data },
+                            })));
                     });
                   } else
                     (r.warn(`${l} is requesting, fallback`),
@@ -18522,7 +18522,7 @@
                 } else
                   this.hasAndSetTargetPeer(l, c, h, f)
                     ? (await this._loadFragByP2p(u, s, l, h, o, c, a, p)) ||
-                      (r.warn(`p2p timeout switch to http load ${h}`),
+                    (r.warn(`p2p timeout switch to http load ${h}`),
                       this._loadFragByHttp(
                         u,
                         s,
@@ -18532,13 +18532,13 @@
                         1e3 * this.fragloadTimeout,
                       ))
                     : this._loadFragByHttp(
-                        u,
-                        s,
-                        h,
-                        o,
-                        a,
-                        1e3 * this.fragloadTimeout,
-                      );
+                      u,
+                      s,
+                      h,
+                      o,
+                      a,
+                      1e3 * this.fragloadTimeout,
+                    );
               }
               _loadFragByHttp(e, s, r, i, n, o, a = !0) {
                 const { sn: u, level: h } = e,
@@ -18548,12 +18548,12 @@
                   m = this.streamEnabled && a ? new rs(p) : new gs(p);
                 let y = { url: g, responseType: "arraybuffer", ..._(n) };
                 const D = {
-                    timeout: o,
-                    loadPolicy: {
-                      maxTimeToFirstByteMs: 8e3,
-                      maxLoadTimeMs: 2e4,
-                    },
+                  timeout: o,
+                  loadPolicy: {
+                    maxTimeToFirstByteMs: 8e3,
+                    maxLoadTimeMs: 2e4,
                   },
+                },
                   E = {
                     onError: (e) => {
                       (e.text && this.logger.warn(e.text),
@@ -18573,7 +18573,7 @@
                         (this.logger.info(
                           `HTTP loaded ${r} time ${l} speed ${a.byteLength / l}`,
                         ),
-                        !(await this.bufMgr.hasSegOfId(r)))
+                          !(await this.bufMgr.hasSegOfId(r)))
                       ) {
                         const e = v(a).buffer,
                           t = new Y(u, r, e, "", h);
@@ -18605,8 +18605,8 @@
                     !e &&
                       t > 0 &&
                       (this.notifyAllPeers(u, h, r, t, c.PARTIAL_FORWARD),
-                      (e = new cs(u, h, r, t)),
-                      this.segmentBuilderMap.has(d) ||
+                        (e = new cs(u, h, r, t)),
+                        this.segmentBuilderMap.has(d) ||
                         this.segmentBuilderMap.set(d, e));
                   }),
                     (E.onUpdate = (t, s, i) => {
@@ -18630,7 +18630,7 @@
                     (l.info(
                       `p2p loaded segId ${i} level ${o} size ${a.byteLength}`,
                     ),
-                    !(await this.bufMgr.hasSegOfId(i)))
+                      !(await this.bufMgr.hasSegOfId(i)))
                   ) {
                     const e = new Y(r, i, a, u, o, c.ext);
                     (l.info(`bufMgr putSeg ${r} level ${o}`),
@@ -18662,18 +18662,18 @@
                 return (
                   !!h &&
                   ((this.fragLoading = !1),
-                  l.info(`already loaded seg sn ${r} segId ${i}`),
-                  s.postMessage({
-                    action: t.SW_GET_MEDIA,
-                    data: { url: n, buffer: h.data },
-                  }),
-                  !0)
+                    l.info(`already loaded seg sn ${r} segId ${i}`),
+                    s.postMessage({
+                      action: t.SW_GET_MEDIA,
+                      data: { url: n, buffer: h.data },
+                    }),
+                    !0)
                 );
               }
               notifySWMessage(e, s, r) {
                 e === t.SW_GET_MEDIA
                   ? (this.engine.fetcher &&
-                      this.engine.fetcher.increMediaRequests(),
+                    this.engine.fetcher.increMediaRequests(),
                     this.handleGetMediaData(s, r))
                   : this.logger.warn(`unknown action ${e}`);
               }
@@ -18762,9 +18762,9 @@
                   this.resolveMap.has(t),
                 ),
                   this.config.live &&
-                    V(() => {
-                      this.checkPeers();
-                    }));
+                  V(() => {
+                    this.checkPeers();
+                  }));
               }
             },
             ps = "2.13.0";
@@ -18788,12 +18788,12 @@
                 (this.fragMap = new Map()),
                 (this.engineName = ms.name),
                 ms.isServiceWorkerSupported() ||
-                  ((this.swSupported = !1),
+                ((this.swSupported = !1),
                   console.warn("service worker is not supported")),
                 s &&
-                  (s.once("hlsDestroying", () => {
-                    (this.destroy(), (this.hlsjs = null));
-                  }),
+                (s.once("hlsDestroying", () => {
+                  (this.destroy(), (this.hlsjs = null));
+                }),
                   s.on(this.HLSEvents.ERROR, this._onHlsError.bind(this))));
               const {
                 channelIdMaker: r,
@@ -18822,53 +18822,53 @@
                     ),
                     a.info(`channel ${this.channel}`),
                     o ||
-                      ((s.startSN = e.startSN),
+                    ((s.startSN = e.startSN),
                       (s.endSN = e.endSN),
                       a.info(`startSN ${e.startSN} endSN ${e.endSN}`)),
                     this._init(this.channel, this.browserInfo),
                     this.off(t.LEVEL_LOADED, this.onLevelLoaded));
                 }),
-                0 === this.config.httpLoadTime &&
+                  0 === this.config.httpLoadTime &&
                   (this.config.live
                     ? this.on(t.LEVEL_LOADED, (e) => {
-                        const {
-                          fragments: t,
-                          averagetargetduration: s,
-                          startSN: r,
-                        } = e;
-                        this.config.httpLoadTime = this.determineHttpLoadTime(
-                          t,
-                          s,
-                          r,
-                        );
-                      })
+                      const {
+                        fragments: t,
+                        averagetargetduration: s,
+                        startSN: r,
+                      } = e;
+                      this.config.httpLoadTime = this.determineHttpLoadTime(
+                        t,
+                        s,
+                        r,
+                      );
+                    })
                     : (this.config.httpLoadTime = 3.5)),
-                this.on(t.LEVEL_LOADED, this.onLevelLoaded),
-                (this.onManifestParsed = (e, s) => {
-                  ((this.multiBitrate = e.length > 1),
-                    (this.currentSrc = s),
-                    this.off(t.MANIFEST_PARSED, this.onManifestParsed));
-                }),
-                this.on(t.MANIFEST_PARSED, this.onManifestParsed),
-                (this.onFragLoaded = ({ url: e }) => {
-                  this.curTsUri = e;
-                  const { config: t } = this;
-                  (!this.rangeTested &&
-                    t.useHttpRange &&
-                    (this.startRangeRequestTimer(),
-                    (this.rangeTested = !0),
-                    t.logger &&
-                      t.logger.info(
-                        JSON.stringify({
-                          engine: this.engineName,
-                          ...this.browserInfo,
-                        }),
-                      )),
-                    this.segmentLoadCount >= t.startFromSegmentOffset &&
+                  this.on(t.LEVEL_LOADED, this.onLevelLoaded),
+                  (this.onManifestParsed = (e, s) => {
+                    ((this.multiBitrate = e.length > 1),
+                      (this.currentSrc = s),
+                      this.off(t.MANIFEST_PARSED, this.onManifestParsed));
+                  }),
+                  this.on(t.MANIFEST_PARSED, this.onManifestParsed),
+                  (this.onFragLoaded = ({ url: e }) => {
+                    this.curTsUri = e;
+                    const { config: t } = this;
+                    (!this.rangeTested &&
+                      t.useHttpRange &&
+                      (this.startRangeRequestTimer(),
+                        (this.rangeTested = !0),
+                        t.logger &&
+                        t.logger.info(
+                          JSON.stringify({
+                            engine: this.engineName,
+                            ...this.browserInfo,
+                          }),
+                        )),
+                      this.segmentLoadCount >= t.startFromSegmentOffset &&
                       this.resumeTracker());
-                }),
-                this.on(t.FRAG_LOADED, this.onFragLoaded),
-                this.swSupported)
+                  }),
+                  this.on(t.FRAG_LOADED, this.onFragLoaded),
+                  this.swSupported)
               ) {
                 const { serviceWorker: e } = navigator;
                 e.onmessage = (e) => {
@@ -18886,8 +18886,8 @@
                     if (
                       (this.logger &&
                         this.logger.info(`engine onmessage action ${s}`),
-                      i.postMessage({ action: s, pong: !0 }),
-                      !this.p2pEnabled || !r)
+                        i.postMessage({ action: s, pong: !0 }),
+                        !this.p2pEnabled || !r)
                     )
                       return i.postMessage({ action: s });
                     if (s === t.SW_GET_PLAYLIST) this.handleGetPlaylist(r, i);
@@ -18902,7 +18902,7 @@
               }
               this.config.swAutoRegister &&
                 this.registerServiceWorker()
-                  .then(function (e) {})
+                  .then(function (e) { })
                   .catch((e) => {
                     console.warn("ServiceWorker registration failed ", e);
                   });
@@ -18914,11 +18914,11 @@
               this.offEventRebuffer = (function (e, t) {
                 let s = null;
                 const r = () => {
-                    s ||
-                      (s = setTimeout(() => {
-                        t();
-                      }, 2500));
-                  },
+                  s ||
+                    (s = setTimeout(() => {
+                      t();
+                    }, 2500));
+                },
                   i = () => {
                     null != s && (clearTimeout(s), (s = null));
                   };
@@ -18940,19 +18940,19 @@
               return (
                 (this.swVersion = c),
                 -1 ===
-                (function (e, t) {
-                  for (
-                    var s = e.split("."), r = t.split("."), i = 0;
-                    i < Math.max(s.length, r.length);
-                    i++
-                  ) {
-                    var n = parseInt(s[i] || 0),
-                      o = parseInt(r[i] || 0);
-                    if (n < o) return -1;
-                    if (n > o) return 1;
-                  }
-                  return 0;
-                })(c, ps)
+                  (function (e, t) {
+                    for (
+                      var s = e.split("."), r = t.split("."), i = 0;
+                      i < Math.max(s.length, r.length);
+                      i++
+                    ) {
+                      var n = parseInt(s[i] || 0),
+                        o = parseInt(r[i] || 0);
+                      if (n < o) return -1;
+                      if (n > o) return 1;
+                    }
+                    return 0;
+                  })(c, ps)
                   ? (console.warn(`hls-proxy.js version should >= ${ps}`),
                     s.postMessage({ action: t.SW_GET_PLAYLIST }))
                   : this.bypassLevels.indexOf(S(o)) >= 0
@@ -18960,14 +18960,14 @@
                       n && n.warn("bypass audio track"),
                       s.postMessage({ action: t.SW_GET_PLAYLIST }))
                     : (s.postMessage({
-                        action: t.SW_GET_PLAYLIST,
-                        data: {
-                          active: !0,
-                          debug: n && n.isDebugLevel,
-                          text: u,
-                          redirectedUrl: a,
-                        },
-                      }),
+                      action: t.SW_GET_PLAYLIST,
+                      data: {
+                        active: !0,
+                        debug: n && n.isDebugLevel,
+                        text: u,
+                        redirectedUrl: a,
+                      },
+                    }),
                       this._parsePlaylist(u, S(o), a, r),
                       void (
                         this.workerKeepAliveInterval ||
@@ -18983,12 +18983,12 @@
                               const t = `keep alive failed ${e}`;
                               n &&
                                 (n.error(t),
-                                n.report(
-                                  t,
-                                  "SWKeepAlive",
-                                  this.peerId,
-                                  "2.17.11",
-                                ));
+                                  n.report(
+                                    t,
+                                    "SWKeepAlive",
+                                    this.peerId,
+                                    "2.17.11",
+                                  ));
                             };
                             this.workerKeepAliveInterval = setInterval(() => {
                               var e;
@@ -19036,8 +19036,8 @@
                       ? (this.restartP2p(), (this.currentSrc = n), (r = 0))
                       : (this.currentLevelIndex = r))
                   : ("" !== this.currentSrc &&
-                      n !== this.currentSrc &&
-                      this.restartP2p(),
+                    n !== this.currentSrc &&
+                    this.restartP2p(),
                     (this.currentSrc = n),
                     (this.levels = [S(s)])),
                   this.emit(t.LEVEL_LOADED, a),
@@ -19052,15 +19052,15 @@
                       this.fragMap.set(t, e));
                   }),
                   !i &&
-                    o.sharePlaylist &&
-                    this.scheduler &&
-                    !this.scheduler.isMobileNet &&
-                    this.scheduler.broadcastPlaylist(S(s), e));
+                  o.sharePlaylist &&
+                  this.scheduler &&
+                  !this.scheduler.isMobileNet &&
+                  this.scheduler.broadcastPlaylist(S(s), e));
               } else {
                 const r = zt.parseMasterPlaylist(e, s);
                 ("" !== this.currentSrc && this.restartP2p(),
                   r.length > 0 &&
-                    (r.sort((e, t) => e.bitrate - t.bitrate),
+                  (r.sort((e, t) => e.bitrate - t.bitrate),
                     (this.levels = r.map((e) => S(e.url))),
                     ["AUDIO", "SUBTITLES", "CLOSED-CAPTIONS"].forEach((t) => {
                       zt.parseMasterPlaylistMedia(e, s, t).forEach((e) => {
@@ -19108,7 +19108,7 @@
                 let e = "sw is not supported";
                 return (
                   E ||
-                    ((e = "https is required when using ServiceWorker"),
+                  ((e = "https is required when using ServiceWorker"),
                     console.warn(e)),
                   Promise.reject(e)
                 );
@@ -19175,10 +19175,10 @@
                 clearTimeout(this.rubufferTimer),
                 this.offEventRebuffer && this.offEventRebuffer(),
                 this.p2pEnabled &&
-                  ((this.config.p2pEnabled = this.p2pEnabled = !1),
+                ((this.config.p2pEnabled = this.p2pEnabled = !1),
                   this.tracker &&
-                    this.tracker instanceof Pt &&
-                    (this.tracker.stopP2P(),
+                  this.tracker instanceof Pt &&
+                  (this.tracker.stopP2P(),
                     (this.tracker = null),
                     (this.fetcher = null),
                     this.bufMgr.destroy(),
@@ -19286,7 +19286,7 @@
                 if (p)
                   if (
                     (this.bitset.has(o, u) || this.reportTraffic(d, g, c),
-                    f && this.callbacks)
+                      f && this.callbacks)
                   ) {
                     (i.info(`receive criticalSeg seg_id ${n}`),
                       (this.criticalSeg = null));
@@ -19312,7 +19312,7 @@
                   (this.criticalSeg &&
                     this.criticalSeg.sn === r &&
                     ((this.criticalSeg = null),
-                    this.callbacks.onTimeout({}, this.context, null)),
+                      this.callbacks.onTimeout({}, this.context, null)),
                     this._handleSynError(e, i, r, s));
                 })
                 .on(
@@ -19363,9 +19363,9 @@
                 this.criticalSeg && this.criticalSeg.segId === r,
               ),
                 this.config.live &&
-                  V(() => {
-                    this.checkPeers();
-                  }));
+                V(() => {
+                  this.checkPeers();
+                }));
             }
           };
           class Cs extends Ft {
@@ -19455,7 +19455,7 @@
                 (this.logger = a),
                 a.info(`channel ${this.channel}`),
                 t ||
-                  ((o.startSN = n.startSN),
+                ((o.startSN = n.startSN),
                   (o.endSN = n.endSN),
                   a.info(`startSN ${n.startSN} endSN ${n.endSN}`)),
                 this._init(this.channel, this.browserInfo));
@@ -19529,7 +19529,7 @@
                       return (r.info(`HTTP load blockType ${n}`), d());
                     if (
                       (this.fetcher.increMediaRequests(),
-                      this.isLive && i.requestedSet.has(h))
+                        this.isLive && i.requestedSet.has(h))
                     )
                       return (r.warn(`HTTP load duplicated ${n}`), d());
                     if (i.engine.segmentLoadCount < this.startFromSegmentOffset)
@@ -19558,12 +19558,12 @@
                       );
                     }
                     !this.prefetchOnly &&
-                    this.p2pEnabled &&
-                    i.hasAndSetTargetPeer(u, a, h, g)
+                      this.p2pEnabled &&
+                      i.hasAndSetTargetPeer(u, a, h, g)
                       ? this.loadFragByP2p(e, t, s, h, g)
                       : (r.info(
-                          `fragLoader load ${h} at ${u} level ${a} buffered ${1e3 * g}`,
-                        ),
+                        `fragLoader load ${h} at ${u} level ${a} buffered ${1e3 * g}`,
+                      ),
                         this.loadFragByHttp(e, t, s, h));
                   }
                   loadFragByHttp(e, t, s, r) {
@@ -19586,8 +19586,8 @@
                           !e &&
                             t > 0 &&
                             ((e = new cs(l, h, r, t)),
-                            a.has(d) || a.set(d, e),
-                            o.notifyAllPeers(l, h, r, t, c.PARTIAL_FORWARD));
+                              a.has(d) || a.set(d, e),
+                              o.notifyAllPeers(l, h, r, t, c.PARTIAL_FORWARD));
                         }));
                     }
                     const g = s.onSuccess;
@@ -19602,8 +19602,8 @@
                         (n.info(
                           `HTTP loaded ${r} time ${c} speed ${t.total / c}`,
                         ),
-                        (u.loaded = t.total),
-                        !(await this.bufMgr.hasSegOfId(r)))
+                          (u.loaded = t.total),
+                          !(await this.bufMgr.hasSegOfId(r)))
                       ) {
                         const e = v(i).buffer,
                           t = new Y(l, r, e, this.fetcher.peerId, h);
@@ -19641,7 +19641,7 @@
                         const { data: u } = t;
                         if (
                           (vs((s = this.stats), u.byteLength, e.coordinator),
-                          !(await this.bufMgr.hasSegOfId(i)))
+                            !(await this.bufMgr.hasSegOfId(i)))
                         ) {
                           const e = v(u).buffer,
                             t = new Y(
@@ -19660,8 +19660,8 @@
                             `${a.loadByP2P ? "P2P" : "HTTP"} loaded segment id ${i}`,
                           ),
                           !this.isHlsV0 &&
-                            r.onProgress &&
-                            r.onProgress(s, n, u),
+                          r.onProgress &&
+                          r.onProgress(s, n, u),
                           (t.data = this.interceptSegment(t.data, n.url)),
                           l(t, s, n));
                       }));
@@ -19669,54 +19669,54 @@
                 };
               })(i, this.fetcher, s, r)),
                 r.sharePlaylist &&
-                  (this.hlsjs.config.pLoader = (function (e, t, s) {
-                    return class extends n() {
-                      constructor(r) {
-                        (super(),
-                          (this.logger = t),
-                          (this.xhrLoader = new r.loader(r)),
-                          (this.p2pEnabled = s.p2pEnabled),
-                          (this.scheduler = e),
-                          (this.stats = this.xhrLoader.stats || I()));
-                      }
-                      destroy() {
-                        this.xhrLoader.destroy();
-                      }
-                      abort() {
-                        this.xhrLoader.abort();
-                      }
-                      async load(e, t, s) {
-                        const { logger: r } = this,
-                          { url: i } = e,
-                          n = S(i),
-                          o = s.onSuccess;
-                        if (
-                          ((s.onSuccess = (e, t, s) => {
-                            (this.scheduler &&
-                              !s.loadedByPeer &&
-                              this.scheduler.broadcastPlaylist(n, e.data),
-                              o(e, t, s));
-                          }),
+                (this.hlsjs.config.pLoader = (function (e, t, s) {
+                  return class extends n() {
+                    constructor(r) {
+                      (super(),
+                        (this.logger = t),
+                        (this.xhrLoader = new r.loader(r)),
+                        (this.p2pEnabled = s.p2pEnabled),
+                        (this.scheduler = e),
+                        (this.stats = this.xhrLoader.stats || I()));
+                    }
+                    destroy() {
+                      this.xhrLoader.destroy();
+                    }
+                    abort() {
+                      this.xhrLoader.abort();
+                    }
+                    async load(e, t, s) {
+                      const { logger: r } = this,
+                        { url: i } = e,
+                        n = S(i),
+                        o = s.onSuccess;
+                      if (
+                        ((s.onSuccess = (e, t, s) => {
+                          (this.scheduler &&
+                            !s.loadedByPeer &&
+                            this.scheduler.broadcastPlaylist(n, e.data),
+                            o(e, t, s));
+                        }),
                           this.scheduler && this.scheduler.playlistInfo.has(n))
-                        ) {
-                          const t = await this.scheduler.getPlaylistFromPeer(n);
-                          if (t && t.data) {
-                            const { data: n, seq: o } = t;
-                            (r.info(`got playlist from peer seq ${o}`),
-                              vs(this.stats, n.length));
-                            let a = { url: i, data: n };
-                            return (
-                              (e.loadedByPeer = !0),
-                              void V(() => {
-                                s.onSuccess(a, this.stats, e);
-                              })
-                            );
-                          }
+                      ) {
+                        const t = await this.scheduler.getPlaylistFromPeer(n);
+                        if (t && t.data) {
+                          const { data: n, seq: o } = t;
+                          (r.info(`got playlist from peer seq ${o}`),
+                            vs(this.stats, n.length));
+                          let a = { url: i, data: n };
+                          return (
+                            (e.loadedByPeer = !0),
+                            void V(() => {
+                              s.onSuccess(a, this.stats, e);
+                            })
+                          );
                         }
-                        this.xhrLoader.load(e, t, s);
                       }
-                    };
-                  })(i, s, r)));
+                      this.xhrLoader.load(e, t, s);
+                    }
+                  };
+                })(i, s, r)));
             }
             _onFragLoading(e, s) {
               const r = s.frag;
@@ -19727,8 +19727,8 @@
               ) {
                 if (
                   (this.logger && this.logger.info("loading frag " + i),
-                  this.bufMgr && (this.bufMgr.loadingSN = i),
-                  !o)
+                    this.bufMgr && (this.bufMgr.loadingSN = i),
+                    !o)
                 ) {
                   let e;
                   r._byteRange &&
@@ -19770,47 +19770,47 @@
               const { frag: r } = s;
               this.curTsUri = r.url;
               const {
-                  sn: i,
-                  segId: n,
-                  loaded: o,
-                  duration: a,
-                  level: u,
-                  fromPeerId: l,
-                  loadByP2P: c,
-                  url: h,
-                } = r,
+                sn: i,
+                segId: n,
+                loaded: o,
+                duration: a,
+                level: u,
+                fromPeerId: l,
+                loadByP2P: c,
+                url: h,
+              } = r,
                 { config: d, logger: g } = this;
               (this.tracker &&
                 this.tracker.scheduler &&
                 (b(this.tracker.scheduler.requestedSet, 50),
-                this.tracker.scheduler.requestedSet.add(n)),
+                  this.tracker.scheduler.requestedSet.add(n)),
                 Ds(r.url, d.p2pBlackList, r.type) ||
-                  (this.bufMgr &&
-                    this.bufMgr.loadingSN >= 0 &&
-                    this.emit(t.FRAG_LOADED, {
-                      url: h,
-                      sn: i,
-                      level: u,
-                      segId: n,
-                      loaded: o,
-                      duration: a,
-                      byP2p: !!c,
-                      fromPeerId: l,
-                    }),
+                (this.bufMgr &&
+                  this.bufMgr.loadingSN >= 0 &&
+                  this.emit(t.FRAG_LOADED, {
+                    url: h,
+                    sn: i,
+                    level: u,
+                    segId: n,
+                    loaded: o,
+                    duration: a,
+                    byP2p: !!c,
+                    fromPeerId: l,
+                  }),
                   !this.rangeTested &&
-                    d.useHttpRange &&
-                    (this.startRangeRequestTimer(),
+                  d.useHttpRange &&
+                  (this.startRangeRequestTimer(),
                     (this.rangeTested = !0),
                     g &&
-                      g.info(
-                        JSON.stringify({
-                          engine: this.engineName,
-                          hlsjs: this.hlsjsVersion,
-                          ...this.browserInfo,
-                        }),
-                      ))),
+                    g.info(
+                      JSON.stringify({
+                        engine: this.engineName,
+                        hlsjs: this.hlsjsVersion,
+                        ...this.browserInfo,
+                      }),
+                    ))),
                 this.segmentLoadCount >= d.startFromSegmentOffset &&
-                  this.resumeTracker());
+                this.resumeTracker());
             }
             _onFragChanged(e, s) {
               const { frag: r } = s;
@@ -19827,10 +19827,10 @@
             disableP2P() {
               (this.logger && this.logger.warn("disable P2P"),
                 this.p2pEnabled &&
-                  ((this.p2pEnabled = !1),
+                ((this.p2pEnabled = !1),
                   (this.config.p2pEnabled = this.p2pEnabled),
                   this.tracker &&
-                    (this.tracker.stopP2P(),
+                  (this.tracker.stopP2P(),
                     (this.tracker = {}),
                     (this.fetcher = null),
                     this.bufMgr.destroy(),
@@ -19908,43 +19908,43 @@
               return !r || s
                 ? Promise.resolve()
                 : r
-                    .getRegistration()
-                    .then(
-                      (s) =>
-                        s ||
-                        Promise.race([
-                          r
-                            .register(e, { scope: t })
-                            .then((e) =>
-                              (function (e) {
-                                return new Promise((t, s) => {
-                                  const r =
-                                      e.installing || e.waiting || e.active,
-                                    i = () =>
-                                      "activated" === r.state &&
-                                      (r.removeEventListener("statechange", i),
+                  .getRegistration()
+                  .then(
+                    (s) =>
+                      s ||
+                      Promise.race([
+                        r
+                          .register(e, { scope: t })
+                          .then((e) =>
+                            (function (e) {
+                              return new Promise((t, s) => {
+                                const r =
+                                  e.installing || e.waiting || e.active,
+                                  i = () =>
+                                    "activated" === r.state &&
+                                    (r.removeEventListener("statechange", i),
                                       t(e),
                                       !0);
-                                  i() || r.addEventListener("statechange", i);
-                                });
-                              })(e),
-                            )
-                            .catch(() => {
-                              Promise.resolve();
-                            }),
-                          y(300),
-                        ]),
-                    )
-                    .catch(() => {
-                      Promise.resolve();
-                    });
+                                i() || r.addEventListener("statechange", i);
+                              });
+                            })(e),
+                          )
+                          .catch(() => {
+                            Promise.resolve();
+                          }),
+                        y(300),
+                      ]),
+                  )
+                  .catch(() => {
+                    Promise.resolve();
+                  });
             }
             constructor(e = {}) {
               const { hlsjsInstance: t } = e;
               delete e.hlsjsInstance;
               const s = () => {
-                  this._realEngine = new bs(t, e);
-                },
+                this._realEngine = new bs(t, e);
+              },
                 r = () => {
                   this._realEngine = new ys(e, t);
                 };
