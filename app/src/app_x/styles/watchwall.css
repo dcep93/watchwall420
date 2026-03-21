@@ -26,8 +26,6 @@
 .menu-title,
 .panel-header,
 .stream-toggle,
-.screen-card,
-.log-panel,
 .password-card {
   border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.25);
@@ -103,10 +101,10 @@
   width: 100vw;
   height: 100vh;
   min-height: 100vh;
-  padding: 16px;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 0;
   flex-shrink: 0;
   overflow: hidden;
 }
@@ -116,7 +114,7 @@
   min-height: 0;
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 0;
   align-content: flex-start;
 }
 
@@ -173,7 +171,7 @@
 .stream-toggle,
 .screen-card {
   width: 100%;
-  background: rgba(255, 255, 255, 0.04);
+  background: transparent;
 }
 
 .stream-toggle:hover,
@@ -223,8 +221,10 @@
 .screen-card {
   box-sizing: border-box;
   min-height: clamp(220px, 28vw, 360px);
-  padding: 22px;
-  border-radius: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -260,11 +260,11 @@
 
 .spotlight-title-bar {
   appearance: none;
-  width: calc(100% + 44px);
-  margin: -22px -22px 0;
+  width: 100%;
+  margin: 0;
   padding: 10px 18px;
   border: 0;
-  border-radius: 28px 28px 0 0;
+  border-radius: 0;
   background: #000;
   color: #fff;
   font: inherit;
@@ -281,7 +281,7 @@
   width: 100%;
   margin: 0;
   padding: 8px 14px;
-  border-radius: 28px 28px 0 0;
+  border-radius: 0;
 }
 
 .screen-focus {
@@ -298,9 +298,9 @@
   order: 0;
   width: 100%;
   flex: 0 0 auto;
-  height: calc(100% - clamp(140px, 24vh, 220px) - 16px);
+  height: calc(100% - clamp(140px, 24vh, 220px));
   min-height: 0;
-  padding-top: 22px;
+  padding-top: 0;
 }
 
 .screen-card-spotlight-solo {
@@ -314,8 +314,8 @@
   flex: 1;
   display: grid;
   grid-template-columns: minmax(240px, 320px) minmax(0, 1fr);
-  gap: 16px;
-  margin-top: 14px;
+  gap: 0;
+  margin-top: 0;
   min-height: 0;
 }
 
@@ -326,8 +326,8 @@
 .screen-focus-spotlight {
   display: grid;
   place-items: center;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.03);
+  border-radius: 0;
+  background: transparent;
 }
 
 .screen-card-secondary {
@@ -386,6 +386,10 @@
 
 .log-panel {
   min-height: 140px;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
 }
 
 .log-panel-spotlight {
@@ -401,23 +405,23 @@
 
 .log-entry {
   margin-top: 0;
-  padding: 16px 18px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.05);
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
   color: #f7fbff;
   font-family: "IBM Plex Mono", "SFMono-Regular", monospace;
-  font-size: 1.25rem;
+  font-size: 0.95rem;
   flex: 1;
   min-height: 0;
   overflow: auto;
 }
 
 .watchwall-log-empty {
-  padding: 16px 18px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.05);
+  padding: 12px 14px;
+  border-radius: 0;
+  background: transparent;
   color: #d3d8e6;
-  font-size: 0.98rem;
+  font-size: 0.84rem;
 }
 
 .watchwall-log {
@@ -426,15 +430,16 @@
   flex-direction: column;
   justify-content: space-between;
   color: #f3f3f8;
-  background-color: #282a3a;
-  border-radius: 18px;
-  overflow: hidden;
+  background: transparent;
+  border-radius: 0;
+  overflow: auto;
 }
 
 .watchwall-log-content {
   overflow: auto;
-  border: 1px solid rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   padding: 10px;
+  font-size: 0.9rem;
 }
 
 .watchwall-log-top {
@@ -465,6 +470,7 @@
   display: flex;
   gap: 0.6em;
   margin-top: 0.7em;
+  min-width: 0;
 }
 
 .watchwall-log-team-summary-card {
@@ -483,13 +489,17 @@
 .watchwall-log-team-summary-stats {
   margin-top: 0.2em;
   color: #cfd5e6;
-  font-size: 0.84em;
+  font-size: 0.76em;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
 }
 
 .watchwall-log-team-summary-stat-row {
   display: flex;
   gap: 0.75em;
   padding-top: 0.1em;
+  min-width: max-content;
 }
 
 .watchwall-log-team-summary-stat-line {
@@ -497,6 +507,7 @@
   flex: 1;
   justify-content: space-between;
   gap: 0.75em;
+  white-space: nowrap;
 }
 
 .watchwall-log-team-summary-stat-label {
@@ -538,7 +549,7 @@
   display: flex;
   gap: 0.75em;
   color: #aab2c7;
-  font-size: 0.88em;
+  font-size: 0.8em;
 }
 
 .watchwall-log-box-score {
