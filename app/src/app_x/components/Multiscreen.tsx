@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type CSSProperties, type Ref } from "react";
+import { useEffect, useState, type CSSProperties, type Ref } from "react";
 import ReactDomServer from "react-dom/server";
 import type { Host, Stream, StreamSlug } from "../config/types";
 import renderLog from "../lib/renderLog";
@@ -132,7 +132,6 @@ function ScreenContent<T>(props: {
 }) {
   const [srcDoc, setSrcDoc] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
   useEffect(() => {
     let isActive = true;
@@ -169,24 +168,6 @@ function ScreenContent<T>(props: {
     };
   }, [props.host, props.stream]);
 
-  function handleIframeLoad() {
-    const iframeElement = iframeRef.current;
-    if (!iframeElement) {
-      return;
-    }
-
-    window.setTimeout(() => {
-      if (document.activeElement !== iframeElement) {
-        return;
-      }
-
-      iframeElement.blur();
-      if (document.body instanceof HTMLElement) {
-        document.body.focus({ preventScroll: true });
-      }
-    }, 0);
-  }
-
   return (
     <div className={props.className}>
       {props.onClick ? (
@@ -203,14 +184,11 @@ function ScreenContent<T>(props: {
         </pre>
       ) : (
         <iframe
-          ref={iframeRef}
           className="screen-iframe"
           title={props.stream.title}
-          tabIndex={-1}
           srcDoc={srcDoc}
           loading="eager"
           referrerPolicy="no-referrer"
-          onLoad={handleIframeLoad}
         />
       )}
     </div>
