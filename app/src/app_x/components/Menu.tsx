@@ -29,6 +29,7 @@ export default function Menu(props: {
             key={stream.slug}
             isSelected={props.selectedSlugs.includes(stream.slug)}
             label={stream.title}
+            rawUrl={stream.raw_url}
             onClick={() => props.onToggle(stream.slug)}
           />
         ))}
@@ -48,13 +49,23 @@ export default function Menu(props: {
 function StreamToggle(props: {
   isSelected: boolean;
   label: string;
+  rawUrl: string;
   onClick: () => void;
 }) {
   return (
     <button
       type="button"
       className={`stream-toggle ${props.isSelected ? "is-selected" : ""}`}
-      onClick={props.onClick}
+      onClick={(event) => {
+        if (event.metaKey) {
+          event.preventDefault();
+          const url = new URL(props.rawUrl, "https://istreameast.is").toString();
+          window.open(url, "_blank", "noopener,noreferrer");
+          return;
+        }
+
+        props.onClick();
+      }}
     >
       <span className="stream-name">{props.label}</span>
     </button>
