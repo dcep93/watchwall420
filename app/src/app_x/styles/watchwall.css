@@ -1,3 +1,23 @@
+:root {
+  --ww-bg-top: #1a1411;
+  --ww-bg-bottom: #0c0907;
+  --ww-panel: rgba(28, 21, 18, 0.84);
+  --ww-panel-strong: rgba(20, 15, 12, 0.92);
+  --ww-panel-soft: rgba(36, 28, 24, 0.78);
+  --ww-border: rgba(201, 156, 107, 0.2);
+  --ww-border-soft: rgba(201, 156, 107, 0.12);
+  --ww-border-strong: rgba(228, 193, 150, 0.34);
+  --ww-text: #ffffff;
+  --ww-text-strong: #ffffff;
+  --ww-text-muted: rgba(255, 255, 255, 0.72);
+  --ww-text-soft: rgba(255, 255, 255, 0.84);
+  --ww-accent-cyan: #d8b38a;
+  --ww-accent-green: #b98d63;
+  --ww-accent-amber: #c99c6b;
+  --ww-title-pink: #ff7bc3;
+  --ww-danger: #ff9fb0;
+}
+
 .password-shell {
   min-height: 100svh;
   box-sizing: border-box;
@@ -5,8 +25,9 @@
   place-items: center;
   padding: 24px;
   background:
-    radial-gradient(circle at top, rgba(255, 180, 112, 0.18), transparent 30%),
-    linear-gradient(180deg, #111827 0%, #09111b 100%);
+    radial-gradient(circle at top, rgba(255, 123, 195, 0.16), transparent 28%),
+    radial-gradient(circle at bottom right, rgba(201, 156, 107, 0.16), transparent 38%),
+    linear-gradient(180deg, #1a1411 0%, #0c0907 100%);
 }
 
 .watchwall-shell {
@@ -15,10 +36,11 @@
   min-width: 100vw;
   width: max-content;
   background:
-    radial-gradient(circle at top left, rgba(255, 180, 112, 0.14), transparent 22%),
-    radial-gradient(circle at top right, rgba(94, 211, 255, 0.1), transparent 28%),
-    linear-gradient(180deg, #0f1720 0%, #081018 100%);
-  color: #edf4ff;
+    radial-gradient(circle at top left, rgba(255, 123, 195, 0.12), transparent 24%),
+    radial-gradient(circle at top right, rgba(201, 156, 107, 0.14), transparent 32%),
+    radial-gradient(circle at bottom center, rgba(185, 141, 99, 0.1), transparent 36%),
+    linear-gradient(180deg, var(--ww-bg-top) 0%, var(--ww-bg-bottom) 100%);
+  color: var(--ww-text);
 }
 
 .menu-column,
@@ -27,7 +49,7 @@
 .panel-header,
 .stream-toggle,
 .password-card {
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--ww-border);
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.25);
 }
 
@@ -40,7 +62,7 @@
   height: 100vh;
   min-height: 100vh;
   padding: 16px;
-  background: rgba(8, 16, 24, 0.78);
+  background: var(--ww-panel-soft);
   overflow-y: auto;
   overflow-x: hidden;
   flex-shrink: 0;
@@ -50,8 +72,8 @@
   margin: 0;
   padding: 22px 24px;
   border-radius: 22px;
-  background: rgba(8, 16, 24, 0.92);
-  color: #ff7bc3;
+  background: var(--ww-panel-strong);
+  color: var(--ww-title-pink);
   font-family: "Comic Sans MS", "Comic Sans", cursive;
   font-size: clamp(2.2rem, 3vw, 3rem);
   font-weight: 400;
@@ -63,14 +85,14 @@
 .log-panel {
   padding: 18px 20px;
   border-radius: 22px;
-  background: rgba(8, 16, 24, 0.78);
+  background: var(--ww-panel-soft);
 }
 
 .menu-card h2,
 .password-card h1,
 .panel-header h2 {
   margin: 0;
-  color: #f7fbff;
+  color: var(--ww-text-strong);
 }
 
 .menu-card h2 {
@@ -131,16 +153,16 @@
 .resume-message {
   width: min(32rem, 100%);
   padding: 32px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--ww-border);
   border-radius: 28px;
-  background: rgba(8, 16, 24, 0.84);
+  background: var(--ww-panel);
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.25);
   text-align: center;
 }
 
 .resume-message p {
   margin: 0;
-  color: #f7fbff;
+  color: var(--ww-text-strong);
   font-size: clamp(1.2rem, 2vw, 1.8rem);
 }
 
@@ -150,11 +172,11 @@
   justify-content: space-between;
   padding: 18px 20px;
   border-radius: 22px;
-  background: rgba(8, 16, 24, 0.78);
+  background: var(--ww-panel-soft);
 }
 
 .panel-header span {
-  color: #8da2b8;
+  color: var(--ww-text-muted);
 }
 
 .stream-list {
@@ -196,8 +218,8 @@
 
 .stream-toggle.is-selected,
 .screen-card.is-focused {
-  border-color: rgba(255, 180, 112, 0.72);
-  background: linear-gradient(135deg, rgba(255, 180, 112, 0.18), rgba(94, 211, 255, 0.12));
+  border-color: rgba(232, 206, 171, 0.5);
+  background: linear-gradient(135deg, rgba(232, 206, 171, 0.14), rgba(217, 174, 119, 0.12));
 }
 
 .stream-name,
@@ -213,7 +235,7 @@
 }
 
 .stream-log {
-  color: #8da2b8;
+  color: var(--ww-text-muted);
   font-family: "IBM Plex Mono", "SFMono-Regular", monospace;
   font-size: 0.95rem;
   text-transform: lowercase;
@@ -268,10 +290,10 @@
   width: 100%;
   margin: 0;
   padding: 10px 18px;
-  border: 1px solid #fff;
+  border: 1px solid var(--ww-border-strong);
   border-radius: 0;
-  background: #000;
-  color: #fff;
+  background: rgba(20, 15, 12, 0.9);
+  color: var(--ww-text-strong);
   font: inherit;
   text-align: center;
   cursor: pointer;
@@ -395,9 +417,9 @@
   width: 100%;
   height: 100%;
   padding: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(0, 0, 0, 0.5);
-  color: #ffb0b0;
+  border: 1px solid rgba(255, 158, 174, 0.28);
+  background: rgba(52, 13, 19, 0.76);
+  color: var(--ww-danger);
   text-align: center;
   font-size: 0.95rem;
 }
@@ -426,7 +448,7 @@
   padding: 0;
   border-radius: 0;
   background: transparent;
-  color: #f7fbff;
+  color: var(--ww-text-strong);
   font-family: "IBM Plex Mono", "SFMono-Regular", monospace;
   font-size: 0.96rem;
   flex: 1;
@@ -438,7 +460,7 @@
   padding: 12px 14px;
   border-radius: 0;
   background: transparent;
-  color: #d3d8e6;
+  color: var(--ww-text-soft);
   font-size: 0.85rem;
 }
 
@@ -447,7 +469,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  color: #f3f3f8;
+  color: var(--ww-text);
   background: transparent;
   border-radius: 0;
   overflow: auto;
@@ -455,7 +477,7 @@
 
 .watchwall-log-content {
   overflow: auto;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--ww-border-soft);
   padding: 10px;
   font-size: 0.9rem;
 }
@@ -486,7 +508,7 @@
 }
 
 .watchwall-log-topbar-muted {
-  color: #b8bfd4;
+  color: var(--ww-text-muted);
   font-size: 0.92em;
 }
 
@@ -501,8 +523,8 @@
   flex: 1;
   min-width: 0;
   padding: 0.5em 0.6em;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(232, 206, 171, 0.06);
+  border: 1px solid var(--ww-border-soft);
   border-radius: 8px;
 }
 
@@ -512,7 +534,7 @@
 
 .watchwall-log-team-summary-stats {
   margin-top: 0.2em;
-  color: #cfd5e6;
+  color: var(--ww-text-soft);
   font-size: 0.78em;
   overflow-x: auto;
   overflow-y: hidden;
@@ -535,7 +557,7 @@
 }
 
 .watchwall-log-team-summary-stat-label {
-  color: #9ea9c5;
+  color: var(--ww-text-muted);
   font-weight: 700;
 }
 
@@ -545,7 +567,7 @@
 
 .watchwall-log-event-row {
   padding: 0.55em 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid var(--ww-border-soft);
 }
 
 .watchwall-log-event-meta {
@@ -556,7 +578,7 @@
 }
 
 .watchwall-log-event-result {
-  color: #91e0a3;
+  color: var(--ww-accent-green);
 }
 
 .watchwall-log-event-description {
@@ -566,13 +588,13 @@
 .watchwall-log-play-content {
   padding-left: 10px;
   padding-top: 0.2em;
-  color: #d3d8e6;
+  color: var(--ww-text-soft);
 }
 
 .watchwall-log-play-meta {
   display: flex;
   gap: 0.75em;
-  color: #aab2c7;
+  color: var(--ww-text-muted);
   font-size: 0.82em;
 }
 
@@ -597,7 +619,7 @@
 .guide-list {
   margin: 0;
   padding-left: 1.2rem;
-  color: #a7b8cb;
+  color: var(--ww-text-muted);
   font-size: 0.86rem;
 }
 
@@ -610,7 +632,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  color: #a7b8cb;
+  color: var(--ww-text-muted);
 }
 
 .option-row + .option-row {
@@ -624,10 +646,10 @@
 .option-input {
   width: 7rem;
   padding: 8px 10px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  border: 1px solid var(--ww-border);
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.04);
-  color: #f7fbff;
+  background: rgba(232, 206, 171, 0.06);
+  color: var(--ww-text-strong);
   font: inherit;
 }
 
@@ -645,9 +667,9 @@
 .secondary-button {
   margin-top: 14px;
   display: block;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  background: rgba(255, 255, 255, 0.04);
-  color: #edf4ff;
+  border: 1px solid var(--ww-border);
+  background: rgba(232, 206, 171, 0.07);
+  color: var(--ww-text);
 }
 
 .secondary-button-inline {
@@ -656,9 +678,9 @@
 }
 
 .primary-button {
-  border: 1px solid rgba(255, 180, 112, 0.5);
-  background: #ffb470;
-  color: #081018;
+  border: 1px solid rgba(255, 191, 105, 0.5);
+  background: var(--ww-accent-amber);
+  color: #21150e;
   font-weight: 700;
 }
 
@@ -666,7 +688,7 @@
   max-width: 520px;
   padding: 32px;
   border-radius: 28px;
-  background: rgba(8, 16, 24, 0.84);
+  background: var(--ww-panel);
 }
 
 .password-row {
@@ -680,16 +702,16 @@
   width: 100%;
   min-width: 0;
   padding: 14px 16px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  border: 1px solid var(--ww-border);
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.04);
-  color: #f7fbff;
+  background: rgba(232, 206, 171, 0.06);
+  color: var(--ww-text-strong);
   font: inherit;
 }
 
 .error-text {
   margin: 10px 0 0;
-  color: #ff8d8d;
+  color: var(--ww-danger);
 }
 
 @media (max-width: 960px) {
