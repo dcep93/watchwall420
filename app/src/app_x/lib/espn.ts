@@ -10,7 +10,6 @@ type EspnScoreboardEndpoint = {
 export type EspnScheduleEvent = {
   id: number;
   startTimeMs: number;
-  competitors: string[];
   normalizedCompetitors: string[];
 };
 
@@ -144,7 +143,6 @@ function parseEspnScoreboardEvents(payloads: unknown[]): EspnScheduleEvent[] {
       return {
         id: eventId,
         startTimeMs,
-        competitors: Array.from(new Set(competitors)),
         normalizedCompetitors,
       } satisfies EspnScheduleEvent;
     })

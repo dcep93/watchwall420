@@ -7,7 +7,6 @@ type PlayType = {
   down: string;
   text: string;
   clock: string;
-  distance: number;
 };
 
 type DriveType = {
@@ -16,7 +15,6 @@ type DriveType = {
   score: string;
   result?: string;
   plays?: PlayType[];
-  yardsToEndzone: number;
 };
 
 type BoxScoreType = {
@@ -36,7 +34,6 @@ type FootballDrivePlay = {
   wallclock?: number;
   participants?: unknown[];
   text?: string;
-  statYardage?: number;
   period?: {
     number?: number;
   };
@@ -45,9 +42,6 @@ type FootballDrivePlay = {
   };
   start?: {
     downDistanceText?: string;
-  };
-  end?: {
-    yardsToEndzone?: number;
   };
 };
 
@@ -75,7 +69,6 @@ type FootballResolvedDrive = {
 };
 
 type LogType = {
-  gameId: number;
   timestamp: number;
   teams: { name: string; statistics: Record<string, string> }[];
   playByPlay: DriveType[];
@@ -290,11 +283,9 @@ async function getFootballLog(
           down: play.start?.downDistanceText ?? "",
           text: play.text ?? "",
           clock: `Q${play.period?.number ?? ""} ${play.clock?.displayValue ?? ""}`.trim(),
-          distance: play.statYardage ?? 0,
         })),
       description: drive.description,
       score: `${drive.plays[0]?.awayScore ?? ""} - ${drive.plays[0]?.homeScore ?? ""}`,
-      yardsToEndzone: drive.plays[0]?.end?.yardsToEndzone ?? 100,
     } satisfies DriveType;
   });
 
@@ -303,7 +294,6 @@ async function getFootballLog(
     Date.now();
 
   return {
-    gameId: espnId,
     timestamp,
     teams: ((summaryWithDrives.boxscore?.teams as any[]) ?? []).map((teamObj) => ({
       name: teamObj.team?.name ?? "",
@@ -354,7 +344,6 @@ async function getBasketballLog(
     ) || Date.now();
 
   return {
-    gameId: espnId,
     timestamp,
     teams: ((((summaryObj as any).boxscore?.teams as any[]) ?? []).map((teamObj: any) => ({
       name: teamObj.team?.name ?? "",
@@ -434,7 +423,6 @@ function buildBasketballGroup(
     down: string;
     text: string;
     clock: string;
-    distance: number;
     score: string;
   }[],
 ) {
@@ -453,11 +441,9 @@ function buildBasketballGroup(
       down: play.down,
       text: play.text,
       clock: play.clock,
-      distance: play.distance,
     })),
     description: summaryPlay.text,
     score: latestPlay.score,
-    yardsToEndzone: 100,
   } satisfies DriveType;
 }
 
@@ -474,7 +460,6 @@ function normalizeBasketballPlay(play: any, teamsById: Record<string, string>) {
     down: play.type?.text || "",
     text: play.text || play.shortText || "",
     clock: `P${period || ""} ${play.clock?.displayValue || ""}`.trim(),
-    distance: parseInt(play.scoreValue || "0", 10),
     score: `${play.awayScore ?? ""} - ${play.homeScore ?? ""}`,
   };
 }
@@ -490,7 +475,6 @@ function filterBasketballGroupPlays(
     down: string;
     text: string;
     clock: string;
-    distance: number;
     score: string;
     team: string;
     result?: string;
