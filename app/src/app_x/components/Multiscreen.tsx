@@ -179,9 +179,9 @@ function ScreenContent<T>(props: {
         />
       ) : null}
       {errorMessage ? (
-        <div className="screen-content-error" role="alert">
+        <pre className="screen-content-error" role="alert">
           {errorMessage}
-        </div>
+        </pre>
       ) : (
         <iframe
           className="screen-iframe"

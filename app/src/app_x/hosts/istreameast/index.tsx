@@ -33,22 +33,31 @@ export const istreameastHost: Host<IframeParams> = {
     const watchPageHtml = await fetchIstreameastPageText(watchPageUrl);
     const watchPage = parseStreamWatchPage(watchPageHtml);
 
+    const iframeParams = {
+      fid: "",
+      _rawUrl: stream.raw_url,
+      _embedPageUrl: watchPage.embedPageUrl,
+      _iframeSourcePageUrl: "",
+    };
+
     const resolvedPlayback = watchPage.embedPageUrl
       ? await resolveEmbedPlayback(watchPage.embedPageUrl)
       : { fid: "", iframeSourcePageUrl: "" };
 
+    iframeParams.fid = resolvedPlayback.fid;
+    iframeParams._iframeSourcePageUrl = resolvedPlayback.iframeSourcePageUrl;
+
     if (!resolvedPlayback.fid) {
       throw new Error(
-        `Unable to resolve a fid for "${stream.title}".`,
+        `Unable to resolve a fid for "${stream.title}".${JSON.stringify(
+          {
+            iframeParams,
+          },
+          null,
+          2,
+        )}`,
       );
     }
-
-    const iframeParams = {
-      fid: resolvedPlayback.fid,
-      _rawUrl: stream.raw_url,
-      _embedPageUrl: watchPage.embedPageUrl,
-      _iframeSourcePageUrl: resolvedPlayback.iframeSourcePageUrl,
-    };
 
     return iframeParams;
   },
