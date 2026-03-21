@@ -1,16 +1,20 @@
-import { LeagueCategories, type Category, type StreamCategory } from "../../config/types";
-import { ESPN_MATCH_WINDOW_MS } from "./constants";
-import type { EspnScheduleEvent } from "./types";
+import { LeagueCategories, type Category, type StreamCategory } from "../config/types";
 
-const ESPN_SCOREBOARD_ENDPOINTS: Partial<
-  Record<
-    StreamCategory,
-    {
-      sport: string;
-      league: string;
-    }
-  >
-> = {
+const ESPN_MATCH_WINDOW_MS = 12 * 60 * 60 * 1000;
+
+type EspnScoreboardEndpoint = {
+  sport: string;
+  league: string;
+};
+
+export type EspnScheduleEvent = {
+  id: number;
+  startTimeMs: number;
+  competitors: string[];
+  normalizedCompetitors: string[];
+};
+
+export const ESPN_SCOREBOARD_ENDPOINTS: Record<StreamCategory, EspnScoreboardEndpoint> = {
   NFL: { sport: "football", league: "nfl" },
   NBA: { sport: "basketball", league: "nba" },
   MLB: { sport: "baseball", league: "mlb" },
@@ -33,10 +37,6 @@ export async function fetchEspnScheduleEvents(category: Category): Promise<EspnS
   }
 
   const endpoint = ESPN_SCOREBOARD_ENDPOINTS[category];
-  if (!endpoint) {
-    return [];
-  }
-
   const payloads = await Promise.all(
     getEspnDateCandidates().map((date) =>
       fetch(
@@ -55,7 +55,7 @@ export async function fetchEspnScheduleEvents(category: Category): Promise<EspnS
           return response.json();
         })
         .catch((error) => {
-          console.error("istreameast:fetchEspnScoreboard", { category, date, error });
+          console.error("espn:fetchScoreboard", { category, date, error });
           return null;
         }),
     ),

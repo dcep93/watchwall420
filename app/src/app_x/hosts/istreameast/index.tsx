@@ -1,6 +1,6 @@
 import type { Host } from "../../config/types";
+import { fetchEspnScheduleEvents } from "../../lib/espn";
 import { ISTREAMEAST_URL } from "./constants";
-import { fetchEspnScheduleEvents } from "./espn";
 import { renderIstreameastDocElement } from "./iframe";
 import { resolvePlayableSourceUrl } from "./playback";
 import { fetchIstreameastHtml, fetchProxyText } from "./proxy";
@@ -10,10 +10,12 @@ import type { IframeParams } from "./types";
 export const istreameastHost = {
   async getStreams(category) {
     const html = await fetchIstreameastHtml();
-    const espnEvents = await fetchEspnScheduleEvents(category).catch((error: unknown) => {
-      console.error("istreameast:fetchEspnScheduleEvents", error);
-      return [];
-    });
+    const espnEvents = await fetchEspnScheduleEvents(category).catch(
+      (error: unknown) => {
+        console.error("istreameast:fetchEspnScheduleEvents", error);
+        return [];
+      },
+    );
     return parseStreamsFromHtml(html, category, espnEvents);
   },
   async getIframeParams(stream) {
@@ -30,7 +32,9 @@ export const istreameastHost = {
       : "";
 
     if (!playback_url) {
-      throw new Error(`Unable to resolve a playable source for "${stream.title}".`);
+      throw new Error(
+        `Unable to resolve a playable source for "${stream.title}".`,
+      );
     }
 
     console.log("istreameast:getIframeParams", {

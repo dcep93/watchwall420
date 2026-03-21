@@ -1,36 +1,50 @@
 import { fetchProxyText } from "./proxy";
 import { matchStrings, isPlayableSourceUrl, resolveUrl } from "./utils";
 
-export async function resolvePlayableSourceUrl(
-  initialUrl: string,
-  visited = new Set<string>(),
-  depth = 0,
-): Promise<string> {
+const MAX_DOCUMENT_HOPS = 5;
+
+export async function resolvePlayableSourceUrl(initialUrl: string): Promise<string> {
   const normalizedUrl = initialUrl.trim();
-  if (!normalizedUrl || visited.has(normalizedUrl) || depth > 5) {
+  if (!normalizedUrl) {
     return "";
   }
 
-  visited.add(normalizedUrl);
+  const seenUrls = new Set<string>();
+  const pendingUrls: Array<{ url: string; hops: number }> = [{ url: normalizedUrl, hops: 0 }];
 
-  if (isPlayableSourceUrl(normalizedUrl)) {
-    return normalizedUrl;
-  }
+  while (pendingUrls.length > 0) {
+    const nextCandidate = pendingUrls.shift();
+    if (!nextCandidate) {
+      break;
+    }
 
-  const html = await fetchProxyText(normalizedUrl).catch(() => "");
-  if (!html) {
-    return "";
-  }
+    const { url, hops } = nextCandidate;
+    if (!url || seenUrls.has(url) || hops > MAX_DOCUMENT_HOPS) {
+      continue;
+    }
 
-  const directSource = extractPlayableSource(html, normalizedUrl);
-  if (directSource) {
-    return directSource;
-  }
+    seenUrls.add(url);
 
-  for (const candidateUrl of extractNestedDocumentUrls(html, normalizedUrl)) {
-    const resolved = await resolvePlayableSourceUrl(candidateUrl, visited, depth + 1);
-    if (resolved) {
-      return resolved;
+    if (isPlayableSourceUrl(url)) {
+      return url;
+    }
+
+    const html = await fetchProxyText(url).catch(() => "");
+    if (!html) {
+      continue;
+    }
+
+    const directSource = extractPlayableSource(html, url);
+    if (directSource) {
+      return directSource;
+    }
+
+    for (const nestedUrl of extractNestedDocumentUrls(html, url)) {
+      if (seenUrls.has(nestedUrl)) {
+        continue;
+      }
+
+      pendingUrls.push({ url: nestedUrl, hops: hops + 1 });
     }
   }
 

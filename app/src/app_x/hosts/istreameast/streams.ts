@@ -1,7 +1,6 @@
 import { LeagueCategories, type Category, type Stream, type StreamCategory } from "../../config/types";
 import { ISTREAMEAST_URL, LIVE_WINDOW_SECONDS, UPCOMING_WINDOW_SECONDS } from "./constants";
-import { resolveEspnEventId } from "./espn";
-import type { EspnScheduleEvent } from "./types";
+import { resolveEspnEventId, type EspnScheduleEvent } from "../../lib/espn";
 import { buildStreamSlug, escapeForRegex, resolveUrl } from "./utils";
 
 export function parseStreamsFromHtml(
