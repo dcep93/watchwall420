@@ -2,10 +2,6 @@ export function escapeForRegex(value: string) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-export function matchStrings(value: string, pattern: RegExp) {
-  return Array.from(value.matchAll(pattern), (match) => match[1]?.trim() ?? "").filter(Boolean);
-}
-
 export function resolveUrl(candidate: string, baseUrl: string) {
   if (!candidate) return "";
 

@@ -1,45 +1,47 @@
 import { fetchProxyText } from "./proxy";
-import { matchStrings, resolveUrl } from "./utils";
+import { resolveUrl } from "./utils";
 
 export async function resolvePlayableSourceUrl(
   initialUrl: string,
 ): Promise<string> {
-  const normalizedUrl = initialUrl.trim();
-  if (!normalizedUrl) {
+  if (!initialUrl) {
     return "";
   }
 
-  const embedHtml = await fetchProxyText(normalizedUrl).catch(() => "");
+  const embedPageUrl = initialUrl.trim();
+  const embedHtml = await fetchProxyText(embedPageUrl).catch(() => "");
   if (!embedHtml) {
     return "";
   }
 
-  const iframe_src = extractIframeSrc(embedHtml, normalizedUrl);
-  if (!iframe_src) {
+  const iframeSourcePageUrl = extractIframeSourcePageUrl(embedHtml, embedPageUrl);
+  if (!iframeSourcePageUrl) {
     return "";
   }
 
-  const fetch_resp = await fetchProxyText(iframe_src).catch(() => "");
-  const fid = extractFid(fetch_resp);
-  return fid;
+  const iframeSourceHtml = await fetchProxyText(iframeSourcePageUrl).catch(() => "");
+  return extractFid(iframeSourceHtml);
 }
 
-function extractIframeSrc(html: string, baseUrl: string) {
+function extractIframeSourcePageUrl(html: string, baseUrl: string) {
   if (!html || !baseUrl) return "";
 
   const document = new DOMParser().parseFromString(html, "text/html");
-  const iframeSrc = [
-    ...Array.from(document.querySelectorAll("iframe"))
-      .map((iframe) => iframe.getAttribute("src")?.trim() ?? "")
-      .filter(Boolean),
-    ...matchStrings(html, /<iframe[^>]*src=["']([^"']+)["']/gi),
-  ].find(Boolean);
+  const iframeSrc = document.querySelector("body > iframe")?.getAttribute("src")?.trim() ?? "";
 
-  return resolveUrl(iframeSrc ?? "", baseUrl);
+  return resolveUrl(iframeSrc, baseUrl);
 }
 
 function extractFid(html: string) {
   if (!html) return "";
 
-  return matchStrings(html, /\bfid\s*=\s*["']([^"']+)["']/gi)[0] ?? "";
+  const document = new DOMParser().parseFromString(html, "text/html");
+  for (const script of document.querySelectorAll("script")) {
+    const fid = script.textContent?.match(/\bfid\s*=\s*["']([^"']+)["']/)?.[1]?.trim();
+    if (fid) {
+      return fid;
+    }
+  }
+
+  return "";
 }

@@ -43,13 +43,6 @@ export const istreameastHost: Host<IframeParams> = {
       );
     }
 
-    console.log("istreameast:getIframeParams", {
-      title: stream.title,
-      streamPageUrl,
-      embed_page_url: streamPage.embed_page_url,
-      fid,
-    });
-
     return {
       fid,
     };
