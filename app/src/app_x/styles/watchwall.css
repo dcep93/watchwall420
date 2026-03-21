@@ -204,6 +204,11 @@
   line-height: 1;
 }
 
+.stream-name {
+  user-select: text;
+  -webkit-user-select: text;
+}
+
 .stream-log {
   color: #8da2b8;
   font-family: "IBM Plex Mono", "SFMono-Regular", monospace;

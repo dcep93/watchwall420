@@ -1,3 +1,5 @@
+import type { ReactElement } from "react";
+
 export const Categories = [
   "NFL",
   "NBA",
@@ -23,7 +25,8 @@ export type Stream = {
 
 export type StreamSlug = Stream["slug"];
 
-export type Host = {
+export type Host<T> = {
   getStreams: (category: Category) => Promise<Stream[]>;
-  getIframeDocStr: (stream: Stream) => Promise<string>;
+  getIframeParams: (stream: Stream) => Promise<T>;
+  getIframeDocStrElement: (params: T) => ReactElement;
 };

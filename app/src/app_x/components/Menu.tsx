@@ -52,23 +52,32 @@ function StreamToggle(props: {
   rawUrl: string;
   onClick: () => void;
 }) {
-  return (
-    <button
-      type="button"
-      className={`stream-toggle ${props.isSelected ? "is-selected" : ""}`}
-      onClick={(event) => {
-        if (event.metaKey) {
-          event.preventDefault();
-          const url = new URL(props.rawUrl, "https://istreameast.is").toString();
-          window.open(url, "_blank", "noopener,noreferrer");
-          return;
-        }
+  function handleActivate(event: { metaKey?: boolean; preventDefault?: () => void }) {
+    if (event.metaKey) {
+      event.preventDefault?.();
+      const url = new URL(props.rawUrl, "https://istreameast.is").toString();
+      window.open(url, "_blank", "noopener,noreferrer");
+      return;
+    }
 
-        props.onClick();
+    props.onClick();
+  }
+
+  return (
+    <div
+      role="button"
+      tabIndex={0}
+      className={`stream-toggle ${props.isSelected ? "is-selected" : ""}`}
+      onClick={handleActivate}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          handleActivate(event);
+        }
       }}
     >
       <span className="stream-name">{props.label}</span>
-    </button>
+    </div>
   );
 }
 

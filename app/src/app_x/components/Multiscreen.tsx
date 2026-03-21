@@ -1,10 +1,11 @@
 import { useEffect, useState, type Ref } from "react";
+import ReactDomServer from "react-dom/server";
 import type { Host, Stream, StreamSlug } from "../config/types";
 import { renderLog } from "../lib/renderStream";
 
-export default function Multiscreen(props: {
+export default function Multiscreen<T>(props: {
   containerRef?: Ref<HTMLElement>;
-  host: Host;
+  host: Host<T>;
   streams: Stream[];
   displayLogs: boolean;
   focusedSlug?: StreamSlug;
@@ -34,8 +35,8 @@ export default function Multiscreen(props: {
   );
 }
 
-function ScreenCard(props: {
-  host: Host;
+function ScreenCard<T>(props: {
+  host: Host<T>;
   stream: Stream;
   displayLogs: boolean;
   isFocused: boolean;
@@ -113,8 +114,8 @@ function ScreenTitleBar(props: {
   );
 }
 
-function ScreenContent(props: {
-  host: Host;
+function ScreenContent<T>(props: {
+  host: Host<T>;
   stream: Stream;
   className: string;
   onClick?: () => void;
@@ -125,7 +126,10 @@ function ScreenContent(props: {
     let isActive = true;
 
     props.host
-      .getIframeDocStr(props.stream)
+      .getIframeParams(props.stream)
+      .then((params) =>
+        ReactDomServer.renderToStaticMarkup(props.host.getIframeDocStrElement(params)),
+      )
       .then((nextSrcDoc) => {
         if (!isActive) return;
         setSrcDoc(nextSrcDoc);
