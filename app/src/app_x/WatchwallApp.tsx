@@ -1,35 +1,42 @@
-import { useMemo, useState } from "react";
-import { STREAMS } from "./data";
+import { useState } from "react";
 import PasswordGate from "./PasswordGate";
-import StreamControls from "./StreamControls";
-import Wall from "./Wall";
+import Menu from "./Menu";
+import Multiscreen from "./Multiscreen";
 import { getInitialAuthorized, unlock } from "./auth";
-import type { StreamId } from "./types";
-
-function getInitialSelection() {
-  return STREAMS.map((stream) => stream.id);
-}
+import useSelectedStreamIds from "./useSelectedStreamIds";
+import { STREAMS } from "./data";
 
 export default function WatchwallApp() {
   const [isAuthorized, setIsAuthorized] = useState(getInitialAuthorized);
-  const [selectedIds, setSelectedIds] = useState<StreamId[]>(getInitialSelection);
-  const [focusedId, setFocusedId] = useState<StreamId>("A");
+  const [focusedSlug, setFocusedSlug] = useState(STREAMS[0]?.slug ?? "");
+  const [displayLogs, setDisplayLogs] = useState(true);
+  const { selectedSlugs, selectedStreams, setSelectedSlugs } = useSelectedStreamIds();
 
-  const selectedStreams = useMemo(
-    () => STREAMS.filter((stream) => selectedIds.includes(stream.id)),
-    [selectedIds],
-  );
-  const resolvedFocusedId =
-    selectedStreams.find((stream) => stream.id === focusedId)?.id ?? selectedStreams[0]?.id;
+  const resolvedFocusedSlug =
+    selectedStreams.find((stream) => stream.slug === focusedSlug)?.slug ?? selectedStreams[0]?.slug;
 
-  function handleToggle(streamId: StreamId) {
-    setSelectedIds((current) => {
-      if (current.includes(streamId)) {
-        return current.length === 1 ? current : current.filter((id) => id !== streamId);
+  function handleToggle(streamSlug: string) {
+    if (selectedSlugs.includes(streamSlug)) {
+      const remainingSlugs = selectedSlugs.filter((slug) => slug !== streamSlug);
+      setSelectedSlugs(remainingSlugs);
+      if (focusedSlug === streamSlug) {
+        setFocusedSlug(remainingSlugs[0] ?? "");
       }
-      return current.concat(streamId);
-    });
-    setFocusedId(streamId);
+      return;
+    }
+
+    setSelectedSlugs(selectedSlugs.concat(streamSlug));
+    if (!resolvedFocusedSlug) {
+      setFocusedSlug(streamSlug);
+    }
+  }
+
+  function handleRemove(streamSlug: string) {
+    const remainingSlugs = selectedSlugs.filter((slug) => slug !== streamSlug);
+    setSelectedSlugs(remainingSlugs);
+    if (focusedSlug === streamSlug) {
+      setFocusedSlug(remainingSlugs[0] ?? "");
+    }
   }
 
   if (!isAuthorized) {
@@ -44,23 +51,22 @@ export default function WatchwallApp() {
   }
 
   return (
-    <main className="watchwall">
-      <section className="hero">
-        <p className="eyebrow">watchwall420</p>
-      </section>
-
-      <section className="layout">
-        <StreamControls
-          streams={STREAMS}
-          selectedIds={selectedIds}
-          onToggle={handleToggle}
-        />
-        <Wall
+    <main className="watchwall-shell">
+      <Menu
+        displayLogs={displayLogs}
+        selectedSlugs={selectedSlugs}
+        onToggle={handleToggle}
+        onDisplayLogsChange={setDisplayLogs}
+      />
+      {selectedStreams.length > 0 ? (
+        <Multiscreen
           streams={selectedStreams}
-          focusedId={resolvedFocusedId}
-          onFocus={setFocusedId}
+          displayLogs={displayLogs}
+          focusedSlug={resolvedFocusedSlug}
+          onRemove={handleRemove}
+          onFocus={setFocusedSlug}
         />
-      </section>
+      ) : null}
     </main>
   );
 }

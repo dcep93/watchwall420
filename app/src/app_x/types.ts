@@ -1,7 +1,6 @@
-export type StreamId = "A" | "B" | "C";
-
 export type Stream = {
-  id: StreamId;
-  label: StreamId;
-  log: Lowercase<StreamId>;
+  slug: string;
+  label: string;
+  content: string;
+  log: string;
 };
