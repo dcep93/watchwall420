@@ -131,9 +131,13 @@ function ScreenContent<T>(props: {
   onClick?: () => void;
 }) {
   const [srcDoc, setSrcDoc] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     let isActive = true;
+
+    setErrorMessage("");
+    setSrcDoc("");
 
     props.host
       .getIframeParams(props.stream)
@@ -150,11 +154,13 @@ function ScreenContent<T>(props: {
       .then((renderedSrcDoc) => {
         if (!isActive) return;
         setSrcDoc(renderedSrcDoc);
+        setErrorMessage("");
       })
       .catch((error) => {
         console.error(error);
         if (!isActive) return;
         setSrcDoc("");
+        setErrorMessage(getStreamContentErrorMessage(error));
       });
 
     return () => {
@@ -172,14 +178,32 @@ function ScreenContent<T>(props: {
           onClick={props.onClick}
         />
       ) : null}
-      <iframe
-        className="screen-iframe"
-        title={props.stream.title}
-        srcDoc={srcDoc}
-        loading="eager"
-        referrerPolicy="no-referrer"
-        sandbox="allow-scripts allow-same-origin allow-forms allow-presentation"
-      />
+      {errorMessage ? (
+        <div className="screen-content-error" role="alert">
+          {errorMessage}
+        </div>
+      ) : (
+        <iframe
+          className="screen-iframe"
+          title={props.stream.title}
+          srcDoc={srcDoc}
+          loading="eager"
+          referrerPolicy="no-referrer"
+          sandbox="allow-scripts allow-same-origin allow-forms allow-presentation"
+        />
+      )}
     </div>
   );
+}
+
+function getStreamContentErrorMessage(error: unknown) {
+  if (error instanceof Error && error.message.trim()) {
+    return error.message;
+  }
+
+  if (typeof error === "string" && error.trim()) {
+    return error;
+  }
+
+  return "Unable to load stream.";
 }
