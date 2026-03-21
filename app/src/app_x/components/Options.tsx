@@ -17,11 +17,12 @@ async function clearCache() {
       `Are you sure? This will clear about ${approximateSizeLabel} from IndexedDB.`,
     )
   ) {
-    return;
+    return false;
   }
 
   await clearProxyCache().catch(() => undefined);
   localStorage.clear();
+  return true;
 }
 
 function formatApproximateSize(sizeBytes: number) {
@@ -59,7 +60,8 @@ export default function Options(props: {
           className="secondary-button secondary-button-inline"
           type="button"
           onClick={async () => {
-            await clearCache();
+            const didClearCache = await clearCache();
+            if (!didClearCache) return;
             props.onClearCache();
           }}
         >
