@@ -1,4 +1,4 @@
-import type { Category, Host, Stream } from "../config/types";
+import { LeagueCategories, type Category, type Host, type Stream, type StreamCategory } from "../config/types";
 import { fetchTextThroughProxy } from "../lib/proxy420";
 import type { ReactElement } from "react";
 
@@ -31,7 +31,7 @@ export async function fetchIstreameastHtml(
 export const istreameastHost = {
   async getStreams(category) {
     const html = await fetchIstreameastHtml();
-    const espnEvents = await fetchEspnScheduleEvents(category).catch((error) => {
+    const espnEvents = await fetchEspnScheduleEvents(category).catch((error: unknown) => {
       console.error("istreameast:fetchEspnScheduleEvents", error);
       return [];
     });
@@ -84,7 +84,6 @@ function parseStreamsFromHtml(
   espnEvents: EspnScheduleEvent[],
 ): Stream[] {
   const document = new DOMParser().parseFromString(html, "text/html");
-  const leaguePattern = new RegExp(`\\b${escapeForRegex(category)}\\b`);
   const seenRawUrls = new Set<string>();
 
   return Array.from(document.querySelectorAll(".events-list .event-card"))
@@ -97,7 +96,8 @@ function parseStreamsFromHtml(
       }
 
       const strippedLeague = leagueElement.textContent?.trim() ?? "";
-      if (!leaguePattern.test(strippedLeague)) {
+      const resolvedCategory = resolveCategory(strippedLeague, category);
+      if (!resolvedCategory) {
         return null;
       }
 
@@ -115,7 +115,7 @@ function parseStreamsFromHtml(
       const startTimeMs = getEventStartTimeMs(eventCard);
 
       return {
-        category,
+        category: resolvedCategory,
         espn_id: resolveEspnEventId(title, startTimeMs, espnEvents),
         raw_url: rawUrl,
         title,
@@ -123,6 +123,25 @@ function parseStreamsFromHtml(
       } satisfies Stream;
     })
     .filter((stream): stream is Stream => stream !== null);
+}
+
+function resolveCategory(leagueLabel: string, selectedCategory: Category): StreamCategory | null {
+  if (selectedCategory !== "ALL") {
+    return hasLeagueMatch(leagueLabel, selectedCategory) ? selectedCategory : null;
+  }
+
+  for (const category of LeagueCategories) {
+    if (hasLeagueMatch(leagueLabel, category)) {
+      return category;
+    }
+  }
+
+  return null;
+}
+
+function hasLeagueMatch(leagueLabel: string, category: StreamCategory) {
+  const leaguePattern = new RegExp(`\\b${escapeForRegex(category)}\\b`);
+  return leaguePattern.test(leagueLabel);
 }
 
 function escapeForRegex(value: string) {
@@ -328,7 +347,14 @@ function buildStreamSlug(title: string, rawUrl: string) {
   return rawUrl.replace(/[^a-z0-9]+/gi, "");
 }
 
-async function fetchEspnScheduleEvents(category: Category) {
+async function fetchEspnScheduleEvents(category: Category): Promise<EspnScheduleEvent[]> {
+  if (category === "ALL") {
+    const events = await Promise.all(
+      LeagueCategories.map((leagueCategory) => fetchEspnScheduleEvents(leagueCategory)),
+    );
+    return events.flat();
+  }
+
   const endpoint = ESPN_SCOREBOARD_ENDPOINTS[category];
   if (!endpoint) {
     return [];

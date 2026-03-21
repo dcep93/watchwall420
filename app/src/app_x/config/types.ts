@@ -1,6 +1,6 @@
 import type { ReactElement } from "react";
 
-export const Categories = [
+export const LeagueCategories = [
   "NFL",
   "NBA",
   "MLB",
@@ -14,10 +14,13 @@ export const Categories = [
   "F1",
 ] as const;
 
+export const Categories = ["ALL", ...LeagueCategories] as const;
+
 export type Category = (typeof Categories)[number];
+export type StreamCategory = (typeof LeagueCategories)[number];
 
 export type Stream = {
-  category: Category;
+  category: StreamCategory;
   espn_id: number;
   raw_url: string;
   title: string;
