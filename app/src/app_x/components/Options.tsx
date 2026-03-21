@@ -4,9 +4,11 @@ import {
   getApproximateProxyCacheSizeBytes,
 } from "../lib/proxy420";
 
-const PREFERRED_DEFAULT_CATEGORY: StreamCategory = "NCAAB";
+const PREFERRED_DEFAULT_CATEGORY: StreamCategory = "MLB";
 
-export function getDefaultCategory(categories: readonly StreamCategory[]): Category {
+export function getDefaultCategory(
+  categories: readonly StreamCategory[],
+): Category {
   if (categories.includes(PREFERRED_DEFAULT_CATEGORY)) {
     return PREFERRED_DEFAULT_CATEGORY;
   }
