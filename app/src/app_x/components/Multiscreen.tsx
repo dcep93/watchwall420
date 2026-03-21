@@ -3,8 +3,6 @@ import ReactDomServer from "react-dom/server";
 import type { Host, Stream, StreamSlug } from "../config/types";
 import renderLog from "../lib/renderLog";
 
-type ScreenState = "idle" | "loading" | "ready" | "error";
-
 export default function Multiscreen<T>(props: {
   containerRef?: Ref<HTMLElement>;
   host: Host<T>;
@@ -125,7 +123,6 @@ function ScreenContent<T>(props: {
   onClick?: () => void;
 }) {
   const [srcDoc, setSrcDoc] = useState("");
-  const [screenState, setScreenState] = useState<ScreenState>("loading");
 
   useEffect(() => {
     let isActive = true;
@@ -138,12 +135,11 @@ function ScreenContent<T>(props: {
       .then((nextSrcDoc) => {
         if (!isActive) return;
         setSrcDoc(nextSrcDoc);
-        setScreenState("ready");
       })
       .catch((error) => {
         console.error(error);
         if (!isActive) return;
-        setScreenState("error");
+        setSrcDoc("");
       });
 
     return () => {
@@ -160,13 +156,6 @@ function ScreenContent<T>(props: {
           aria-label={`Focus screen ${props.stream.title}`}
           onClick={props.onClick}
         />
-      ) : null}
-      {screenState !== "ready" ? (
-        <div className="log-panel log-panel-spotlight">
-          <div className="log-entry">
-            {screenState === "error" ? "Unable to load stream." : "Loading stream..."}
-          </div>
-        </div>
       ) : null}
       <iframe
         className="screen-iframe"

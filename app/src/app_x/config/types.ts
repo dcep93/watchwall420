@@ -17,6 +17,7 @@ export const Categories = [
 export type Category = (typeof Categories)[number];
 
 export type Stream = {
+  category: Category;
   espn_id: number;
   raw_url: string;
   title: string;

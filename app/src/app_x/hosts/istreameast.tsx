@@ -7,7 +7,6 @@ const LOCAL_PROXY_CACHE_MAX_AGE_MS = 24 * 60 * 60 * 1000;
 const REMOTE_PROXY_CACHE_MAX_AGE_MS = 5 * 60 * 1000;
 const UPCOMING_WINDOW_SECONDS = 60 * 60;
 const LIVE_WINDOW_SECONDS = 10_600;
-const ESPN_PROXY_CACHE_MAX_AGE_MS = 10 * 60 * 1000;
 const ESPN_MATCH_WINDOW_MS = 12 * 60 * 60 * 1000;
 const HLS_JS_CDN_URL = "https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js";
 const STREAM_SOURCE_PATTERN = /\.(?:m3u8|mp4)(?:$|[?#])/i;
@@ -129,6 +128,7 @@ function parseStreamsFromHtml(
       const startTimeMs = getEventStartTimeMs(eventCard);
 
       return {
+        category,
         espn_id: resolveEspnEventId(title, startTimeMs, espnEvents),
         raw_url: rawUrl,
         title,
@@ -284,65 +284,75 @@ function isPlayableSourceUrl(value: string) {
 
 function buildStreamSlug(title: string, rawUrl: string) {
   const normalizedTitle = title
-    .toLowerCase()
-    .split(" vs ")
+    .split(/ vs /i)
     .at(-1)
     ?.trim()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
+    .replaceAll(" ", "");
 
   if (normalizedTitle) {
     return normalizedTitle;
   }
 
-  return rawUrl.replace(/[^a-z0-9]+/gi, "-").replace(/^-+|-+$/g, "").toLowerCase();
+  return rawUrl.replace(/[^a-z0-9]+/gi, "");
 }
 
 async function fetchEspnScheduleEvents(category: Category) {
-  const schedulePath = ESPN_SCHEDULE_PATHS[category];
-  if (!schedulePath) {
+  const endpoint = ESPN_SCOREBOARD_ENDPOINTS[category];
+  if (!endpoint) {
     return [];
   }
 
-  const scheduleHtml = await fetchTextThroughProxy({
-    url: `https://www.espn.com/${schedulePath}/schedule`,
-    localMaxAgeMs: ESPN_PROXY_CACHE_MAX_AGE_MS,
-    remoteMaxAgeMs: ESPN_PROXY_CACHE_MAX_AGE_MS,
-    options: {
-      headers: {
-        "user-agent": WATCHWALL_USER_AGENT,
-      },
-      referrer: "https://www.espn.com/",
-    },
-  });
+  const payloads = await Promise.all(
+    getEspnDateCandidates().map((date) =>
+      fetch(
+        `https://site.api.espn.com/apis/site/v2/sports/${endpoint.sport}/${endpoint.league}/scoreboard?dates=${date}`,
+        {
+          headers: {
+            Accept: "application/json",
+          },
+        },
+      )
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`ESPN scoreboard request failed with status ${response.status}.`);
+          }
 
-  return parseEspnScheduleEvents(scheduleHtml);
+          return response.json();
+        })
+        .catch((error) => {
+          console.error("istreameast:fetchEspnScoreboard", { category, date, error });
+          return null;
+        }),
+    ),
+  );
+
+  return parseEspnScoreboardEvents(payloads);
 }
 
-const ESPN_SCHEDULE_PATHS: Partial<Record<Category, string>> = {
-  NFL: "nfl",
-  NBA: "nba",
-  MLB: "mlb",
-  NHL: "nhl",
-  CFL: "cfl",
-  CFB: "college-football",
-  NCAAB: "mens-college-basketball",
-  UFC: "mma",
-  BOXING: "boxing",
-  SOCCER: "soccer",
-  F1: "f1",
+const ESPN_SCOREBOARD_ENDPOINTS: Partial<
+  Record<
+    Category,
+    {
+      sport: string;
+      league: string;
+    }
+  >
+> = {
+  NFL: { sport: "football", league: "nfl" },
+  NBA: { sport: "basketball", league: "nba" },
+  MLB: { sport: "baseball", league: "mlb" },
+  NHL: { sport: "hockey", league: "nhl" },
+  CFL: { sport: "football", league: "cfl" },
+  CFB: { sport: "football", league: "college-football" },
+  NCAAB: { sport: "basketball", league: "mens-college-basketball" },
+  UFC: { sport: "mma", league: "ufc" },
+  BOXING: { sport: "boxing", league: "boxing" },
+  SOCCER: { sport: "soccer", league: "eng.1" },
+  F1: { sport: "racing", league: "f1" },
 };
 
-function parseEspnScheduleEvents(scheduleHtml: string): EspnScheduleEvent[] {
-  const fittPayload =
-    matchSingleString(scheduleHtml, /window\['__espnfitt__'\]=(.+?);<\/script>/s) ||
-    matchSingleString(scheduleHtml, /window\.__espnfitt__\s*=\s*(.+?);<\/script>/s);
-
-  if (!fittPayload) {
-    return [];
-  }
-
-  type EspnFittEvent = {
+function parseEspnScoreboardEvents(payloads: unknown[]): EspnScheduleEvent[] {
+  type EspnScoreboardEvent = {
     id?: string | number;
     date?: string;
     competitions?: Array<{
@@ -357,42 +367,20 @@ function parseEspnScheduleEvents(scheduleHtml: string): EspnScheduleEvent[] {
           name?: string;
         };
       }>;
-      competitorsData?: never;
-    }>;
-    teams?: Array<{
-      displayName?: string;
-      shortDisplayName?: string;
-      shortName?: string;
-      abbreviation?: string;
-      location?: string;
-      name?: string;
     }>;
   };
 
-  let parsed: {
-    page?: {
-      content?: {
-        events?: Record<string, EspnFittEvent[]>;
-      };
-    };
-  } | null = null;
-
-  try {
-    parsed = JSON.parse(fittPayload);
-  } catch (error) {
-    console.error("istreameast:parseEspnScheduleEvents", error);
-    return [];
-  }
-
-  return Object.values(parsed?.page?.content?.events ?? {})
-    .flatMap((events) => events)
+  return payloads
+    .flatMap((payload) => {
+      const events = (payload as { events?: EspnScoreboardEvent[] } | null)?.events;
+      return Array.isArray(events) ? events : [];
+    })
     .map((event) => {
       const eventId = parseInt(String(event.id ?? ""), 10);
       const competitors =
         event.competitions?.[0]?.competitors
           ?.map((competitor) => getEspnTeamNames(competitor.team))
           .flat() ??
-        event.teams?.map((team) => getEspnTeamNames(team)).flat() ??
         [];
       const startTimeMs = Date.parse(event.competitions?.[0]?.date ?? event.date ?? "");
 
@@ -416,6 +404,23 @@ function parseEspnScheduleEvents(scheduleHtml: string): EspnScheduleEvent[] {
       } satisfies EspnScheduleEvent;
     })
     .filter((event): event is EspnScheduleEvent => event !== null);
+}
+
+function getEspnDateCandidates() {
+  const today = new Date();
+
+  return [-1, 0, 1].map((offsetDays) => {
+    const nextDate = new Date(today);
+    nextDate.setDate(today.getDate() + offsetDays);
+    return formatEspnDate(nextDate);
+  });
+}
+
+function formatEspnDate(date: Date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}${month}${day}`;
 }
 
 function getEspnTeamNames(team: {
@@ -536,10 +541,6 @@ function teamNamesMatch(left: string, right: string) {
   }
 
   return leftCompact.includes(rightCompact) || rightCompact.includes(leftCompact);
-}
-
-function matchSingleString(value: string, pattern: RegExp) {
-  return value.match(pattern)?.[1]?.trim() ?? "";
 }
 
 type IframeParams = {
