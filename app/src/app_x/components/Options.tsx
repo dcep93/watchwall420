@@ -22,8 +22,7 @@ async function clearCache() {
 
   await clearProxyCache().catch(() => undefined);
   localStorage.clear();
-  alert("x");
-  window.location.reload();
+  window.location.replace(window.location.href);
 }
 
 function formatApproximateSize(sizeBytes: number) {

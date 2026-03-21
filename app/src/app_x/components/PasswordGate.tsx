@@ -1,10 +1,30 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { FormEvent } from "react";
 import { isValidPasswordInput } from "../lib/auth";
 
 export default function PasswordGate(props: { onUnlock: () => void }) {
   const [value, setValue] = useState("");
   const [error, setError] = useState("");
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    function focusPasswordInput() {
+      inputRef.current?.focus({ preventScroll: true });
+    }
+
+    const timeoutId = window.setTimeout(focusPasswordInput, 0);
+    const frameId = window.requestAnimationFrame(focusPasswordInput);
+
+    window.addEventListener("focus", focusPasswordInput);
+    window.addEventListener("pageshow", focusPasswordInput);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+      window.cancelAnimationFrame(frameId);
+      window.removeEventListener("focus", focusPasswordInput);
+      window.removeEventListener("pageshow", focusPasswordInput);
+    };
+  }, []);
 
   function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -22,6 +42,7 @@ export default function PasswordGate(props: { onUnlock: () => void }) {
         <div className="password-row">
           <input
             id="watchwall-password"
+            ref={inputRef}
             className="password-input"
             type="text"
             value={value}
