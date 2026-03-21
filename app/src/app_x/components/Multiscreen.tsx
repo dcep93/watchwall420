@@ -189,7 +189,6 @@ function ScreenContent<T>(props: {
           srcDoc={srcDoc}
           loading="eager"
           referrerPolicy="no-referrer"
-          sandbox="allow-scripts allow-same-origin allow-forms allow-presentation"
         />
       )}
     </div>

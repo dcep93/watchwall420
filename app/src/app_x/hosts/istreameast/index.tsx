@@ -47,18 +47,6 @@ export const istreameastHost: Host<IframeParams> = {
     iframeParams.fid = resolvedPlayback.fid;
     iframeParams._3_iframeSourcePageUrl = resolvedPlayback.iframeSourcePageUrl;
 
-    if (!resolvedPlayback.fid) {
-      throw new Error(
-        `Unable to resolve a fid for "${stream.title}".${JSON.stringify(
-          {
-            iframeParams,
-          },
-          null,
-          2,
-        )}`,
-      );
-    }
-
     return iframeParams;
   },
   getIframeDocStrElement(iframeParams) {
