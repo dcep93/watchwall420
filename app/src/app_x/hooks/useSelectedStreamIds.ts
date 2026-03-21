@@ -80,7 +80,16 @@ export default function useSelectedStreamIds(streams: Stream[] | null) {
   }, [selectedSlugs, validSlugs]);
 
   const selectedStreams = useMemo(
-    () => (streams ? streams.filter((stream) => selectedSlugs.includes(stream.slug)) : []),
+    () => {
+      if (!streams) {
+        return [];
+      }
+
+      const streamsBySlug = new Map(streams.map((stream) => [stream.slug, stream] as const));
+      return selectedSlugs
+        .map((slug) => streamsBySlug.get(slug))
+        .filter((stream): stream is Stream => stream !== undefined);
+    },
     [selectedSlugs, streams],
   );
 

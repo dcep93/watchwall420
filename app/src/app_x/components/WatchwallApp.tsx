@@ -33,6 +33,7 @@ export default function WatchwallApp() {
     !hadHashSelectionOnLoad,
   );
   const multiscreenRef = useRef<HTMLElement | null>(null);
+  const hasScrolledFromInitialHashRef = useRef(false);
 
   useEffect(() => {
     let isActive = true;
@@ -67,13 +68,17 @@ export default function WatchwallApp() {
     (shouldShowResumePrompt || IS_DEV);
 
   useEffect(() => {
-    if (!shouldScrollToMultiscreenOnLoad) return;
+    if (!shouldScrollToMultiscreenOnLoad || hasScrolledFromInitialHashRef.current) {
+      return;
+    }
 
     multiscreenRef.current?.scrollIntoView({
       behavior: "smooth",
       block: "start",
       inline: "start",
     });
+
+    hasScrolledFromInitialHashRef.current = true;
   }, [shouldScrollToMultiscreenOnLoad]);
 
   useEffect(() => {
