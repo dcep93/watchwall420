@@ -21,7 +21,6 @@ export async function resolvePlayableSourceUrl(
 
   const fetch_resp = await fetchProxyText(iframe_src).catch(() => "");
   const fid = extractFid(fetch_resp);
-  console.log("istreameast:resolvePlayableSourceUrl", { iframe_src, fid, fetch_resp });
   return fid;
 }
 
