@@ -32,7 +32,7 @@ export const istreameastHost = {
     return parseStreamsFromHtml(html, category);
   },
   async getIframeParams(stream) {
-    const html_str = await fetchTextThroughProxy({
+    const rawHtml = await fetchTextThroughProxy({
       url: new URL(stream.raw_url, ISTREAMEAST_URL).toString(),
       localMaxAgeMs: LOCAL_PROXY_CACHE_MAX_AGE_MS,
       remoteMaxAgeMs: REMOTE_PROXY_CACHE_MAX_AGE_MS,
@@ -42,12 +42,12 @@ export const istreameastHost = {
         },
       },
     });
-    return { html_str };
+    return parseIframeParams(rawHtml);
   },
   getIframeDocStrElement(params) {
     return renderStreamDocElement(params);
   },
-} satisfies Host<{ html_str: string }>;
+} satisfies Host<{ iframe_src: string; title: string }>;
 
 function parseStreamsFromHtml(html: string, category: Category): Stream[] {
   const document = new DOMParser().parseFromString(html, "text/html");
@@ -142,4 +142,19 @@ function hasRelevantStatus(eventCard: Element) {
     liveWindowSeconds: LIVE_WINDOW_SECONDS,
   });
   return false;
+}
+
+function parseIframeParams(rawHtml: string) {
+  const document = new DOMParser().parseFromString(rawHtml, "text/html");
+  const iframe_src =
+    document.querySelector("#main-player")?.getAttribute("src") ??
+    document.querySelector(".server-btn.active")?.getAttribute("data-src") ??
+    document.querySelector(".server-btn")?.getAttribute("data-src") ??
+    "";
+  const title =
+    document.querySelector(".hero-title")?.textContent?.trim() ??
+    document.title ??
+    "Streameast Stream";
+
+  return { iframe_src, title };
 }

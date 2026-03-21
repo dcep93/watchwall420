@@ -5,36 +5,39 @@ export function renderLog(stream: Stream): ReactNode {
   return <pre>{JSON.stringify(stream, null, 2)}</pre>;
 }
 
-export function renderStreamDocElement(params: { html_str: string }) {
+export function renderStreamDocElement(params: {
+  iframe_src: string;
+  title: string;
+}) {
   return (
     <html>
       <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="referrer" content="no-referrer" />
         <style>{`
-          body {
+          html, body {
             margin: 0;
-            padding: 16px;
-            color: white;
-            background: #081018;
-            font-family: sans-serif;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #000;
           }
 
-          pre {
-            white-space: pre-wrap;
-          }
-
-          video {
+          iframe {
             display: block;
             width: 100%;
-            max-width: 960px;
-            margin-top: 16px;
+            height: 100%;
+            border: 0;
           }
         `}</style>
       </head>
       <body>
-        <pre>{params.html_str}</pre>
-        <video
-          controls
-          src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+        <iframe
+          allow="autoplay; fullscreen"
+          allowFullScreen
+          src={params.iframe_src}
+          title={params.title}
         />
       </body>
     </html>
