@@ -32,22 +32,32 @@ export const istreameastHost = {
     return parseStreamsFromHtml(html, category);
   },
   async getIframeParams(stream) {
-    const rawHtml = await fetchTextThroughProxy({
-      url: new URL(stream.raw_url, ISTREAMEAST_URL).toString(),
-      localMaxAgeMs: LOCAL_PROXY_CACHE_MAX_AGE_MS,
-      remoteMaxAgeMs: REMOTE_PROXY_CACHE_MAX_AGE_MS,
-      options: {
-        headers: {
-          "user-agent": WATCHWALL_USER_AGENT,
-        },
-      },
-    });
-    return parseIframeParams(rawHtml);
+    const streamPageUrl = new URL(stream.raw_url, ISTREAMEAST_URL).toString();
+    const rawHtml = await fetchProxyText(streamPageUrl);
+    const streamPage = parseStreamPage(rawHtml);
+
+    let embedHtml = "";
+    if (streamPage.embed_page_url) {
+      embedHtml = await fetchProxyText(streamPage.embed_page_url);
+    }
+
+    const nestedIframeUrl = streamPage.embed_page_url
+      ? extractNestedIframeUrl(embedHtml, streamPage.embed_page_url)
+      : "";
+    const nestedIframeHtml = nestedIframeUrl ? await fetchProxyText(nestedIframeUrl) : "";
+
+    return {
+      source_url:
+        extractPlayableSource(nestedIframeHtml, nestedIframeUrl) ||
+        extractPlayableSource(embedHtml, streamPage.embed_page_url) ||
+        streamPage.embed_page_url,
+      title: streamPage.title,
+    };
   },
   getIframeDocStrElement(params) {
     return renderStreamDocElement(params);
   },
-} satisfies Host<{ iframe_src: string; title: string }>;
+} satisfies Host<{ source_url: string; title: string }>;
 
 function parseStreamsFromHtml(html: string, category: Category): Stream[] {
   const document = new DOMParser().parseFromString(html, "text/html");
@@ -144,9 +154,9 @@ function hasRelevantStatus(eventCard: Element) {
   return false;
 }
 
-function parseIframeParams(rawHtml: string) {
+function parseStreamPage(rawHtml: string) {
   const document = new DOMParser().parseFromString(rawHtml, "text/html");
-  const iframe_src =
+  const embed_page_url =
     document.querySelector("#main-player")?.getAttribute("src") ??
     document.querySelector(".server-btn.active")?.getAttribute("data-src") ??
     document.querySelector(".server-btn")?.getAttribute("data-src") ??
@@ -156,5 +166,49 @@ function parseIframeParams(rawHtml: string) {
     document.title ??
     "Streameast Stream";
 
-  return { iframe_src, title };
+  return {
+    embed_page_url: embed_page_url ? new URL(embed_page_url, ISTREAMEAST_URL).toString() : "",
+    title,
+  };
+}
+
+async function fetchProxyText(url: string) {
+  return fetchTextThroughProxy({
+    url,
+    localMaxAgeMs: LOCAL_PROXY_CACHE_MAX_AGE_MS,
+    remoteMaxAgeMs: REMOTE_PROXY_CACHE_MAX_AGE_MS,
+    options: {
+      headers: {
+        "user-agent": WATCHWALL_USER_AGENT,
+      },
+      referrer: ISTREAMEAST_URL,
+    },
+  });
+}
+
+function extractNestedIframeUrl(html: string, baseUrl: string) {
+  const document = new DOMParser().parseFromString(html, "text/html");
+  const src =
+    document.querySelector("iframe")?.getAttribute("src") ??
+    matchString(html, /<iframe[^>]*src=["']([^"']+)["']/i);
+  return src ? new URL(src, baseUrl).toString() : "";
+}
+
+function extractPlayableSource(html: string, baseUrl: string) {
+  if (!html) return "";
+
+  const directMatch =
+    matchString(html, /(https?:\/\/[^"'\\\s]+?\.(?:m3u8|mp4)(?:[^"'\\\s]*)?)/i) ||
+    matchString(html, /["'](?:file|source|src)["']\s*[:=]\s*["']([^"']+\.(?:m3u8|mp4)[^"']*)["']/i) ||
+    matchString(html, /\b(?:file|source|src)\b\s*:\s*["']([^"']+\.(?:m3u8|mp4)[^"']*)["']/i);
+
+  if (directMatch) {
+    return new URL(directMatch, baseUrl).toString();
+  }
+
+  return "";
+}
+
+function matchString(value: string, pattern: RegExp) {
+  return value.match(pattern)?.[1] ?? "";
 }
