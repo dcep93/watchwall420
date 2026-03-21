@@ -1,32 +1,49 @@
-import { fetchProxyText } from "./proxy";
+import { fetchIstreameastPageText } from "./proxy";
 import { resolveUrl } from "./utils";
 
-export async function resolveStreamFid(
+export type ResolvedEmbedPlayback = {
+  fid: string;
+  iframeSourcePageUrl: string;
+};
+
+export async function resolveEmbedPlayback(
   embedPageUrl: string,
-): Promise<string> {
+): Promise<ResolvedEmbedPlayback> {
   if (!embedPageUrl) {
-    return "";
+    return {
+      fid: "",
+      iframeSourcePageUrl: "",
+    };
   }
 
   const normalizedEmbedPageUrl = embedPageUrl.trim();
-  const embedPageHtml = await fetchProxyText(normalizedEmbedPageUrl).catch(() => "");
+  const embedPageHtml = await fetchIstreameastPageText(normalizedEmbedPageUrl).catch(() => "");
   if (!embedPageHtml) {
-    return "";
+    return {
+      fid: "",
+      iframeSourcePageUrl: "",
+    };
   }
 
-  const iframeSourcePageUrl = extractIframeSourcePageUrl(
+  const iframeSourcePageUrl = extractIframeDocumentUrl(
     embedPageHtml,
     normalizedEmbedPageUrl,
   );
   if (!iframeSourcePageUrl) {
-    return "";
+    return {
+      fid: "",
+      iframeSourcePageUrl: "",
+    };
   }
 
-  const iframeSourceHtml = await fetchProxyText(iframeSourcePageUrl).catch(() => "");
-  return extractStreamFid(iframeSourceHtml);
+  const iframeSourceHtml = await fetchIstreameastPageText(iframeSourcePageUrl).catch(() => "");
+  return {
+    fid: extractEmbedFid(iframeSourceHtml),
+    iframeSourcePageUrl,
+  };
 }
 
-function extractIframeSourcePageUrl(html: string, baseUrl: string) {
+function extractIframeDocumentUrl(html: string, baseUrl: string) {
   if (!html || !baseUrl) return "";
 
   const document = new DOMParser().parseFromString(html, "text/html");
@@ -35,7 +52,7 @@ function extractIframeSourcePageUrl(html: string, baseUrl: string) {
   return resolveUrl(iframeSrc, baseUrl);
 }
 
-function extractStreamFid(html: string) {
+function extractEmbedFid(html: string) {
   if (!html) return "";
 
   const document = new DOMParser().parseFromString(html, "text/html");

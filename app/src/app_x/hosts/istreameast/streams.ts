@@ -7,7 +7,7 @@ export function parseStreamsFromHtml(
   streamListHtml: string,
   selectedCategory: Category,
   espnEvents: EspnScheduleEvent[],
-  leagueCategories: readonly StreamCategory[],
+  supportedLeagueCategories: readonly StreamCategory[],
 ): Stream[] {
   const document = new DOMParser().parseFromString(streamListHtml, "text/html");
   const seenRawUrls = new Set<string>();
@@ -25,7 +25,7 @@ export function parseStreamsFromHtml(
       const resolvedCategory = resolveCategory(
         strippedLeague,
         selectedCategory,
-        leagueCategories,
+        supportedLeagueCategories,
       );
       if (!resolvedCategory) {
         return null;
@@ -55,14 +55,14 @@ export function parseStreamsFromHtml(
     .filter((stream): stream is Stream => stream !== null);
 }
 
-export function parseStreamPageDetails(streamPageHtml: string) {
-  const document = new DOMParser().parseFromString(streamPageHtml, "text/html");
+export function parseStreamWatchPage(streamWatchPageHtml: string) {
+  const document = new DOMParser().parseFromString(streamWatchPageHtml, "text/html");
   const embedPageUrlCandidate = [
     document.querySelector("#main-player")?.getAttribute("src"),
     document.querySelector(".server-btn.active")?.getAttribute("data-src"),
     document.querySelector(".server-btn")?.getAttribute("data-src"),
   ]
-    .map((value) => value?.trim() ?? "")
+    .map((candidateUrl) => candidateUrl?.trim() ?? "")
     .find(Boolean);
 
   return {
@@ -73,15 +73,15 @@ export function parseStreamPageDetails(streamPageHtml: string) {
 function resolveCategory(
   leagueLabel: string,
   selectedCategory: Category,
-  leagueCategories: readonly StreamCategory[],
+  supportedLeagueCategories: readonly StreamCategory[],
 ): StreamCategory | null {
   if (selectedCategory !== "ALL") {
     return hasLeagueMatch(leagueLabel, selectedCategory) ? selectedCategory : null;
   }
 
-  for (const category of leagueCategories) {
-    if (hasLeagueMatch(leagueLabel, category)) {
-      return category;
+  for (const supportedCategory of supportedLeagueCategories) {
+    if (hasLeagueMatch(leagueLabel, supportedCategory)) {
+      return supportedCategory;
     }
   }
 

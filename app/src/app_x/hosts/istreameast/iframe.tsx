@@ -1,7 +1,7 @@
 import type { ReactElement } from "react";
 import type { IframeParams } from "./types";
 
-export function renderIstreameastDocElement(params: IframeParams): ReactElement {
+export function renderIstreameastPlayerDocument(iframeParams: IframeParams): ReactElement {
   return (
     <html>
       <head>
@@ -22,7 +22,7 @@ export function renderIstreameastDocElement(params: IframeParams): ReactElement 
         <script
           dangerouslySetInnerHTML={{
             __html: `
-              window.fid = ${JSON.stringify(params.fid)};
+              window.fid = ${JSON.stringify(iframeParams.fid)};
               window.v_width = "100%";
               window.v_height = "100%";
             `,

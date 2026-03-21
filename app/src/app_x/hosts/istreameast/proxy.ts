@@ -22,9 +22,9 @@ export async function fetchIstreameastHtml(
   });
 }
 
-export async function fetchProxyText(url: string) {
+export async function fetchIstreameastPageText(targetUrl: string) {
   return fetchTextThroughProxy({
-    url,
+    url: targetUrl,
     localMaxAgeMs: LOCAL_PROXY_CACHE_MAX_AGE_MS,
     remoteMaxAgeMs: REMOTE_PROXY_CACHE_MAX_AGE_MS,
     options: {
