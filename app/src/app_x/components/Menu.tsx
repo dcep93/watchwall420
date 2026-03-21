@@ -11,6 +11,7 @@ export default function Menu(props: {
   onCategoryChange: (value: Category) => void;
   displayLogs: boolean;
   onDisplayLogsChange: (value: boolean) => void;
+  onClearCache: () => void;
 }) {
   return (
     <aside className="menu-column">
@@ -39,6 +40,7 @@ export default function Menu(props: {
         displayLogs={props.displayLogs}
         onCategoryChange={props.onCategoryChange}
         onDisplayLogsChange={props.onDisplayLogsChange}
+        onClearCache={props.onClearCache}
       />
     </aside>
   );

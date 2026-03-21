@@ -119,6 +119,24 @@ export default function WatchwallApp() {
     }
   }
 
+  function handleClearCache() {
+    const url = new URL(window.location.href);
+    url.hash = "";
+    window.history.replaceState(null, "", url);
+
+    setIsAuthorized(IS_DEV);
+    setCategory(DEFAULT_CATEGORY);
+    setStreamsState({
+      category: DEFAULT_CATEGORY,
+      streams: null,
+    });
+    setFocusedSlug("");
+    setDisplayLogs(true);
+    setSelectedSlugs([]);
+    setHasResumedFromHashSelection(true);
+    hasScrolledFromInitialHashRef.current = false;
+  }
+
   if (!isAuthorized) {
     return (
       <PasswordGate
@@ -140,6 +158,7 @@ export default function WatchwallApp() {
         onCategoryChange={setCategory}
         onToggle={handleToggle}
         onDisplayLogsChange={setDisplayLogs}
+        onClearCache={handleClearCache}
       />
       {selectedStreams.length > 0 ? (
         shouldShowResumePrompt ? (

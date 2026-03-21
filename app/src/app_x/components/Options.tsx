@@ -22,7 +22,6 @@ async function clearCache() {
 
   await clearProxyCache().catch(() => undefined);
   localStorage.clear();
-  window.location.replace(window.location.href);
 }
 
 function formatApproximateSize(sizeBytes: number) {
@@ -36,6 +35,7 @@ export default function Options(props: {
   onCategoryChange: (value: Category) => void;
   displayLogs: boolean;
   onDisplayLogsChange: (value: boolean) => void;
+  onClearCache: () => void;
 }) {
   return (
     <section className="menu-card">
@@ -58,7 +58,10 @@ export default function Options(props: {
         <button
           className="secondary-button secondary-button-inline"
           type="button"
-          onClick={clearCache}
+          onClick={async () => {
+            await clearCache();
+            props.onClearCache();
+          }}
         >
           clear cache
         </button>
