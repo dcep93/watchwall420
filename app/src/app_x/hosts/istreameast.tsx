@@ -46,22 +46,11 @@ export const istreameastHost = {
     const rawHtml = await fetchProxyText(streamPageUrl);
     const streamPage = parseStreamPage(rawHtml);
 
-    let embedHtml = "";
-    if (streamPage.embed_page_url) {
-      embedHtml = await fetchProxyText(streamPage.embed_page_url);
-    }
-
-    const nestedIframeUrl = streamPage.embed_page_url
-      ? extractNestedIframeUrl(embedHtml, streamPage.embed_page_url)
+    const playback_url = streamPage.embed_page_url
+      ? await resolvePlayableSourceUrl(streamPage.embed_page_url)
       : "";
-    const nestedIframeHtml = nestedIframeUrl ? await fetchProxyText(nestedIframeUrl) : "";
 
-    const source_url =
-      extractPlayableSource(nestedIframeHtml, nestedIframeUrl) ||
-      extractPlayableSource(embedHtml, streamPage.embed_page_url) ||
-      streamPage.embed_page_url;
-
-    if (!source_url) {
+    if (!playback_url) {
       throw new Error(`Unable to resolve a playable source for "${stream.title}".`);
     }
 
@@ -69,19 +58,18 @@ export const istreameastHost = {
       title: stream.title,
       streamPageUrl,
       embed_page_url: streamPage.embed_page_url,
-      nestedIframeUrl,
-      source_url,
+      playback_url,
     });
 
     return {
-      source_url,
+      playback_url,
       title: streamPage.title || stream.title,
     };
   },
   getIframeDocStrElement(params) {
     return renderIstreameastDocElement(params);
   },
-} satisfies Host<{ source_url: string; title: string }>;
+} satisfies Host<{ playback_url: string; title: string }>;
 
 type EspnScheduleEvent = {
   id: number;
@@ -211,25 +199,6 @@ async function fetchProxyText(url: string) {
   });
 }
 
-function extractNestedIframeUrl(html: string, baseUrl: string) {
-  if (!html || !baseUrl) return "";
-
-  const document = new DOMParser().parseFromString(html, "text/html");
-  const domMatches = Array.from(document.querySelectorAll("iframe"))
-    .map((iframe) => iframe.getAttribute("src")?.trim() ?? "")
-    .filter(Boolean);
-  const rawMatches = matchStrings(html, /<iframe[^>]*src=["']([^"']+)["']/gi);
-
-  for (const candidate of domMatches.concat(rawMatches)) {
-    const resolved = resolveUrl(candidate, baseUrl);
-    if (resolved) {
-      return resolved;
-    }
-  }
-
-  return "";
-}
-
 function extractPlayableSource(html: string, baseUrl: string) {
   if (!html || !baseUrl) return "";
 
@@ -257,6 +226,70 @@ function extractPlayableSource(html: string, baseUrl: string) {
   }
 
   return "";
+}
+
+async function resolvePlayableSourceUrl(
+  initialUrl: string,
+  visited = new Set<string>(),
+  depth = 0,
+): Promise<string> {
+  const normalizedUrl = initialUrl.trim();
+  if (!normalizedUrl || visited.has(normalizedUrl) || depth > 5) {
+    return "";
+  }
+
+  visited.add(normalizedUrl);
+
+  if (isPlayableSourceUrl(normalizedUrl)) {
+    return normalizedUrl;
+  }
+
+  const html = await fetchProxyText(normalizedUrl).catch(() => "");
+  if (!html) {
+    return "";
+  }
+
+  const directSource = extractPlayableSource(html, normalizedUrl);
+  if (directSource) {
+    return directSource;
+  }
+
+  for (const candidateUrl of extractNestedDocumentUrls(html, normalizedUrl)) {
+    const resolved = await resolvePlayableSourceUrl(candidateUrl, visited, depth + 1);
+    if (resolved) {
+      return resolved;
+    }
+  }
+
+  return "";
+}
+
+function extractNestedDocumentUrls(html: string, baseUrl: string) {
+  if (!html || !baseUrl) return [];
+
+  const document = new DOMParser().parseFromString(html, "text/html");
+  const candidates = [
+    ...Array.from(document.querySelectorAll("iframe"))
+      .map((iframe) => iframe.getAttribute("src")?.trim() ?? "")
+      .filter(Boolean),
+    ...Array.from(document.querySelectorAll("[data-src]"))
+      .map((element) => element.getAttribute("data-src")?.trim() ?? "")
+      .filter(Boolean),
+    ...matchStrings(html, /<iframe[^>]*src=["']([^"']+)["']/gi),
+    ...matchStrings(html, /\bdata-src=["']([^"']+)["']/gi),
+    ...matchStrings(html, /\b(?:src|href)\s*[:=]\s*["'](https?:\/\/[^"']+)["']/gi),
+  ];
+
+  const uniqueCandidates = new Set<string>();
+  for (const candidate of candidates) {
+    const resolved = resolveUrl(candidate, baseUrl);
+    if (!resolved || uniqueCandidates.has(resolved) || isPlayableSourceUrl(resolved)) {
+      continue;
+    }
+    uniqueCandidates.add(resolved);
+  }
+
+  return Array.from(uniqueCandidates);
 }
 
 function matchStrings(value: string, pattern: RegExp) {
@@ -543,7 +576,7 @@ function teamNamesMatch(left: string, right: string) {
 }
 
 type IframeParams = {
-  source_url: string;
+  playback_url: string;
   title: string;
 };
 
@@ -590,7 +623,7 @@ function renderIstreameastDocElement(params: IframeParams): ReactElement {
         <video id="player" controls playsInline autoPlay />
         <div id="status">Loading stream...</div>
         <noscript>
-          <a href={params.source_url}>Open stream</a>
+          <a href={params.playback_url}>Open stream</a>
         </noscript>
         <script
           dangerouslySetInnerHTML={{
@@ -603,16 +636,16 @@ function renderIstreameastDocElement(params: IframeParams): ReactElement {
 }
 
 function bootIstreameastPlayer(params: IframeParams) {
-  const sourceUrl = params.source_url;
+  const playbackUrl = params.playback_url;
   const video = document.getElementById("player") as HTMLVideoElement | null;
   const status = document.getElementById("status") as HTMLDivElement | null;
   const HLS_JS_CDN_URL = "https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js";
-  const sourceIsHls = /\.m3u8(?:$|[?#])/i.test(sourceUrl);
+  const sourceIsHls = /\.m3u8(?:$|[?#])/i.test(playbackUrl);
   let hasStartedPlayback = false;
 
   function log(event: string, details: Record<string, unknown> = {}) {
     const payload = {
-      sourceUrl,
+      playbackUrl,
       title: params.title,
       ...details,
     };
@@ -665,7 +698,7 @@ function bootIstreameastPlayer(params: IframeParams) {
   }
 
   function attachSource() {
-    if (!sourceUrl || !video) {
+    if (!playbackUrl || !video) {
       showStatus("Missing stream source.");
       return;
     }
@@ -678,7 +711,7 @@ function bootIstreameastPlayer(params: IframeParams) {
 
       if (video.canPlayType("application/vnd.apple.mpegurl")) {
         log("hls:native");
-        video.src = sourceUrl;
+        video.src = playbackUrl;
         showStatus("Loading stream...");
         attemptPlayback();
         return;
@@ -710,7 +743,7 @@ function bootIstreameastPlayer(params: IframeParams) {
 
         const hls = new HlsConstructor();
         log("hls:created");
-        hls.loadSource(sourceUrl);
+        hls.loadSource(playbackUrl);
         hls.attachMedia(video);
         hls.on(HlsConstructor.Events.MANIFEST_PARSED, function () {
           handlePlaybackReady("hls:manifest-parsed");
@@ -728,7 +761,7 @@ function bootIstreameastPlayer(params: IframeParams) {
     }
 
     log("attach:direct");
-    video.src = sourceUrl;
+    video.src = playbackUrl;
     showStatus("Loading stream...");
     attemptPlayback();
   }
