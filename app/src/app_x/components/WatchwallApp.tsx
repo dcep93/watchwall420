@@ -34,7 +34,7 @@ export default function WatchwallApp() {
     if (!shouldShowResumePrompt) return;
 
     multiscreenRef.current?.scrollIntoView({
-      behavior: "auto",
+      behavior: "smooth",
       block: "start",
       inline: "start",
     });

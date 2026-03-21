@@ -21,7 +21,7 @@ function isUniqueValidSlug(
 }
 
 function writeHash(slugs: StreamSlug[]) {
-  const hash = slugs.join(",");
+  const hash = getHashValue(slugs);
   const url = new URL(window.location.href);
 
   if (hash) {
@@ -33,8 +33,12 @@ function writeHash(slugs: StreamSlug[]) {
   window.history.replaceState(null, "", url);
 }
 
-function haveSameOrder(left: StreamSlug[], right: StreamSlug[]) {
-  return left.length === right.length && left.every((slug, index) => slug === right[index]);
+function getHashValue(slugs: StreamSlug[]) {
+  return slugs.join(",");
+}
+
+function hasCanonicalHash(slugs: StreamSlug[]) {
+  return window.location.hash.replace(/^#/, "") === getHashValue(slugs);
 }
 
 export default function useSelectedStreamIds() {
@@ -53,7 +57,7 @@ export default function useSelectedStreamIds() {
   }, []);
 
   useEffect(() => {
-    if (!haveSameOrder(parseHash(window.location.hash), selectedSlugs)) {
+    if (!hasCanonicalHash(selectedSlugs)) {
       writeHash(selectedSlugs);
     }
   }, [selectedSlugs]);
