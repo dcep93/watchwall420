@@ -415,7 +415,7 @@
   background: transparent;
   color: #f7fbff;
   font-family: "IBM Plex Mono", "SFMono-Regular", monospace;
-  font-size: 1rem;
+  font-size: 0.96rem;
   flex: 1;
   min-height: 0;
   overflow: auto;
@@ -426,7 +426,7 @@
   border-radius: 0;
   background: transparent;
   color: #d3d8e6;
-  font-size: 0.88rem;
+  font-size: 0.85rem;
 }
 
 .watchwall-log {
@@ -444,7 +444,12 @@
   overflow: auto;
   border: 1px solid rgba(255, 255, 255, 0.08);
   padding: 10px;
-  font-size: 0.94rem;
+  font-size: 0.9rem;
+}
+
+.watchwall-log-autoscroller {
+  height: 100%;
+  overflow: auto;
 }
 
 .watchwall-log-top {
@@ -453,6 +458,7 @@
 
 .watchwall-log-bottom {
   height: 34%;
+  font-size: 0.85em;
 }
 
 .watchwall-log-header {
@@ -494,7 +500,7 @@
 .watchwall-log-team-summary-stats {
   margin-top: 0.2em;
   color: #cfd5e6;
-  font-size: 0.8em;
+  font-size: 0.78em;
   overflow-x: auto;
   overflow-y: hidden;
   white-space: nowrap;
@@ -554,7 +560,7 @@
   display: flex;
   gap: 0.75em;
   color: #aab2c7;
-  font-size: 0.84em;
+  font-size: 0.82em;
 }
 
 .watchwall-log-box-score {
@@ -569,10 +575,10 @@
 }
 
 .watchwall-log-player-name {
-  width: 8em;
-  max-width: 8em;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  width: auto;
+  max-width: none;
+  overflow: visible;
+  text-overflow: clip;
 }
 
 .guide-list {

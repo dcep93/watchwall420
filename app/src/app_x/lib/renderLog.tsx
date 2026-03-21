@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, react-refresh/only-export-components */
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import type { Category, Stream } from "../config/types";
+import Autoscroller from "./Autoscroller";
 
 type PlayType = {
   down: string;
@@ -658,31 +659,35 @@ function LogView(props: { log: LogType }) {
         ))}
       </div>
       <div className="watchwall-log-content watchwall-log-bottom">
-        {(props.log.boxScore || []).map((boxScore) => (
-          <div key={boxScore.key} className="watchwall-log-box-score">
-            <div className="watchwall-log-header">{boxScore.key}</div>
-            <table>
-              <thead>
-                <tr>
-                  <th></th>
-                  {boxScore.labels.map((label) => (
-                    <th key={label}>{label}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {(boxScore.players || []).map((player) => (
-                  <tr key={player.name}>
-                    <td className="watchwall-log-player-name">{player.name}</td>
-                    {player.stats.map((stat, index) => (
-                      <td key={`${player.name}-${index}`}>{stat}</td>
+        <Autoscroller className="watchwall-log-autoscroller" speed={0.1}>
+          <>
+            {(props.log.boxScore || []).map((boxScore) => (
+              <div key={boxScore.key} className="watchwall-log-box-score">
+                <div className="watchwall-log-header">{boxScore.key}</div>
+                <table>
+                  <thead>
+                    <tr>
+                      <th></th>
+                      {boxScore.labels.map((label) => (
+                        <th key={label}>{label}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {(boxScore.players || []).map((player) => (
+                      <tr key={player.name}>
+                        <td className="watchwall-log-player-name">{player.name}</td>
+                        {player.stats.map((stat, index) => (
+                          <td key={`${player.name}-${index}`}>{stat}</td>
+                        ))}
+                      </tr>
                     ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        ))}
+                  </tbody>
+                </table>
+              </div>
+            ))}
+          </>
+        </Autoscroller>
       </div>
     </div>
   );
