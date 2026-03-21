@@ -30,7 +30,6 @@ export default function WatchwallApp() {
     !hadHashSelectionOnLoad,
   );
   const multiscreenRef = useRef<HTMLElement | null>(null);
-  const hasScrolledFromInitialHashRef = useRef(false);
 
   useEffect(() => {
     let isActive = true;
@@ -59,25 +58,6 @@ export default function WatchwallApp() {
     !hasResumedFromHashSelection &&
     hadHashSelectionOnLoad &&
     selectedStreams.length > 0;
-  const shouldScrollToMultiscreenOnLoad =
-    hadHashSelectionOnLoad &&
-    selectedStreams.length > 0 &&
-    (shouldShowResumePrompt || IS_DEV);
-
-  useEffect(() => {
-    if (!shouldScrollToMultiscreenOnLoad || hasScrolledFromInitialHashRef.current) {
-      return;
-    }
-
-    multiscreenRef.current?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-      inline: "start",
-    });
-
-    hasScrolledFromInitialHashRef.current = true;
-  }, [shouldScrollToMultiscreenOnLoad]);
-
   useEffect(() => {
     if (!shouldShowResumePrompt) return;
 
@@ -129,7 +109,6 @@ export default function WatchwallApp() {
     setDisplayLogs(true);
     setSelectedSlugs([]);
     setHasResumedFromHashSelection(true);
-    hasScrolledFromInitialHashRef.current = false;
   }
 
   if (!isAuthorized) {

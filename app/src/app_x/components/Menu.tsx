@@ -69,6 +69,9 @@ function StreamToggle(props: {
       role="button"
       tabIndex={0}
       className={`stream-toggle ${props.isSelected ? "is-selected" : ""}`}
+      onMouseDown={(event) => {
+        event.preventDefault();
+      }}
       onClick={handleActivate}
       onKeyDown={(event) => {
         if (event.key === "Enter" || event.key === " ") {

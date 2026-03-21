@@ -19,6 +19,7 @@ export function renderIstreameastPlayerDocument(iframeParams: IframeParams): Rea
       >
         <iframe
           src={iframeParams._2_embedPageUrl}
+          tabIndex={-1}
           frameBorder="0"
           style={{
             overflow: "hidden",
