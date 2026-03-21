@@ -1,10 +1,12 @@
 import { getBaseballLog } from "./baseball";
 import { getBasketballLog } from "./basketball";
 import { getFootballLog } from "./football";
+import { getHockeyLog } from "./hockey";
 import type {
   BaseballLeagueConfig,
   BasketballLeagueConfig,
   FootballLeagueConfig,
+  HockeyLeagueConfig,
   LeagueConfig,
   LogType,
 } from "./types";
@@ -40,6 +42,12 @@ export const leagueConfigs: Record<string, LeagueConfig> = {
     playType: "baseball",
     boxScoreKeys: ["batting", "pitching"],
   },
+  NHL: {
+    sport: "hockey",
+    espnLeague: "nhl",
+    playType: "hockey",
+    boxScoreKeys: ["skaters", "goalies"],
+  },
   NCAAB: {
     sport: "basketball",
     espnLeague: "mens-college-basketball",
@@ -64,6 +72,10 @@ export async function fetchLeagueLog(
     return getBaseballLog(espnId, config);
   }
 
+  if (isHockeyLeagueConfig(config)) {
+    return getHockeyLog(espnId, config);
+  }
+
   return null;
 }
 
@@ -77,4 +89,8 @@ function isBasketballLeagueConfig(config: LeagueConfig): config is BasketballLea
 
 function isBaseballLeagueConfig(config: LeagueConfig): config is BaseballLeagueConfig {
   return config.playType === "baseball";
+}
+
+function isHockeyLeagueConfig(config: LeagueConfig): config is HockeyLeagueConfig {
+  return config.playType === "hockey";
 }

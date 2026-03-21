@@ -29,7 +29,7 @@ export type LogType = {
 export type LeagueConfig = {
   sport: string;
   espnLeague: string;
-  playType: "football" | "basketball" | "baseball";
+  playType: "football" | "basketball" | "baseball" | "hockey";
   boxScoreKeys: readonly string[];
 };
 
@@ -43,4 +43,8 @@ export type BasketballLeagueConfig = LeagueConfig & {
 
 export type BaseballLeagueConfig = LeagueConfig & {
   playType: "baseball";
+};
+
+export type HockeyLeagueConfig = LeagueConfig & {
+  playType: "hockey";
 };

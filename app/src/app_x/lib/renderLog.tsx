@@ -172,6 +172,8 @@ function renderTeamStatistics(statistics: Record<string, string>) {
   const runs = statistics.runs;
   const hits = statistics.hits;
   const errors = statistics.errors;
+  const shots = statistics.shots || statistics.shotsOnGoal;
+  const powerPlays = statistics.powerPlayGoals || statistics.powerPlays;
 
   if (statistics.possessionTime && statistics.totalYards && statistics.totalOffensivePlays) {
     return renderStatRows([
@@ -198,6 +200,15 @@ function renderTeamStatistics(statistics: Record<string, string>) {
       ["H", hits],
       ["E", errors],
       ["LOB", statistics.leftOnBase || ""],
+    ]);
+  }
+
+  if (shots && statistics.hits && statistics.penaltyMinutes) {
+    return renderStatRows([
+      ["SOG", shots],
+      ["HIT", statistics.hits],
+      ["PIM", statistics.penaltyMinutes],
+      ["PP", powerPlays || ""],
     ]);
   }
 
