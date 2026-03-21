@@ -55,8 +55,7 @@ function StreamToggle(props: {
   function handleActivate(event: { metaKey?: boolean; preventDefault?: () => void }) {
     if (event.metaKey) {
       event.preventDefault?.();
-      const url = new URL(props.rawUrl, "https://istreameast.is").toString();
-      window.open(url, "_blank", "noopener,noreferrer");
+      window.open(props.rawUrl, "_blank", "noopener,noreferrer");
       return;
     }
 

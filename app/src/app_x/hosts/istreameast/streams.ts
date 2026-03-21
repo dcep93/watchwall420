@@ -93,7 +93,7 @@ function hasLeagueMatch(leagueLabel: string, category: StreamCategory) {
 function getRawUrl(eventCard: Element) {
   const onclick = eventCard.getAttribute("onclick") ?? "";
   const match = onclick.match(/window\.location\.href='([^']+)'/);
-  return match?.[1]?.trim() ?? "";
+  return resolveUrl(match?.[1]?.trim() ?? "", ISTREAMEAST_URL);
 }
 
 function hasRelevantStatus(eventCard: Element) {
