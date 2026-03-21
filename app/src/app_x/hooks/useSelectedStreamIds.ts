@@ -42,10 +42,8 @@ function hasCanonicalHash(slugs: StreamSlug[]) {
 }
 
 export default function useSelectedStreamIds() {
-  const [initialHash] = useState(() => window.location.hash);
-  const [selectedSlugs, setSelectedSlugs] = useState<StreamSlug[]>(() =>
-    parseHash(initialHash),
-  );
+  const [initialSelectedSlugs] = useState<StreamSlug[]>(() => parseHash(window.location.hash));
+  const [selectedSlugs, setSelectedSlugs] = useState<StreamSlug[]>(initialSelectedSlugs);
 
   useEffect(() => {
     const onHashChange = () => {
@@ -68,7 +66,7 @@ export default function useSelectedStreamIds() {
   );
 
   return {
-    hadHashSelectionOnLoad: parseHash(initialHash).length > 0,
+    hadHashSelectionOnLoad: initialSelectedSlugs.length > 0,
     selectedSlugs,
     selectedStreams,
     setSelectedSlugs,

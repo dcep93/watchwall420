@@ -8,6 +8,7 @@ import { STREAMS } from "../config/data";
 import type { StreamSlug } from "../config/types";
 
 const IS_DEV = import.meta.env.DEV;
+const DEFAULT_FOCUSED_SLUG = STREAMS[0]?.slug ?? "";
 
 function removeSlug(slugs: StreamSlug[], streamSlug: StreamSlug) {
   return slugs.filter((slug) => slug !== streamSlug);
@@ -15,7 +16,7 @@ function removeSlug(slugs: StreamSlug[], streamSlug: StreamSlug) {
 
 export default function WatchwallApp() {
   const [isAuthorized, setIsAuthorized] = useState(() => (IS_DEV ? true : getInitialAuthorized()));
-  const [focusedSlug, setFocusedSlug] = useState(STREAMS[0]?.slug ?? "");
+  const [focusedSlug, setFocusedSlug] = useState(DEFAULT_FOCUSED_SLUG);
   const [displayLogs, setDisplayLogs] = useState(true);
   const { hadHashSelectionOnLoad, selectedSlugs, selectedStreams, setSelectedSlugs } =
     useSelectedStreamIds();
@@ -45,7 +46,9 @@ export default function WatchwallApp() {
       block: "start",
       inline: "start",
     });
+  }, [shouldScrollToMultiscreenOnLoad]);
 
+  useEffect(() => {
     if (!shouldShowResumePrompt) return;
 
     const resume = () => setHasResumedFromHashSelection(true);
@@ -57,7 +60,15 @@ export default function WatchwallApp() {
       window.removeEventListener("keydown", resume);
       window.removeEventListener("click", resume);
     };
-  }, [shouldScrollToMultiscreenOnLoad, shouldShowResumePrompt]);
+  }, [shouldShowResumePrompt]);
+
+  useEffect(() => {
+    if (selectedStreams.length > 0 && resolvedFocusedSlug) {
+      return;
+    }
+
+    setFocusedSlug(selectedStreams[0]?.slug ?? DEFAULT_FOCUSED_SLUG);
+  }, [resolvedFocusedSlug, selectedStreams]);
 
   function handleToggle(streamSlug: StreamSlug) {
     if (selectedSlugs.includes(streamSlug)) {

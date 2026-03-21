@@ -100,7 +100,7 @@ function ScreenTitleBar(props: {
   const content = <span className="screen-letter">{props.label}</span>;
 
   if (!props.onClick) {
-    return <span className={props.className}>{content}</span>;
+    return <div className={props.className}>{content}</div>;
   }
 
   return (
@@ -123,9 +123,9 @@ function ScreenContent(props: {
 }) {
   if (!props.onClick) {
     return (
-      <span className={props.className}>
-        <span className="screen-focus-label">{props.content}</span>
-      </span>
+      <div className={props.className}>
+        <div className="screen-focus-label">{props.content}</div>
+      </div>
     );
   }
 
@@ -136,7 +136,7 @@ function ScreenContent(props: {
       aria-label={`Focus screen ${props.label}`}
       onClick={props.onClick}
     >
-      <span className="screen-focus-label">{props.content}</span>
+      <div className="screen-focus-label">{props.content}</div>
     </button>
   );
 }

@@ -32,6 +32,11 @@ export async function fetchTextThroughProxy(args: ProxyFetchTextArgs) {
       options: args.options,
     }),
   });
+
+  if (!response.ok) {
+    throw new Error(`Proxy request failed with status ${response.status}.`);
+  }
+
   const text = await response.text();
 
   await putCachedText(cacheKey, text, args.ttlMs ?? null).catch(() => undefined);
@@ -130,9 +135,22 @@ async function withStore<T>(
   return new Promise<T>((resolve, reject) => {
     const transaction = db.transaction(CACHE_STORE_NAME, mode);
     const store = transaction.objectStore(CACHE_STORE_NAME);
+    let didFinish = false;
 
-    action(store).then(resolve).catch(reject);
-    transaction.onerror = () => reject(transaction.error);
+    const finish = (callback: () => void) => {
+      if (didFinish) return;
+      didFinish = true;
+      db.close();
+      callback();
+    };
+
+    action(store)
+      .then((result) => finish(() => resolve(result)))
+      .catch((error) => finish(() => reject(error)));
+    transaction.onerror = () =>
+      finish(() => reject(transaction.error ?? new Error("IndexedDB transaction failed.")));
+    transaction.onabort = () =>
+      finish(() => reject(transaction.error ?? new Error("IndexedDB transaction aborted.")));
   });
 }
 

@@ -12,8 +12,8 @@ const WATCHWALL_USER_AGENT =
 export default function Menu(props: {
   selectedSlugs: StreamSlug[];
   onToggle: (streamSlug: StreamSlug) => void;
-  displayLogs?: boolean;
-  onDisplayLogsChange?: (value: boolean) => void;
+  displayLogs: boolean;
+  onDisplayLogsChange: (value: boolean) => void;
 }) {
   return (
     <aside className="menu-column">
@@ -38,8 +38,8 @@ export default function Menu(props: {
 
       <Guide />
       <Options
-        displayLogs={props.displayLogs ?? true}
-        onDisplayLogsChange={props.onDisplayLogsChange ?? (() => undefined)}
+        displayLogs={props.displayLogs}
+        onDisplayLogsChange={props.onDisplayLogsChange}
       />
     </aside>
   );
