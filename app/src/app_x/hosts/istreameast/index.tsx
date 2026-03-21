@@ -12,7 +12,7 @@ function getSupportedIstreameastCategories() {
 }
 
 export const istreameastHost: Host<IframeParams> = {
-  getLeagueCategories: getSupportedIstreameastCategories,
+    getLeagueCategories: getSupportedIstreameastCategories,
   async getStreams(category) {
     const streamListHtml = await fetchIstreameastHtml();
     const supportedCategories = getSupportedIstreameastCategories();
