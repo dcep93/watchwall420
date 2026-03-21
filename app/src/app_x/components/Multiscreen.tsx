@@ -1,8 +1,10 @@
 import type { Ref } from "react";
-import type { Stream, StreamSlug } from "../config/types";
+import type { Host, Stream, StreamSlug } from "../config/types";
+import { renderLog } from "../lib/renderStream";
 
 export default function Multiscreen(props: {
   containerRef?: Ref<HTMLElement>;
+  host: Host;
   streams: Stream[];
   displayLogs: boolean;
   focusedSlug?: StreamSlug;
@@ -12,6 +14,12 @@ export default function Multiscreen(props: {
   const focusedStream =
     props.streams.find((stream) => stream.slug === props.focusedSlug) ?? props.streams[0];
   const secondaryStreams = props.streams.filter((stream) => stream.slug !== focusedStream?.slug);
+  const spotlightBodyClassName = [
+    "screen-spotlight-body",
+    props.displayLogs ? "" : "screen-spotlight-body-no-log",
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <section ref={props.containerRef} className="multiscreen-column">
@@ -31,11 +39,16 @@ export default function Multiscreen(props: {
             label={focusedStream.title}
             onClick={() => props.onRemove(focusedStream.slug)}
           />
-          <div className="screen-spotlight-body screen-spotlight-body-no-log">
+          <div className={spotlightBodyClassName}>
+            {props.displayLogs ? (
+              <div className="log-panel log-panel-spotlight">
+                <div className="log-entry">{renderLog(focusedStream)}</div>
+              </div>
+            ) : null}
             <ScreenContent
+              host={props.host}
               className="screen-focus screen-focus-spotlight"
-              label={focusedStream.title}
-              renderContent={focusedStream.renderContent}
+              stream={focusedStream}
             />
           </div>
         </article>
@@ -45,9 +58,9 @@ export default function Multiscreen(props: {
         <div className="screen-strip">
           {secondaryStreams.map((stream) => (
             <SecondaryScreenCard
+              host={props.host}
               key={stream.slug}
-              renderContent={stream.renderContent}
-              label={stream.title}
+              stream={stream}
               onFocus={() => props.onFocus(stream.slug)}
               onRemove={() => props.onRemove(stream.slug)}
             />
@@ -59,8 +72,8 @@ export default function Multiscreen(props: {
 }
 
 function SecondaryScreenCard(props: {
-  label: string;
-  renderContent: string;
+  host: Host;
+  stream: Stream;
   onFocus: () => void;
   onRemove: () => void;
 }) {
@@ -68,13 +81,13 @@ function SecondaryScreenCard(props: {
     <article className="screen-card screen-card-secondary">
       <ScreenTitleBar
         className="spotlight-title-bar spotlight-title-bar-secondary"
-        label={props.label}
+        label={props.stream.title}
         onClick={props.onRemove}
       />
       <ScreenContent
+        host={props.host}
         className="screen-focus screen-focus-secondary"
-        label={props.label}
-        renderContent={props.renderContent}
+        stream={props.stream}
         onClick={props.onFocus}
       />
     </article>
@@ -105,33 +118,31 @@ function ScreenTitleBar(props: {
 }
 
 function ScreenContent(props: {
-  label: string;
-  renderContent: string;
+  host: Host;
+  stream: Stream;
   className: string;
   onClick?: () => void;
 }) {
+  const iframe = (
+    <iframe
+      className="screen-iframe"
+      title={props.stream.title}
+      srcDoc={props.host.getIframeDocStr(props.stream)}
+    />
+  );
+
   if (!props.onClick) {
-    return (
-      <div className={props.className}>
-        <div
-          className="screen-focus-label"
-          dangerouslySetInnerHTML={{ __html: props.renderContent }}
-        />
-      </div>
-    );
+    return <div className={props.className}>{iframe}</div>;
   }
 
   return (
     <button
       type="button"
       className={props.className}
-      aria-label={`Focus screen ${props.label}`}
+      aria-label={`Focus screen ${props.stream.title}`}
       onClick={props.onClick}
     >
-      <div
-        className="screen-focus-label"
-        dangerouslySetInnerHTML={{ __html: props.renderContent }}
-      />
+      {iframe}
     </button>
   );
 }

@@ -2,10 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import PasswordGate from "./PasswordGate";
 import Menu from "./Menu";
 import Multiscreen from "./Multiscreen";
+import { DEFAULT_CATEGORY } from "./Options";
 import { getInitialAuthorized, unlock } from "../lib/auth";
 import useSelectedStreamIds from "../hooks/useSelectedStreamIds";
 import { HOST } from "../config/data";
-import type { Stream, StreamSlug } from "../config/types";
+import type { Category, Stream, StreamSlug } from "../config/types";
 
 const IS_DEV = import.meta.env.DEV;
 
@@ -15,6 +16,7 @@ function removeSlug(slugs: StreamSlug[], streamSlug: StreamSlug) {
 
 export default function WatchwallApp() {
   const [isAuthorized, setIsAuthorized] = useState(() => (IS_DEV ? true : getInitialAuthorized()));
+  const [category, setCategory] = useState<Category>(DEFAULT_CATEGORY);
   const [streams, setStreams] = useState<Stream[]>([]);
   const [focusedSlug, setFocusedSlug] = useState<StreamSlug>("");
   const [displayLogs, setDisplayLogs] = useState(true);
@@ -28,7 +30,7 @@ export default function WatchwallApp() {
   useEffect(() => {
     let isActive = true;
 
-    HOST.getStreams()
+    HOST.getStreams(category)
       .then((nextStreams) => {
         if (!isActive) return;
         setStreams(nextStreams);
@@ -42,7 +44,7 @@ export default function WatchwallApp() {
     return () => {
       isActive = false;
     };
-  }, []);
+  }, [category]);
 
   const resolvedFocusedSlug =
     selectedStreams.find((stream) => stream.slug === focusedSlug)?.slug ?? selectedStreams[0]?.slug;
@@ -127,9 +129,11 @@ export default function WatchwallApp() {
   return (
     <main className="watchwall-shell">
       <Menu
+        category={category}
         displayLogs={displayLogs}
         streams={streams}
         selectedSlugs={selectedSlugs}
+        onCategoryChange={setCategory}
         onToggle={handleToggle}
         onDisplayLogsChange={setDisplayLogs}
       />
@@ -143,6 +147,7 @@ export default function WatchwallApp() {
         ) : (
           <Multiscreen
             containerRef={multiscreenRef}
+            host={HOST}
             streams={selectedStreams}
             displayLogs={displayLogs}
             focusedSlug={resolvedFocusedSlug}
