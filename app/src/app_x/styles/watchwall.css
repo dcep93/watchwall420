@@ -313,7 +313,6 @@
 
 .screen-focus {
   flex: 1;
-  cursor: pointer;
   display: block;
   padding: 0;
   min-width: 0;
@@ -376,6 +375,7 @@
 
 .screen-card-secondary .screen-focus-secondary {
   flex: 1;
+  cursor: pointer;
 }
 
 .screen-card-secondary .screen-iframe {
