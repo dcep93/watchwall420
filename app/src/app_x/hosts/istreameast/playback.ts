@@ -1,16 +1,20 @@
 import { fetchProxyText } from "./proxy";
-import { matchStrings, isPlayableSourceUrl, resolveUrl } from "./utils";
+import { isPlayableSourceUrl, matchStrings, resolveUrl } from "./utils";
 
 const MAX_DOCUMENT_HOPS = 5;
 
-export async function resolvePlayableSourceUrl(initialUrl: string): Promise<string> {
+export async function resolvePlayableSourceUrl(
+  initialUrl: string,
+): Promise<string> {
   const normalizedUrl = initialUrl.trim();
   if (!normalizedUrl) {
     return "";
   }
 
   const seenUrls = new Set<string>();
-  const pendingUrls: Array<{ url: string; hops: number }> = [{ url: normalizedUrl, hops: 0 }];
+  const pendingUrls: Array<{ url: string; hops: number }> = [
+    { url: normalizedUrl, hops: 0 },
+  ];
 
   while (pendingUrls.length > 0) {
     const nextCandidate = pendingUrls.shift();
@@ -30,6 +34,7 @@ export async function resolvePlayableSourceUrl(initialUrl: string): Promise<stri
     }
 
     const html = await fetchProxyText(url).catch(() => "");
+    console.log({ hops, url, html });
     if (!html) {
       continue;
     }
@@ -93,13 +98,20 @@ function extractNestedDocumentUrls(html: string, baseUrl: string) {
       .filter(Boolean),
     ...matchStrings(html, /<iframe[^>]*src=["']([^"']+)["']/gi),
     ...matchStrings(html, /\bdata-src=["']([^"']+)["']/gi),
-    ...matchStrings(html, /\b(?:src|href)\s*[:=]\s*["'](https?:\/\/[^"']+)["']/gi),
+    ...matchStrings(
+      html,
+      /\b(?:src|href)\s*[:=]\s*["'](https?:\/\/[^"']+)["']/gi,
+    ),
   ];
 
   const uniqueCandidates = new Set<string>();
   for (const candidate of candidates) {
     const resolved = resolveUrl(candidate, baseUrl);
-    if (!resolved || uniqueCandidates.has(resolved) || isPlayableSourceUrl(resolved)) {
+    if (
+      !resolved ||
+      uniqueCandidates.has(resolved) ||
+      isPlayableSourceUrl(resolved)
+    ) {
       continue;
     }
     uniqueCandidates.add(resolved);
