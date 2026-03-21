@@ -40,9 +40,19 @@ export const istreameastHost: Host<IframeParams> = {
       _3_iframeSourcePageUrl: "",
     };
 
-    const resolvedPlayback = watchPage.embedPageUrl
-      ? await resolveEmbedPlayback(watchPage.embedPageUrl)
-      : { fid: "", iframeSourcePageUrl: "" };
+    if (!iframeParams._2_embedPageUrl) {
+      throw new Error(
+        `Unable to resolve an embed page URL for "${stream.title}".\n${JSON.stringify(
+          {
+            iframeParams,
+          },
+          null,
+          2,
+        )}`,
+      );
+    }
+
+    const resolvedPlayback = await resolveEmbedPlayback(iframeParams._2_embedPageUrl);
 
     iframeParams._4_fid = resolvedPlayback.fid;
     iframeParams._3_iframeSourcePageUrl = resolvedPlayback.iframeSourcePageUrl;
