@@ -17,9 +17,16 @@ function removeSlug(slugs: StreamSlug[], streamSlug: StreamSlug) {
 export default function WatchwallApp() {
   const [isAuthorized, setIsAuthorized] = useState(() => (IS_DEV ? true : getInitialAuthorized()));
   const [category, setCategory] = useState<Category>(DEFAULT_CATEGORY);
-  const [streams, setStreams] = useState<Stream[] | null>(null);
+  const [streamsState, setStreamsState] = useState<{
+    category: Category;
+    streams: Stream[] | null;
+  }>({
+    category: DEFAULT_CATEGORY,
+    streams: null,
+  });
   const [focusedSlug, setFocusedSlug] = useState<StreamSlug>("");
   const [displayLogs, setDisplayLogs] = useState(true);
+  const streams = streamsState.category === category ? streamsState.streams : null;
   const { hadHashSelectionOnLoad, selectedSlugs, selectedStreams, setSelectedSlugs } =
     useSelectedStreamIds(streams);
   const [hasResumedFromHashSelection, setHasResumedFromHashSelection] = useState(
@@ -29,17 +36,16 @@ export default function WatchwallApp() {
 
   useEffect(() => {
     let isActive = true;
-    setStreams(null);
 
     HOST.getStreams(category)
       .then((nextStreams) => {
         if (!isActive) return;
-        setStreams(nextStreams);
+        setStreamsState({ category, streams: nextStreams });
       })
       .catch((error) => {
         console.error(error);
         if (!isActive) return;
-        setStreams([]);
+        setStreamsState({ category, streams: [] });
       });
 
     return () => {
@@ -83,14 +89,6 @@ export default function WatchwallApp() {
       window.removeEventListener("click", resume);
     };
   }, [shouldShowResumePrompt]);
-
-  useEffect(() => {
-    if (selectedStreams.length > 0 && resolvedFocusedSlug) {
-      return;
-    }
-
-    setFocusedSlug(selectedStreams[0]?.slug ?? "");
-  }, [resolvedFocusedSlug, selectedStreams]);
 
   function handleToggle(streamSlug: StreamSlug) {
     if (selectedSlugs.includes(streamSlug)) {

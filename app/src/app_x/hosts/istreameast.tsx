@@ -7,6 +7,8 @@ const LOCAL_PROXY_CACHE_MAX_AGE_MS = 24 * 60 * 60 * 1000;
 const REMOTE_PROXY_CACHE_MAX_AGE_MS = 5 * 60 * 1000;
 const UPCOMING_WINDOW_SECONDS = 60 * 60;
 const LIVE_WINDOW_SECONDS = 10_600;
+const HLS_JS_CDN_URL = "https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js";
+const STREAM_SOURCE_PATTERN = /\.(?:m3u8|mp4)(?:$|[?#])/i;
 const WATCHWALL_USER_AGENT =
   "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36";
 
@@ -32,6 +34,10 @@ export const istreameastHost = {
     return parseStreamsFromHtml(html, category);
   },
   async getIframeParams(stream) {
+    if (!stream.raw_url) {
+      throw new Error(`Missing raw stream URL for "${stream.title}".`);
+    }
+
     const streamPageUrl = new URL(stream.raw_url, ISTREAMEAST_URL).toString();
     const rawHtml = await fetchProxyText(streamPageUrl);
     const streamPage = parseStreamPage(rawHtml);
@@ -51,6 +57,10 @@ export const istreameastHost = {
       extractPlayableSource(embedHtml, streamPage.embed_page_url) ||
       streamPage.embed_page_url;
 
+    if (!source_url) {
+      throw new Error(`Unable to resolve a playable source for "${stream.title}".`);
+    }
+
     console.log("istreameast:getIframeParams", {
       title: stream.title,
       streamPageUrl,
@@ -61,7 +71,7 @@ export const istreameastHost = {
 
     return {
       source_url,
-      title: streamPage.title,
+      title: streamPage.title || stream.title,
     };
   },
   getIframeDocStrElement(params) {
@@ -72,6 +82,7 @@ export const istreameastHost = {
 function parseStreamsFromHtml(html: string, category: Category): Stream[] {
   const document = new DOMParser().parseFromString(html, "text/html");
   const leaguePattern = new RegExp(`\\b${escapeForRegex(category)}\\b`);
+  const seenRawUrls = new Set<string>();
 
   return Array.from(document.querySelectorAll(".events-list .event-card"))
     .map((eventCard) => {
@@ -93,15 +104,16 @@ function parseStreamsFromHtml(html: string, category: Category): Stream[] {
 
       const title = titleElement.textContent?.trim() ?? "";
       const rawUrl = getRawUrl(eventCard);
-      if (!title) {
+      if (!title || !rawUrl || seenRawUrls.has(rawUrl)) {
         return null;
       }
+      seenRawUrls.add(rawUrl);
 
       return {
         espn_id: -1,
         raw_url: rawUrl,
         title,
-        slug: (title.split(" vs ").at(-1)?.trim() ?? title).replaceAll(" ", ""),
+        slug: buildStreamSlug(title, rawUrl),
       } satisfies Stream;
     })
     .filter((stream): stream is Stream => stream !== null);
@@ -114,7 +126,7 @@ function escapeForRegex(value: string) {
 function getRawUrl(eventCard: Element) {
   const onclick = eventCard.getAttribute("onclick") ?? "";
   const match = onclick.match(/window\.location\.href='([^']+)'/);
-  return match?.[1] ?? "";
+  return match?.[1]?.trim() ?? "";
 }
 
 function hasRelevantStatus(eventCard: Element) {
@@ -140,18 +152,20 @@ function hasRelevantStatus(eventCard: Element) {
 
 function parseStreamPage(rawHtml: string) {
   const document = new DOMParser().parseFromString(rawHtml, "text/html");
-  const embed_page_url =
-    document.querySelector("#main-player")?.getAttribute("src") ??
-    document.querySelector(".server-btn.active")?.getAttribute("data-src") ??
-    document.querySelector(".server-btn")?.getAttribute("data-src") ??
-    "";
+  const embed_page_url = [
+    document.querySelector("#main-player")?.getAttribute("src"),
+    document.querySelector(".server-btn.active")?.getAttribute("data-src"),
+    document.querySelector(".server-btn")?.getAttribute("data-src"),
+  ]
+    .map((value) => value?.trim() ?? "")
+    .find(Boolean);
   const title =
     document.querySelector(".hero-title")?.textContent?.trim() ??
     document.title ??
     "Streameast Stream";
 
   return {
-    embed_page_url: embed_page_url ? new URL(embed_page_url, ISTREAMEAST_URL).toString() : "",
+    embed_page_url: resolveUrl(embed_page_url ?? "", ISTREAMEAST_URL),
     title,
   };
 }
@@ -171,30 +185,89 @@ async function fetchProxyText(url: string) {
 }
 
 function extractNestedIframeUrl(html: string, baseUrl: string) {
+  if (!html || !baseUrl) return "";
+
   const document = new DOMParser().parseFromString(html, "text/html");
-  const src =
-    document.querySelector("iframe")?.getAttribute("src") ??
-    matchString(html, /<iframe[^>]*src=["']([^"']+)["']/i);
-  return src ? new URL(src, baseUrl).toString() : "";
-}
+  const domMatches = Array.from(document.querySelectorAll("iframe"))
+    .map((iframe) => iframe.getAttribute("src")?.trim() ?? "")
+    .filter(Boolean);
+  const rawMatches = matchStrings(html, /<iframe[^>]*src=["']([^"']+)["']/gi);
 
-function extractPlayableSource(html: string, baseUrl: string) {
-  if (!html) return "";
-
-  const directMatch =
-    matchString(html, /(https?:\/\/[^"'\\\s]+?\.(?:m3u8|mp4)(?:[^"'\\\s]*)?)/i) ||
-    matchString(html, /["'](?:file|source|src)["']\s*[:=]\s*["']([^"']+\.(?:m3u8|mp4)[^"']*)["']/i) ||
-    matchString(html, /\b(?:file|source|src)\b\s*:\s*["']([^"']+\.(?:m3u8|mp4)[^"']*)["']/i);
-
-  if (directMatch) {
-    return new URL(directMatch, baseUrl).toString();
+  for (const candidate of domMatches.concat(rawMatches)) {
+    const resolved = resolveUrl(candidate, baseUrl);
+    if (resolved) {
+      return resolved;
+    }
   }
 
   return "";
 }
 
-function matchString(value: string, pattern: RegExp) {
-  return value.match(pattern)?.[1] ?? "";
+function extractPlayableSource(html: string, baseUrl: string) {
+  if (!html || !baseUrl) return "";
+
+  const normalizedHtml = html.replaceAll("\\/", "/");
+  const candidates = [
+    ...matchStrings(
+      normalizedHtml,
+      /(https?:\/\/[^"'\\\s]+?\.(?:m3u8|mp4)(?:[^"'\\\s]*)?)/gi,
+    ),
+    ...matchStrings(
+      normalizedHtml,
+      /["'](?:file|source|src)["']\s*[:=]\s*["']([^"']+\.(?:m3u8|mp4)[^"']*)["']/gi,
+    ),
+    ...matchStrings(
+      normalizedHtml,
+      /\b(?:file|source|src)\b\s*:\s*["']([^"']+\.(?:m3u8|mp4)[^"']*)["']/gi,
+    ),
+  ];
+
+  for (const candidate of candidates) {
+    const resolved = resolveUrl(candidate, baseUrl);
+    if (resolved && isPlayableSourceUrl(resolved)) {
+      return resolved;
+    }
+  }
+
+  return "";
+}
+
+function matchStrings(value: string, pattern: RegExp) {
+  return Array.from(value.matchAll(pattern), (match) => match[1]?.trim() ?? "").filter(Boolean);
+}
+
+function resolveUrl(candidate: string, baseUrl: string) {
+  if (!candidate) return "";
+
+  try {
+    const url = new URL(candidate, baseUrl);
+    if (url.protocol !== "http:" && url.protocol !== "https:") {
+      return "";
+    }
+    return url.toString();
+  } catch {
+    return "";
+  }
+}
+
+function isPlayableSourceUrl(value: string) {
+  return STREAM_SOURCE_PATTERN.test(new URL(value).pathname + new URL(value).search);
+}
+
+function buildStreamSlug(title: string, rawUrl: string) {
+  const normalizedTitle = title
+    .toLowerCase()
+    .split(" vs ")
+    .at(-1)
+    ?.trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+  if (normalizedTitle) {
+    return normalizedTitle;
+  }
+
+  return rawUrl.replace(/[^a-z0-9]+/gi, "-").replace(/^-+|-+$/g, "").toLowerCase();
 }
 
 type IframeParams = {
@@ -261,6 +334,8 @@ function bootIstreameastPlayer(params: IframeParams) {
   const sourceUrl = params.source_url;
   const video = document.getElementById("player") as HTMLVideoElement | null;
   const status = document.getElementById("status") as HTMLDivElement | null;
+  const sourceIsHls = isHlsSource(sourceUrl);
+  let hasStartedPlayback = false;
 
   function log(event: string, details: Record<string, unknown> = {}) {
     const payload = {
@@ -293,25 +368,51 @@ function bootIstreameastPlayer(params: IframeParams) {
     status.style.display = "none";
   }
 
+  function attemptPlayback() {
+    if (!video) return;
+    const playResult = video.play();
+    if (playResult && typeof playResult.catch === "function") {
+      playResult.catch((error: unknown) => {
+        log("video:play-rejected", {
+          error: error instanceof Error ? error.message : String(error),
+        });
+        showStatus("Press play to start the stream.");
+      });
+    }
+  }
+
+  function handlePlaybackReady(event: string) {
+    hasStartedPlayback = true;
+    log(event, {
+      currentSrc: video?.currentSrc,
+      readyState: video?.readyState,
+    });
+    hideStatus();
+    attemptPlayback();
+  }
+
   function attachSource() {
     if (!sourceUrl || !video) {
       showStatus("Missing stream source.");
       return;
     }
 
-    if (sourceUrl.includes(".m3u8")) {
+    video.crossOrigin = "anonymous";
+    video.preload = "auto";
+
+    if (sourceIsHls) {
       log("attach:hls");
 
       if (video.canPlayType("application/vnd.apple.mpegurl")) {
         log("hls:native");
         video.src = sourceUrl;
-        hideStatus();
+        showStatus("Loading stream...");
+        attemptPlayback();
         return;
       }
 
-      const script = document.createElement("script");
-      script.src = "https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js";
-      script.onload = function () {
+      loadHlsScript(log)
+        .then(() => {
         const HlsConstructor = (window as Window & {
           Hls?: {
             new (): {
@@ -339,25 +440,24 @@ function bootIstreameastPlayer(params: IframeParams) {
         hls.loadSource(sourceUrl);
         hls.attachMedia(video);
         hls.on(HlsConstructor.Events.MANIFEST_PARSED, function () {
-          log("hls:manifest-parsed");
-          hideStatus();
+          handlePlaybackReady("hls:manifest-parsed");
         });
         hls.on(HlsConstructor.Events.ERROR, function (_event, data) {
           log("hls:error", { data });
           showStatus("Unable to load stream.");
         });
-      };
-      script.onerror = function () {
-        log("hls:script-error");
-        showStatus("Unable to load player library.");
-      };
-      document.head.appendChild(script);
+      })
+        .catch(() => {
+          log("hls:script-error");
+          showStatus("Unable to load player library.");
+        });
       return;
     }
 
     log("attach:direct");
     video.src = sourceUrl;
-    hideStatus();
+    showStatus("Loading stream...");
+    attemptPlayback();
   }
 
   if (!video) {
@@ -383,10 +483,23 @@ function bootIstreameastPlayer(params: IframeParams) {
   });
 
   video.addEventListener("canplay", function () {
-    log("video:canplay", {
-      currentSrc: video.currentSrc,
-      readyState: video.readyState,
-    });
+    handlePlaybackReady("video:canplay");
+  });
+
+  video.addEventListener("playing", function () {
+    handlePlaybackReady("video:playing");
+  });
+
+  video.addEventListener("waiting", function () {
+    if (!hasStartedPlayback) {
+      showStatus("Loading stream...");
+      return;
+    }
+    showStatus("Buffering stream...");
+  });
+
+  video.addEventListener("stalled", function () {
+    showStatus("Stream stalled. Retrying...");
   });
 
   video.addEventListener("error", function () {
@@ -403,4 +516,53 @@ function bootIstreameastPlayer(params: IframeParams) {
 
   log("init");
   attachSource();
+}
+
+function isHlsSource(value: string) {
+  return /\.m3u8(?:$|[?#])/i.test(value);
+}
+
+function loadHlsScript(log: (event: string, details?: Record<string, unknown>) => void) {
+  const windowWithHls = window as Window & {
+    Hls?: unknown;
+    __watchwallHlsScriptPromise__?: Promise<void>;
+  };
+
+  if (windowWithHls.Hls) {
+    return Promise.resolve();
+  }
+
+  if (windowWithHls.__watchwallHlsScriptPromise__) {
+    return windowWithHls.__watchwallHlsScriptPromise__;
+  }
+
+  windowWithHls.__watchwallHlsScriptPromise__ = new Promise<void>((resolve, reject) => {
+    const existingScript = document.querySelector<HTMLScriptElement>(
+      `script[data-watchwall-hls="true"]`,
+    );
+
+    if (existingScript) {
+      existingScript.addEventListener("load", () => resolve(), { once: true });
+      existingScript.addEventListener("error", () => reject(new Error("HLS script failed.")), {
+        once: true,
+      });
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = HLS_JS_CDN_URL;
+    script.async = true;
+    script.dataset.watchwallHls = "true";
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error("HLS script failed."));
+    document.head.appendChild(script);
+  }).catch((error) => {
+    delete windowWithHls.__watchwallHlsScriptPromise__;
+    log("hls:script-load-failed", {
+      error: error instanceof Error ? error.message : String(error),
+    });
+    throw error;
+  });
+
+  return windowWithHls.__watchwallHlsScriptPromise__;
 }

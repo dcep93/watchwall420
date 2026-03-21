@@ -3,6 +3,8 @@ import ReactDomServer from "react-dom/server";
 import type { Host, Stream, StreamSlug } from "../config/types";
 import renderLog from "../lib/renderLog";
 
+type ScreenState = "idle" | "loading" | "ready" | "error";
+
 export default function Multiscreen<T>(props: {
   containerRef?: Ref<HTMLElement>;
   host: Host<T>;
@@ -12,22 +14,23 @@ export default function Multiscreen<T>(props: {
   onRemove: (streamSlug: StreamSlug) => void;
   onFocus: (streamSlug: StreamSlug) => void;
 }) {
+  const { containerRef, displayLogs, focusedSlug, host, onFocus, onRemove, streams } = props;
   const focusedStream =
-    props.streams.find((stream) => stream.slug === props.focusedSlug) ?? props.streams[0];
+    streams.find((stream) => stream.slug === focusedSlug) ?? streams[0];
 
   return (
-    <section ref={props.containerRef} className="multiscreen-column">
+    <section ref={containerRef} className="multiscreen-column">
       <div className="screen-layout">
-        {props.streams.map((stream) => (
+        {streams.map((stream) => (
           <ScreenCard
             key={stream.slug}
-            host={props.host}
+            host={host}
             stream={stream}
-            displayLogs={props.displayLogs}
+            displayLogs={displayLogs}
             isFocused={stream.slug === focusedStream?.slug}
-            isSolo={props.streams.length === 1}
-            onFocus={() => props.onFocus(stream.slug)}
-            onRemove={() => props.onRemove(stream.slug)}
+            isSolo={streams.length === 1}
+            onFocus={() => onFocus(stream.slug)}
+            onRemove={() => onRemove(stream.slug)}
           />
         ))}
       </div>
@@ -78,6 +81,7 @@ function ScreenCard<T>(props: {
           </div>
         ) : null}
         <ScreenContent
+          key={props.stream.raw_url}
           host={props.host}
           className={[
             "screen-focus",
@@ -121,6 +125,7 @@ function ScreenContent<T>(props: {
   onClick?: () => void;
 }) {
   const [srcDoc, setSrcDoc] = useState("");
+  const [screenState, setScreenState] = useState<ScreenState>("loading");
 
   useEffect(() => {
     let isActive = true;
@@ -133,11 +138,12 @@ function ScreenContent<T>(props: {
       .then((nextSrcDoc) => {
         if (!isActive) return;
         setSrcDoc(nextSrcDoc);
+        setScreenState("ready");
       })
       .catch((error) => {
         console.error(error);
         if (!isActive) return;
-        setSrcDoc("");
+        setScreenState("error");
       });
 
     return () => {
@@ -155,10 +161,20 @@ function ScreenContent<T>(props: {
           onClick={props.onClick}
         />
       ) : null}
+      {screenState !== "ready" ? (
+        <div className="log-panel log-panel-spotlight">
+          <div className="log-entry">
+            {screenState === "error" ? "Unable to load stream." : "Loading stream..."}
+          </div>
+        </div>
+      ) : null}
       <iframe
         className="screen-iframe"
         title={props.stream.title}
         srcDoc={srcDoc}
+        loading="eager"
+        referrerPolicy="no-referrer"
+        sandbox="allow-scripts allow-same-origin allow-forms allow-presentation"
       />
     </div>
   );
