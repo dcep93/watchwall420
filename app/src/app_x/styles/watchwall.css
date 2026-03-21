@@ -112,10 +112,15 @@
 .screen-layout {
   flex: 1;
   min-height: 0;
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(var(--screen-columns, 1), minmax(0, 1fr));
+  grid-template-rows: minmax(0, 1fr) clamp(140px, 24vh, 220px);
   gap: 0;
-  align-content: flex-start;
+  align-content: stretch;
+}
+
+.screen-layout-solo {
+  grid-template-rows: minmax(0, 1fr);
 }
 
 .resume-column {
@@ -295,16 +300,17 @@
 }
 
 .screen-card-spotlight {
-  order: 0;
-  width: 100%;
-  flex: 0 0 auto;
-  height: calc(100% - clamp(140px, 24vh, 220px));
+  grid-column: 1 / -1;
+  grid-row: 1;
+  width: auto;
+  height: auto;
   min-height: 0;
+  max-height: 100%;
   padding-top: 0;
 }
 
 .screen-card-spotlight-solo {
-  flex: 1 1 auto;
+  grid-row: 1;
   height: 100%;
   min-height: 0;
   max-height: 100%;
@@ -331,11 +337,10 @@
 }
 
 .screen-card-secondary {
-  order: 1;
-  flex: 1 1 0;
+  grid-row: 2;
   min-width: 0;
   min-height: clamp(140px, 24vh, 220px);
-  height: clamp(140px, 24vh, 220px);
+  height: auto;
   padding: 0;
 }
 

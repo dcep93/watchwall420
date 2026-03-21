@@ -1,4 +1,4 @@
-import { useEffect, useState, type Ref } from "react";
+import { useEffect, useState, type CSSProperties, type Ref } from "react";
 import ReactDomServer from "react-dom/server";
 import type { Host, Stream, StreamSlug } from "../config/types";
 import renderLog from "../lib/renderLog";
@@ -15,10 +15,18 @@ export default function Multiscreen<T>(props: {
   const { containerRef, displayLogs, focusedSlug, host, onFocus, onRemove, streams } = props;
   const focusedStream =
     streams.find((stream) => stream.slug === focusedSlug) ?? streams[0];
+  const secondaryCount = Math.max(1, streams.length - 1);
 
   return (
     <section ref={containerRef} className="multiscreen-column">
-      <div className="screen-layout">
+      <div
+        className={streams.length === 1 ? "screen-layout screen-layout-solo" : "screen-layout"}
+        style={
+          {
+            "--screen-columns": secondaryCount,
+          } as CSSProperties
+        }
+      >
         {streams.map((stream) => (
           <ScreenCard
             key={stream.slug}
@@ -47,7 +55,7 @@ function ScreenCard<T>(props: {
 }) {
   const spotlightBodyClassName = [
     "screen-spotlight-body",
-    props.displayLogs ? "" : "screen-spotlight-body-no-log",
+    props.isFocused && props.displayLogs ? "" : "screen-spotlight-body-no-log",
   ]
     .filter(Boolean)
     .join(" ");
