@@ -1,4 +1,4 @@
-import type { Host } from "../../config/types";
+import { LeagueCategories, type Host } from "../../config/types";
 import { fetchEspnScheduleEvents } from "../../lib/espn";
 import { ISTREAMEAST_URL } from "./constants";
 import { renderIstreameastDocElement } from "./iframe";
@@ -8,6 +8,9 @@ import { parseStreamPage, parseStreamsFromHtml } from "./streams";
 import type { IframeParams } from "./types";
 
 export const istreameastHost = {
+  getLeagueCategories() {
+    return LeagueCategories;
+  },
   async getStreams(category) {
     const html = await fetchIstreameastHtml();
     const espnEvents = await fetchEspnScheduleEvents(category).catch(

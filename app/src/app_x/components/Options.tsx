@@ -1,10 +1,22 @@
-import { Categories, type Category } from "../config/types";
+import type { Category, StreamCategory } from "../config/types";
 import {
   clearProxyCache,
   getApproximateProxyCacheSizeBytes,
 } from "../lib/proxy420";
 
-export const DEFAULT_CATEGORY: Category = "NCAAB";
+const PREFERRED_DEFAULT_CATEGORY: StreamCategory = "NCAAB";
+
+export function getDefaultCategory(categories: readonly StreamCategory[]): Category {
+  if (categories.includes(PREFERRED_DEFAULT_CATEGORY)) {
+    return PREFERRED_DEFAULT_CATEGORY;
+  }
+
+  return categories[0] ?? "ALL";
+}
+
+function getCategories(categories: readonly StreamCategory[]): Category[] {
+  return ["ALL", ...categories];
+}
 
 async function clearCache() {
   const approximateSizeBytes = await getApproximateProxyCacheSizeBytes().catch(
@@ -33,6 +45,7 @@ function formatApproximateSize(sizeBytes: number) {
 
 export default function Options(props: {
   category: Category;
+  categories: readonly StreamCategory[];
   onCategoryChange: (value: Category) => void;
   displayLogs: boolean;
   onDisplayLogsChange: (value: boolean) => void;
@@ -50,7 +63,7 @@ export default function Options(props: {
             props.onCategoryChange(event.target.value as Category)
           }
         >
-          {Categories.map((category) => (
+          {getCategories(props.categories).map((category) => (
             <option key={category} value={category}>
               {category}
             </option>

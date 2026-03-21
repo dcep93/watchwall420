@@ -1,10 +1,11 @@
 import shaDetailsRaw from "../config/sha.json?raw";
-import type { Category, Stream, StreamSlug } from "../config/types";
+import type { Category, Stream, StreamCategory, StreamSlug } from "../config/types";
 import Guide from "./Guide";
 import Options from "./Options";
 
 export default function Menu(props: {
   category: Category;
+  categories: readonly StreamCategory[];
   streams: Stream[];
   selectedSlugs: StreamSlug[];
   onToggle: (streamSlug: StreamSlug) => void;
@@ -37,6 +38,7 @@ export default function Menu(props: {
       <Guide />
       <Options
         category={props.category}
+        categories={props.categories}
         displayLogs={props.displayLogs}
         onCategoryChange={props.onCategoryChange}
         onDisplayLogsChange={props.onDisplayLogsChange}

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import PasswordGate from "./PasswordGate";
 import Menu from "./Menu";
 import Multiscreen from "./Multiscreen";
-import { DEFAULT_CATEGORY } from "./Options";
+import { getDefaultCategory } from "./Options";
 import { getInitialAuthorized, unlock } from "../lib/auth";
 import useSelectedStreamIds from "../hooks/useSelectedStreamIds";
 import { HOST } from "../config/data";
@@ -15,13 +15,15 @@ function removeSlug(slugs: StreamSlug[], streamSlug: StreamSlug) {
 }
 
 export default function WatchwallApp() {
+  const hostCategories = HOST.getLeagueCategories();
+  const defaultCategory = getDefaultCategory(hostCategories);
   const [isAuthorized, setIsAuthorized] = useState(() => (IS_DEV ? true : getInitialAuthorized()));
-  const [category, setCategory] = useState<Category>(DEFAULT_CATEGORY);
+  const [category, setCategory] = useState<Category>(defaultCategory);
   const [streamsState, setStreamsState] = useState<{
     category: Category;
     streams: Stream[] | null;
   }>({
-    category: DEFAULT_CATEGORY,
+    category: defaultCategory,
     streams: null,
   });
   const [focusedSlug, setFocusedSlug] = useState<StreamSlug>("");
@@ -125,9 +127,9 @@ export default function WatchwallApp() {
     window.history.replaceState(null, "", url);
 
     setIsAuthorized(IS_DEV);
-    setCategory(DEFAULT_CATEGORY);
+    setCategory(defaultCategory);
     setStreamsState({
-      category: DEFAULT_CATEGORY,
+      category: defaultCategory,
       streams: null,
     });
     setFocusedSlug("");
@@ -152,6 +154,7 @@ export default function WatchwallApp() {
     <main className="watchwall-shell">
       <Menu
         category={category}
+        categories={hostCategories}
         displayLogs={displayLogs}
         streams={streams ?? []}
         selectedSlugs={selectedSlugs}

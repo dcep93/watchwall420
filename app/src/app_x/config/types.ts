@@ -30,6 +30,7 @@ export type Stream = {
 export type StreamSlug = Stream["slug"];
 
 export type Host<T> = {
+  getLeagueCategories: () => readonly StreamCategory[];
   getStreams: (category: Category) => Promise<Stream[]>;
   getIframeParams: (stream: Stream) => Promise<T>;
   getIframeDocStrElement: (params: T) => ReactElement;
