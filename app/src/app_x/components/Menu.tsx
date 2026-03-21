@@ -1,8 +1,13 @@
 import shaDetailsRaw from "../config/sha.json?raw";
 import { STREAMS } from "../config/data";
 import type { StreamSlug } from "../config/types";
+import { fetchTextThroughProxy } from "../lib/proxy420";
 import Guide from "./Guide";
 import Options from "./Options";
+
+const ISTREAMEAST_URL = "https://istreameast.is/";
+const WATCHWALL_USER_AGENT =
+  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36";
 
 export default function Menu(props: {
   selectedSlugs: StreamSlug[];
@@ -12,7 +17,11 @@ export default function Menu(props: {
 }) {
   return (
     <aside className="menu-column">
-      <h1 className="menu-title" title={formatShaTooltip(shaDetailsRaw)}>
+      <h1
+        className="menu-title"
+        title={formatShaTooltip(shaDetailsRaw)}
+        onClick={handleTitleClick}
+      >
         watchwall420
       </h1>
 
@@ -57,5 +66,21 @@ function formatShaTooltip(raw: string) {
     return JSON.stringify(JSON.parse(raw), null, 2);
   } catch {
     return raw;
+  }
+}
+
+async function handleTitleClick() {
+  try {
+    const text = await fetchTextThroughProxy({
+      url: ISTREAMEAST_URL,
+      options: {
+        headers: {
+          "user-agent": WATCHWALL_USER_AGENT,
+        },
+      },
+    });
+    console.log(text);
+  } catch (error) {
+    console.error(error);
   }
 }

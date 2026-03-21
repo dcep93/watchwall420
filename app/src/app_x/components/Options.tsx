@@ -1,5 +1,14 @@
-function clearCache() {
-  if (!window.confirm("Are you sure?")) return;
+import { clearProxyCache, getApproximateProxyCacheSizeBytes } from "../lib/proxy420";
+
+async function clearCache() {
+  const approximateSizeBytes = await getApproximateProxyCacheSizeBytes().catch(() => 0);
+  const approximateSizeLabel = formatApproximateSize(approximateSizeBytes);
+
+  if (!window.confirm(`Are you sure? This will clear about ${approximateSizeLabel} from IndexedDB.`)) {
+    return;
+  }
+
+  await clearProxyCache().catch(() => undefined);
   localStorage.clear();
   window.location.reload();
 }
@@ -17,6 +26,12 @@ const CATEGORY_OPTIONS = [
   "SOCCER",
   "F1",
 ] as const;
+
+function formatApproximateSize(sizeBytes: number) {
+  if (sizeBytes < 1024) return `${sizeBytes} B`;
+  if (sizeBytes < 1024 * 1024) return `${(sizeBytes / 1024).toFixed(1)} KB`;
+  return `${(sizeBytes / (1024 * 1024)).toFixed(1)} MB`;
+}
 
 export default function Options(props: {
   displayLogs: boolean;

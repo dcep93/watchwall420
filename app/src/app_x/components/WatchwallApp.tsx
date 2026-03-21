@@ -7,12 +7,14 @@ import useSelectedStreamIds from "../hooks/useSelectedStreamIds";
 import { STREAMS } from "../config/data";
 import type { StreamSlug } from "../config/types";
 
+const IS_DEV = import.meta.env.DEV;
+
 function removeSlug(slugs: StreamSlug[], streamSlug: StreamSlug) {
   return slugs.filter((slug) => slug !== streamSlug);
 }
 
 export default function WatchwallApp() {
-  const [isAuthorized, setIsAuthorized] = useState(getInitialAuthorized);
+  const [isAuthorized, setIsAuthorized] = useState(() => (IS_DEV ? true : getInitialAuthorized()));
   const [focusedSlug, setFocusedSlug] = useState(STREAMS[0]?.slug ?? "");
   const [displayLogs, setDisplayLogs] = useState(true);
   const { hadHashSelectionOnLoad, selectedSlugs, selectedStreams, setSelectedSlugs } =
@@ -25,19 +27,26 @@ export default function WatchwallApp() {
   const resolvedFocusedSlug =
     selectedStreams.find((stream) => stream.slug === focusedSlug)?.slug ?? selectedStreams[0]?.slug;
   const shouldShowResumePrompt =
+    !IS_DEV &&
     isAuthorized &&
     !hasResumedFromHashSelection &&
     hadHashSelectionOnLoad &&
     selectedStreams.length > 0;
+  const shouldScrollToMultiscreenOnLoad =
+    hadHashSelectionOnLoad &&
+    selectedStreams.length > 0 &&
+    (shouldShowResumePrompt || IS_DEV);
 
   useEffect(() => {
-    if (!shouldShowResumePrompt) return;
+    if (!shouldScrollToMultiscreenOnLoad) return;
 
     multiscreenRef.current?.scrollIntoView({
       behavior: "smooth",
       block: "start",
       inline: "start",
     });
+
+    if (!shouldShowResumePrompt) return;
 
     const resume = () => setHasResumedFromHashSelection(true);
 
@@ -48,7 +57,7 @@ export default function WatchwallApp() {
       window.removeEventListener("keydown", resume);
       window.removeEventListener("click", resume);
     };
-  }, [shouldShowResumePrompt]);
+  }, [shouldScrollToMultiscreenOnLoad, shouldShowResumePrompt]);
 
   function handleToggle(streamSlug: StreamSlug) {
     if (selectedSlugs.includes(streamSlug)) {
