@@ -4,3 +4,5 @@ export type Stream = {
   content: string;
   log: string;
 };
+
+export type StreamSlug = Stream["slug"];

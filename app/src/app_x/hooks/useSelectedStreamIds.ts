@@ -1,19 +1,26 @@
 import { useEffect, useMemo, useState } from "react";
-import { STREAMS } from "./data";
+import { STREAMS } from "../config/data";
+import type { StreamSlug } from "../config/types";
 
-const VALID_SLUGS = new Set(STREAMS.map((stream) => stream.slug));
+const VALID_SLUGS = new Set<StreamSlug>(STREAMS.map((stream) => stream.slug));
 
-function parseHash(hash: string) {
-  const slugs = hash
+function parseHash(hash: string): StreamSlug[] {
+  return hash
     .replace(/^#/, "")
     .split(",")
     .map((slug) => slug.trim())
-    .filter((slug, index, array) => VALID_SLUGS.has(slug) && array.indexOf(slug) === index);
-
-  return slugs;
+    .filter(isUniqueValidSlug);
 }
 
-function writeHash(slugs: string[]) {
+function isUniqueValidSlug(
+  slug: string,
+  index: number,
+  array: string[],
+): slug is StreamSlug {
+  return VALID_SLUGS.has(slug as StreamSlug) && array.indexOf(slug) === index;
+}
+
+function writeHash(slugs: StreamSlug[]) {
   const hash = slugs.join(",");
   const url = new URL(window.location.href);
 
@@ -26,8 +33,12 @@ function writeHash(slugs: string[]) {
   window.history.replaceState(null, "", url);
 }
 
+function haveSameOrder(left: StreamSlug[], right: StreamSlug[]) {
+  return left.length === right.length && left.every((slug, index) => slug === right[index]);
+}
+
 export default function useSelectedStreamIds() {
-  const [selectedSlugs, setSelectedSlugs] = useState<string[]>(() =>
+  const [selectedSlugs, setSelectedSlugs] = useState<StreamSlug[]>(() =>
     parseHash(window.location.hash),
   );
 
@@ -41,12 +52,7 @@ export default function useSelectedStreamIds() {
   }, []);
 
   useEffect(() => {
-    const currentHashIds = parseHash(window.location.hash);
-    const same =
-      currentHashIds.length === selectedSlugs.length &&
-      currentHashIds.every((slug, index) => slug === selectedSlugs[index]);
-
-    if (!same) {
+    if (!haveSameOrder(parseHash(window.location.hash), selectedSlugs)) {
       writeHash(selectedSlugs);
     }
   }, [selectedSlugs]);

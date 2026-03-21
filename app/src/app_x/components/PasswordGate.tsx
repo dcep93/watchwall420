@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
-import { isValidPasswordInput } from "./auth";
+import { isValidPasswordInput } from "../lib/auth";
 
 export default function PasswordGate(props: { onUnlock: () => void }) {
   const [value, setValue] = useState("");

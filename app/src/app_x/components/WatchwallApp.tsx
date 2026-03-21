@@ -2,9 +2,14 @@ import { useState } from "react";
 import PasswordGate from "./PasswordGate";
 import Menu from "./Menu";
 import Multiscreen from "./Multiscreen";
-import { getInitialAuthorized, unlock } from "./auth";
-import useSelectedStreamIds from "./useSelectedStreamIds";
-import { STREAMS } from "./data";
+import { getInitialAuthorized, unlock } from "../lib/auth";
+import useSelectedStreamIds from "../hooks/useSelectedStreamIds";
+import { STREAMS } from "../config/data";
+import type { StreamSlug } from "../config/types";
+
+function removeSlug(slugs: StreamSlug[], streamSlug: StreamSlug) {
+  return slugs.filter((slug) => slug !== streamSlug);
+}
 
 export default function WatchwallApp() {
   const [isAuthorized, setIsAuthorized] = useState(getInitialAuthorized);
@@ -15,11 +20,11 @@ export default function WatchwallApp() {
   const resolvedFocusedSlug =
     selectedStreams.find((stream) => stream.slug === focusedSlug)?.slug ?? selectedStreams[0]?.slug;
 
-  function handleToggle(streamSlug: string) {
+  function handleToggle(streamSlug: StreamSlug) {
     if (selectedSlugs.includes(streamSlug)) {
-      const remainingSlugs = selectedSlugs.filter((slug) => slug !== streamSlug);
+      const remainingSlugs = removeSlug(selectedSlugs, streamSlug);
       setSelectedSlugs(remainingSlugs);
-      if (focusedSlug === streamSlug) {
+      if (resolvedFocusedSlug === streamSlug) {
         setFocusedSlug(remainingSlugs[0] ?? "");
       }
       return;
@@ -31,10 +36,10 @@ export default function WatchwallApp() {
     }
   }
 
-  function handleRemove(streamSlug: string) {
-    const remainingSlugs = selectedSlugs.filter((slug) => slug !== streamSlug);
+  function handleRemove(streamSlug: StreamSlug) {
+    const remainingSlugs = removeSlug(selectedSlugs, streamSlug);
     setSelectedSlugs(remainingSlugs);
-    if (focusedSlug === streamSlug) {
+    if (resolvedFocusedSlug === streamSlug) {
       setFocusedSlug(remainingSlugs[0] ?? "");
     }
   }
