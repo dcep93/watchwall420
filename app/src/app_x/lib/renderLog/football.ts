@@ -1,0 +1,140 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { buildDefaultBoxScore, buildTeamSummaries, fetchJson } from "./shared";
+import type { DriveType, FootballLeagueConfig, LogType } from "./types";
+
+type FootballCoreDriveItem = {
+  $ref: string;
+  id: string;
+};
+
+type FootballDrivePlay = {
+  awayScore?: number;
+  homeScore?: number;
+  wallclock?: number;
+  participants?: unknown[];
+  text?: string;
+  period?: {
+    number?: number;
+  };
+  clock?: {
+    displayValue?: string;
+  };
+  start?: {
+    downDistanceText?: string;
+  };
+};
+
+type FootballDriveResponse = {
+  description?: string;
+  displayResult?: string;
+  team?: {
+    $ref?: string;
+  };
+  plays?: {
+    items?: FootballDrivePlay[];
+  };
+};
+
+type FootballTeamResponse = {
+  shortDisplayName?: string;
+};
+
+type FootballResolvedDrive = {
+  id: string;
+  description: string;
+  displayResult?: string;
+  team: FootballTeamResponse | null;
+  plays: FootballDrivePlay[];
+};
+
+export async function getFootballLog(
+  espnId: number,
+  config: FootballLeagueConfig,
+): Promise<LogType | null> {
+  const [summaryObj, coreObj] = await Promise.all([
+    fetchJson(
+      `https://site.web.api.espn.com/apis/site/v2/sports/${config.sport}/${config.espnLeague}/summary?region=us&lang=en&contentorigin=espn&event=${espnId}`,
+    ),
+    fetchJson(
+      `https://sports.core.api.espn.com/v2/sports/${config.sport}/leagues/${config.espnLeague}/events/${espnId}/competitions/${espnId}/drives?limit=1000`,
+    ),
+  ]);
+
+  const driveItems = ((coreObj as { items?: FootballCoreDriveItem[] }).items ?? []).slice().reverse();
+
+  const driveObjs: FootballResolvedDrive[] = await Promise.all(
+    driveItems.map(async (coreItem) => {
+      const driveObj = (await fetchJson(coreItem.$ref)) as FootballDriveResponse;
+      const teamRef = driveObj.team?.$ref;
+      const teamObj = teamRef ? ((await fetchJson(teamRef)) as FootballTeamResponse) : null;
+      return {
+        id: coreItem.id,
+        description: driveObj.description ?? "",
+        displayResult: driveObj.displayResult,
+        team: teamObj,
+        plays: driveObj.plays?.items ?? [],
+      };
+    }),
+  );
+
+  const filteredDriveObjs = driveObjs.filter((driveObj) => driveObj.plays.length > 0);
+
+  const summaryWithDrives = summaryObj as {
+    drives?: {
+      current?: FootballResolvedDrive;
+      previous?: FootballResolvedDrive[];
+    };
+    boxscore?: {
+      teams?: any[];
+      players?: any[];
+    };
+  };
+
+  if (filteredDriveObjs.length > 0) {
+    summaryWithDrives.drives = {
+      current: filteredDriveObjs[0],
+      previous: filteredDriveObjs.slice(1).reverse(),
+    };
+  }
+
+  if (!summaryWithDrives.drives?.current) {
+    return null;
+  }
+
+  const drives = [summaryWithDrives.drives.current]
+    .concat(
+      (summaryWithDrives.drives.previous ?? [])
+        .slice()
+        .reverse()
+        .filter((drive) => drive?.id !== summaryWithDrives.drives?.current?.id),
+    )
+    .filter((drive) => drive?.team);
+
+  const playByPlay = drives.map((drive) => {
+    const plays = drive.plays.slice().reverse();
+    return {
+      team: drive.team?.shortDisplayName ?? "",
+      result: drive.displayResult,
+      plays: plays
+        .filter((play) => play.participants)
+        .map((play) => ({
+          down: play.start?.downDistanceText ?? "",
+          text: play.text ?? "",
+          clock: `Q${play.period?.number ?? ""} ${play.clock?.displayValue ?? ""}`.trim(),
+        })),
+      description: drive.description,
+      score: `${drive.plays[0]?.awayScore ?? ""} - ${drive.plays[0]?.homeScore ?? ""}`,
+    } satisfies DriveType;
+  });
+
+  const timestamp =
+    (summaryWithDrives.drives.current?.plays ?? []).map((play) => play.wallclock).find(Boolean) ??
+    Date.now();
+
+  return {
+    timestamp,
+    teams: buildTeamSummaries(summaryObj),
+    playByPlay,
+    boxScore: buildDefaultBoxScore(summaryWithDrives.boxscore?.players ?? [], config.boxScoreKeys),
+  };
+}
