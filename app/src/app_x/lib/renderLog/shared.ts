@@ -19,7 +19,13 @@ export function buildTeamSummaries(summaryObj: any) {
   return (((summaryObj as any).boxscore?.teams as any[]) ?? []).map((teamObj: any) => ({
     name: teamObj.team?.name ?? "",
     statistics: Object.fromEntries(
-      ((teamObj.statistics as any[]) ?? []).map((stat) => [stat.name, stat.displayValue]),
+      ((teamObj.statistics as any[]) ?? []).flatMap((stat) => {
+        if (Array.isArray(stat?.stats)) {
+          return stat.stats.map((nestedStat: any) => [nestedStat.name, nestedStat.displayValue]);
+        }
+
+        return stat?.name ? [[stat.name, stat.displayValue]] : [];
+      }),
     ),
   }));
 }

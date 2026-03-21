@@ -4,18 +4,6 @@ import {
   getApproximateProxyCacheSizeBytes,
 } from "../lib/proxy420";
 
-const PREFERRED_DEFAULT_CATEGORY: StreamCategory = "MLB";
-
-export function getDefaultCategory(
-  categories: readonly StreamCategory[],
-): Category {
-  if (categories.includes(PREFERRED_DEFAULT_CATEGORY)) {
-    return PREFERRED_DEFAULT_CATEGORY;
-  }
-
-  return categories[0] ?? "ALL";
-}
-
 function getCategoryOptions(categories: readonly StreamCategory[]): Category[] {
   return ["ALL", ...categories];
 }

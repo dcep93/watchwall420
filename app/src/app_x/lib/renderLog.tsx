@@ -109,18 +109,25 @@ function LogView(props: { log: LogType }) {
                 {drive.score ? (
                   <span className="watchwall-log-topbar-muted">{drive.score}</span>
                 ) : null}
+                {drive.meta ? (
+                  <span className="watchwall-log-topbar-muted">{drive.meta}</span>
+                ) : null}
               </div>
               <div className="watchwall-log-event-description">{drive.description}</div>
             </div>
             <div>
               {(drive.plays || []).slice().reverse().map((play, playIndex) => {
                 const hideText = play.text === drive.description;
+                const hasPlayMeta = Boolean(play.clock || play.down);
                 return (
                   <div key={`${play.clock}-${playIndex}`} className="watchwall-log-play-content">
                     {!hideText ? <div>{play.text}</div> : null}
-                    <div className="watchwall-log-play-meta">
-                      <span>{play.clock}</span>
-                    </div>
+                    {hasPlayMeta ? (
+                      <div className="watchwall-log-play-meta">
+                        {play.down ? <span>{play.down}</span> : null}
+                        {play.clock ? <span>{play.clock}</span> : null}
+                      </div>
+                    ) : null}
                   </div>
                 );
               })}

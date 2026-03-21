@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import PasswordGate from "./PasswordGate";
 import Menu from "./Menu";
 import Multiscreen from "./Multiscreen";
-import { getDefaultCategory } from "./Options";
+import { getDefaultCategory } from "./optionsShared";
 import { getInitialAuthorized, unlock } from "../lib/auth";
 import useSelectedStreamIds from "../hooks/useSelectedStreamIds";
 import { HOST } from "../config/data";

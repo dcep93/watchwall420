@@ -9,6 +9,7 @@ export type DriveType = {
   description: string;
   score: string;
   result?: string;
+  meta?: string;
   plays?: PlayType[];
 };
 

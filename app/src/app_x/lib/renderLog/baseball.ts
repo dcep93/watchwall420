@@ -23,86 +23,157 @@ export async function getBaseballLog(
         "",
     ) || Date.now();
 
+  const teamsById = Object.fromEntries(
+    [
+      ...(((summaryObj as any).header?.competitions?.[0]?.competitors ?? []).map((competitor: any) => [
+        competitor.team?.id,
+        competitor.team?.shortDisplayName ||
+          competitor.team?.displayName ||
+          competitor.team?.name ||
+          "",
+      ])),
+      ...((((summaryObj as any).boxscore?.teams as any[]) ?? []).map((teamObj: any) => [
+        teamObj.team?.id,
+        teamObj.team?.shortDisplayName || teamObj.team?.displayName || teamObj.team?.name || "",
+      ])),
+      ...((((summaryObj as any).boxscore?.players as any[]) ?? []).map((teamObj: any) => [
+        teamObj.team?.id,
+        teamObj.team?.shortDisplayName || teamObj.team?.displayName || teamObj.team?.name || "",
+      ])),
+    ].filter(([teamId]) => Boolean(teamId)),
+  );
+
   return {
     timestamp,
-    teams: buildTeamSummaries(summaryObj),
-    playByPlay: buildBaseballPlayByPlay(plays),
+    teams: buildTeamSummaries(summaryObj).slice().reverse(),
+    playByPlay: buildBaseballPlayByPlay(plays, teamsById),
     boxScore: buildBaseballBoxScore((summaryObj as any).boxscore?.players ?? [], config.boxScoreKeys),
   };
 }
 
-function buildBaseballPlayByPlay(plays: any[]) {
-  return plays
-    .map(normalizeBaseballPlay)
-    .filter((play) => play.text)
-    .map((play) => ({
-      team: play.team,
-      result: play.result,
-      plays: [
-        {
-          down: play.down,
-          text: play.text,
-          clock: play.clock,
-        },
-      ],
-      description: play.text,
-      score: play.score,
-    }) satisfies DriveType);
+function buildBaseballPlayByPlay(plays: any[], teamsById: Record<string, string>) {
+  const normalizedPlays = plays
+    .map((play) => normalizeBaseballPlay(play, teamsById))
+    .filter((play) => play.text);
+
+  const groups: typeof normalizedPlays[] = [];
+  let currentGroup: typeof normalizedPlays = [];
+
+  normalizedPlays.forEach((play, index) => {
+    if (currentGroup.length === 0) {
+      currentGroup.push(play);
+    } else {
+      currentGroup.push(play);
+    }
+
+    const nextPlay = normalizedPlays[index + 1];
+    if (!nextPlay || play.stateKey !== nextPlay.stateKey) {
+      groups.push(currentGroup);
+      currentGroup = [];
+    }
+  });
+
+  return groups
+    .map(buildBaseballGroup)
+    .filter((group): group is DriveType => Boolean(group));
 }
 
-function normalizeBaseballPlay(play: any) {
-  const awayScore = play.awayScore ?? play.scoreValue?.away;
-  const homeScore = play.homeScore ?? play.scoreValue?.home;
-  const situation = [
-    formatBaseballCount(play),
-    formatBaseballBases(play),
-    formatBaseballOuts(play),
-  ]
-    .filter(Boolean)
-    .join(" | ");
+function buildBaseballGroup(
+  plays: {
+    playType: string;
+    stateKey: string;
+    team: string;
+    result?: string;
+    meta: string;
+    down: string;
+    text: string;
+    clock: string;
+    score: string;
+  }[],
+) {
+  const visiblePlays = filterBaseballGroupPlays(plays);
+  if (visiblePlays.length === 0) {
+    return null;
+  }
+
+  const renderedOrderPlays = visiblePlays.slice().reverse();
+  const summaryPlay =
+    renderedOrderPlays.find((play) => isPrimaryBaseballSummaryPlay(play.playType)) || renderedOrderPlays[0];
+  const latestPlay = renderedOrderPlays[0];
 
   return {
+    team: plays[0]?.team || summaryPlay.team || latestPlay.team,
+    result: renderedOrderPlays.find((play) => play.result === "SCORE") ? "SCORE" : undefined,
+    meta: plays[0]?.meta || "",
+    plays: visiblePlays.map((play) => ({
+      down: "",
+      text: play.text,
+      clock: play.clock,
+    })),
+    description: summaryPlay.text,
+    score: latestPlay.score,
+  } satisfies DriveType;
+}
+
+function normalizeBaseballPlay(play: any, teamsById: Record<string, string>) {
+  const awayScore = play.awayScore ?? play.scoreValue?.away;
+  const homeScore = play.homeScore ?? play.scoreValue?.home;
+
+  return {
+    playType: play.type?.type || "",
+    stateKey: buildBaseballStateKey(play, awayScore, homeScore),
     team:
+      teamsById[play.team?.id] ||
       play.team?.shortDisplayName ||
       play.team?.displayName ||
       play.team?.abbreviation ||
       play.team?.name ||
       "",
     result: play.scoringPlay ? "SCORE" : undefined,
-    down: situation,
+    meta: formatBaseballStateMeta(play),
+    down: "",
     text: play.text || play.shortText || "",
-    clock: formatBaseballClock(play),
+    clock: "",
     score:
       awayScore !== undefined || homeScore !== undefined ? `${awayScore ?? ""} - ${homeScore ?? ""}` : "",
   };
 }
 
-function formatBaseballClock(play: any) {
-  const inning = play.period?.number ?? play.period ?? play.inning;
-  const halfInning =
-    play.homeAway ||
-    play.period?.type ||
-    play.period?.displayValue ||
-    play.clock?.displayValue ||
-    play.inningHalf;
-  const normalizedHalfInning = String(halfInning || "").trim().toLowerCase();
-  const inningLabel =
-    normalizedHalfInning === "top" || normalizedHalfInning === "top of the inning"
-      ? "Top"
-      : normalizedHalfInning === "bottom" || normalizedHalfInning === "bottom of the inning"
-        ? "Bot"
-        : normalizedHalfInning;
-
-  return [inningLabel, inning ? String(inning) : ""].filter(Boolean).join(" ").trim();
+function filterBaseballGroupPlays(
+  plays: {
+    playType: string;
+    text: string;
+    down: string;
+    clock: string;
+    score: string;
+    team: string;
+    result?: string;
+  }[],
+) {
+  const meaningfulPlays = plays.filter((play) => !isAdministrativeBaseballPlay(play.playType) && play.text);
+  return meaningfulPlays.length > 0 ? meaningfulPlays : plays.filter((play) => play.text);
 }
 
-function formatBaseballCount(play: any) {
-  const balls = play.count?.balls ?? play.balls;
-  const strikes = play.count?.strikes ?? play.strikes;
-  if (!Number.isFinite(balls) && !Number.isFinite(strikes)) {
-    return "";
-  }
-  return `${balls ?? 0}-${strikes ?? 0}`;
+function isPrimaryBaseballSummaryPlay(playType: string) {
+  return !["start-batterpitcher", "start-inning"].includes(playType.toLowerCase());
+}
+
+function isAdministrativeBaseballPlay(playType: string) {
+  return ["end-batterpitcher", "start-inning"].includes(playType.toLowerCase());
+}
+
+function formatBaseballStateMeta(play: any) {
+  const bases = formatBaseballBases(play);
+  const outs = formatBaseballOuts(play);
+  return [bases, outs].filter(Boolean).join(" | ");
+}
+
+function buildBaseballStateKey(play: any, awayScore: unknown, homeScore: unknown) {
+  const bases = formatBaseballBases(play);
+  const outs = formatBaseballOuts(play);
+  const score =
+    awayScore !== undefined || homeScore !== undefined ? `${awayScore ?? ""} - ${homeScore ?? ""}` : "";
+  return [bases, outs, score].join(" :: ");
 }
 
 function formatBaseballBases(play: any) {
@@ -134,20 +205,20 @@ function buildBaseballBoxScore(players: any[], keys: readonly string[]) {
     }
   > = {
     batting: {
-      rankKeys: ["hits", "RBI", "rbis", "runs", "totalBases"],
+      rankKeys: ["hits", "RBIs", "RBI", "rbis", "runs", "totalBases"],
       columns: [
         ["atBats", "AB"],
         ["runs", "R"],
         ["hits", "H"],
-        ["RBI", "rbis", "RBI"],
+        ["RBIs", "RBI", "rbis"],
         ["walks", "BB"],
         ["strikeouts", "SO"],
       ],
     },
     pitching: {
-      rankKeys: ["strikeouts", "innings", "outs"],
+      rankKeys: ["strikeouts", "fullInnings.partInnings", "innings", "outs"],
       columns: [
-        ["innings", "IP"],
+        ["fullInnings.partInnings", "innings", "IP"],
         ["hits", "H"],
         ["runs", "R"],
         ["earnedRuns", "ER"],
@@ -160,7 +231,9 @@ function buildBaseballBoxScore(players: any[], keys: readonly string[]) {
   return keys.map((key) => {
     const config = statConfig[key];
     const athletes = (players || []).flatMap((team: any) => {
-      const statBlock = (team.statistics || []).find((stat: any) => stat.name === key);
+      const statBlock = (team.statistics || []).find(
+        (stat: any) => stat.name === key || stat.type === key,
+      );
       if (!statBlock || !config) return [];
 
       const blockKeys = statBlock.keys || [];
