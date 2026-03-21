@@ -8,7 +8,7 @@ import { parseStreamWatchPage, parseStreamsFromHtml } from "./streams";
 import type { IframeParams } from "./types";
 
 function getSupportedIstreameastCategories() {
-  return ["NFL", "NBA", "MLB", "NHL", "CFL", "CFB", "NCAAB", "UFC", "BOXING", "SOCCER", "F1"] as const;
+  return ["NFL", "NBA", "MLB", "NHL", "CFL", "CFB", "NCAAB", "UFC", "SOCCER", "F1"] as const;
 }
 
 export const istreameastHost: Host<IframeParams> = {
@@ -34,7 +34,7 @@ export const istreameastHost: Host<IframeParams> = {
     const watchPage = parseStreamWatchPage(watchPageHtml);
 
     const iframeParams = {
-      fid: "",
+      _4_fid: "",
       _1_rawUrl: stream.raw_url,
       _2_embedPageUrl: watchPage.embedPageUrl,
       _3_iframeSourcePageUrl: "",
@@ -44,7 +44,7 @@ export const istreameastHost: Host<IframeParams> = {
       ? await resolveEmbedPlayback(watchPage.embedPageUrl)
       : { fid: "", iframeSourcePageUrl: "" };
 
-    iframeParams.fid = resolvedPlayback.fid;
+    iframeParams._4_fid = resolvedPlayback.fid;
     iframeParams._3_iframeSourcePageUrl = resolvedPlayback.iframeSourcePageUrl;
 
     return iframeParams;

@@ -19,7 +19,6 @@ type EspnSupportedCategory =
   | "CFB"
   | "NCAAB"
   | "UFC"
-  | "BOXING"
   | "SOCCER"
   | "F1";
 
@@ -64,7 +63,6 @@ export const ESPN_SCOREBOARD_ENDPOINTS: Record<EspnSupportedCategory, EspnScoreb
   CFB: { sport: "football", league: "college-football" },
   NCAAB: { sport: "basketball", league: "mens-college-basketball" },
   UFC: { sport: "mma", league: "ufc" },
-  BOXING: { sport: "boxing", league: "boxing" },
   SOCCER: { sport: "soccer", league: "eng.1" },
   F1: { sport: "racing", league: "f1" },
 };
