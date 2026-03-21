@@ -114,7 +114,7 @@ function buildBasketballGroup(
     team: summaryPlay.team || latestPlay.team,
     result: plays.find((play) => play.result === "SCORE") ? "SCORE" : undefined,
     plays: visiblePlays.map((play) => ({
-      down: play.down,
+      down: getBasketballPlayMetaLabel(play),
       text: play.text,
       clock: play.clock,
     })),
@@ -174,6 +174,18 @@ function isAdministrativeBasketballPlay(down: string) {
     "dead ball rebound",
     "deadballteamrebound",
   ].includes(normalized);
+}
+
+function getBasketballPlayMetaLabel(play: { down: string }) {
+  const normalized = play.down.trim().toLowerCase();
+
+  if (!normalized) {
+    return "";
+  }
+
+  // ESPN's basketball play types are usually just machine-ish duplicates
+  // of the human-readable play text, so we only keep the clock in the UI.
+  return "";
 }
 
 function buildBasketballBoxScore(players: any[], keys: readonly string[]) {
