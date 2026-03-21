@@ -1,21 +1,27 @@
 import { useEffect, useMemo, useState } from "react";
 import type { Stream, StreamSlug } from "../config/types";
 
-function parseHash(hash: string, validSlugs: Set<StreamSlug>): StreamSlug[] {
+function parseHash(hash: string, validSlugs: Set<StreamSlug> | null): StreamSlug[] {
   return hash
     .replace(/^#/, "")
     .split(",")
     .map((slug) => slug.trim())
-    .filter((slug, index, array): slug is StreamSlug => isUniqueValidSlug(slug, index, array, validSlugs));
+    .filter((slug, index, array): slug is StreamSlug =>
+      isUniqueValidSlug(slug, index, array, validSlugs),
+    );
 }
 
 function isUniqueValidSlug(
   slug: string,
   index: number,
   array: string[],
-  validSlugs: Set<StreamSlug>,
+  validSlugs: Set<StreamSlug> | null,
 ): slug is StreamSlug {
-  return validSlugs.has(slug as StreamSlug) && array.indexOf(slug) === index;
+  if (!slug || array.indexOf(slug) !== index) {
+    return false;
+  }
+
+  return validSlugs ? validSlugs.has(slug as StreamSlug) : true;
 }
 
 function writeHash(slugs: StreamSlug[]) {
@@ -39,8 +45,11 @@ function hasCanonicalHash(slugs: StreamSlug[]) {
   return window.location.hash.replace(/^#/, "") === getHashValue(slugs);
 }
 
-export default function useSelectedStreamIds(streams: Stream[]) {
-  const validSlugs = useMemo(() => new Set<StreamSlug>(streams.map((stream) => stream.slug)), [streams]);
+export default function useSelectedStreamIds(streams: Stream[] | null) {
+  const validSlugs = useMemo(
+    () => (streams ? new Set<StreamSlug>(streams.map((stream) => stream.slug)) : null),
+    [streams],
+  );
   const [initialHash] = useState(() => window.location.hash);
   const initialSelectedSlugs = useMemo(
     () => parseHash(initialHash, validSlugs),
@@ -64,13 +73,14 @@ export default function useSelectedStreamIds(streams: Stream[]) {
   }, [validSlugs]);
 
   useEffect(() => {
+    if (!validSlugs) return;
     if (!hasCanonicalHash(selectedSlugs)) {
       writeHash(selectedSlugs);
     }
-  }, [selectedSlugs]);
+  }, [selectedSlugs, validSlugs]);
 
   const selectedStreams = useMemo(
-    () => streams.filter((stream) => selectedSlugs.includes(stream.slug)),
+    () => (streams ? streams.filter((stream) => selectedSlugs.includes(stream.slug)) : []),
     [selectedSlugs, streams],
   );
 

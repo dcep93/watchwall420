@@ -17,7 +17,7 @@ function removeSlug(slugs: StreamSlug[], streamSlug: StreamSlug) {
 export default function WatchwallApp() {
   const [isAuthorized, setIsAuthorized] = useState(() => (IS_DEV ? true : getInitialAuthorized()));
   const [category, setCategory] = useState<Category>(DEFAULT_CATEGORY);
-  const [streams, setStreams] = useState<Stream[]>([]);
+  const [streams, setStreams] = useState<Stream[] | null>(null);
   const [focusedSlug, setFocusedSlug] = useState<StreamSlug>("");
   const [displayLogs, setDisplayLogs] = useState(true);
   const { hadHashSelectionOnLoad, selectedSlugs, selectedStreams, setSelectedSlugs } =
@@ -29,6 +29,7 @@ export default function WatchwallApp() {
 
   useEffect(() => {
     let isActive = true;
+    setStreams(null);
 
     HOST.getStreams(category)
       .then((nextStreams) => {
@@ -131,7 +132,7 @@ export default function WatchwallApp() {
       <Menu
         category={category}
         displayLogs={displayLogs}
-        streams={streams}
+        streams={streams ?? []}
         selectedSlugs={selectedSlugs}
         onCategoryChange={setCategory}
         onToggle={handleToggle}

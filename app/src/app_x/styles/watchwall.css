@@ -382,6 +382,8 @@
   font-family: "IBM Plex Mono", "SFMono-Regular", monospace;
   font-size: 1.25rem;
   flex: 1;
+  min-height: 0;
+  overflow: auto;
 }
 
 .guide-list {
