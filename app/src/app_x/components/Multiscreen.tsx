@@ -47,7 +47,6 @@ export default function Multiscreen(props: {
               className="screen-focus screen-focus-spotlight"
               label={focusedStream.label}
               content={focusedStream.content}
-              onClick={() => props.onFocus(focusedStream.slug)}
             />
           </div>
         </article>
@@ -120,8 +119,16 @@ function ScreenContent(props: {
   label: string;
   content: string;
   className: string;
-  onClick: () => void;
+  onClick?: () => void;
 }) {
+  if (!props.onClick) {
+    return (
+      <span className={props.className}>
+        <span className="screen-focus-label">{props.content}</span>
+      </span>
+    );
+  }
+
   return (
     <button
       type="button"
