@@ -20,12 +20,9 @@ export async function resolvePlayableSourceUrl(
   }
 
   const fetch_resp = await fetchProxyText(iframe_src).catch(() => "");
-  console.log("istreameast:resolvePlayableSourceUrl", {
-    iframe_src,
-    fetch_resp,
-  });
-  console.log(fetch_resp);
-  return "";
+  const fid = extractFid(fetch_resp);
+  console.log("istreameast:resolvePlayableSourceUrl", { iframe_src, fid, fetch_resp });
+  return fid;
 }
 
 function extractIframeSrc(html: string, baseUrl: string) {
@@ -40,4 +37,10 @@ function extractIframeSrc(html: string, baseUrl: string) {
   ].find(Boolean);
 
   return resolveUrl(iframeSrc ?? "", baseUrl);
+}
+
+function extractFid(html: string) {
+  if (!html) return "";
+
+  return matchStrings(html, /\bfid\s*=\s*["']([^"']+)["']/gi)[0] ?? "";
 }

@@ -33,13 +33,13 @@ export const istreameastHost: Host<IframeParams> = {
     const rawHtml = await fetchProxyText(streamPageUrl);
     const streamPage = parseStreamPage(rawHtml);
 
-    const playback_url = streamPage.embed_page_url
+    const fid = streamPage.embed_page_url
       ? await resolvePlayableSourceUrl(streamPage.embed_page_url)
       : "";
 
-    if (!playback_url) {
+    if (!fid) {
       throw new Error(
-        `Unable to resolve a playable source for "${stream.title}".`,
+        `Unable to resolve a fid for "${stream.title}".`,
       );
     }
 
@@ -47,12 +47,11 @@ export const istreameastHost: Host<IframeParams> = {
       title: stream.title,
       streamPageUrl,
       embed_page_url: streamPage.embed_page_url,
-      playback_url,
+      fid,
     });
 
     return {
-      playback_url,
-      title: streamPage.title || stream.title,
+      fid,
     };
   },
   getIframeDocStrElement(params) {
