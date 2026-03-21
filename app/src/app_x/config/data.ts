@@ -1,1 +1,1 @@
-export { istreameastHost as HOST } from "../hosts/istreameast";
+export { istreameastHost as HOST } from "../hosts/isterameast";
