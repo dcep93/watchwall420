@@ -24,6 +24,55 @@ type BoxScoreType = {
   players?: { name: string; stats: string[] }[];
 };
 
+type FootballCoreDriveItem = {
+  $ref: string;
+  id: string;
+};
+
+type FootballDrivePlay = {
+  awayScore?: number;
+  homeScore?: number;
+  wallclock?: number;
+  participants?: unknown[];
+  text?: string;
+  statYardage?: number;
+  period?: {
+    number?: number;
+  };
+  clock?: {
+    displayValue?: string;
+  };
+  start?: {
+    downDistanceText?: string;
+  };
+  end?: {
+    yardsToEndzone?: number;
+  };
+};
+
+type FootballDriveResponse = {
+  description?: string;
+  displayResult?: string;
+  team?: {
+    $ref?: string;
+  };
+  plays?: {
+    items?: FootballDrivePlay[];
+  };
+};
+
+type FootballTeamResponse = {
+  shortDisplayName?: string;
+};
+
+type FootballResolvedDrive = {
+  id: string;
+  description: string;
+  displayResult?: string;
+  team: FootballTeamResponse | null;
+  plays: FootballDrivePlay[];
+};
+
 type LogType = {
   gameId: number;
   timestamp: number;
@@ -179,33 +228,29 @@ async function getFootballLog(
     ),
   ]);
 
-  const driveItems = ((coreObj as { items?: { $ref: string; id: string }[] }).items ?? [])
-    .slice()
-    .reverse();
+  const driveItems = ((coreObj as { items?: FootballCoreDriveItem[] }).items ?? []).slice().reverse();
 
-  const driveObjs = await Promise.all(
+  const driveObjs: FootballResolvedDrive[] = await Promise.all(
     driveItems.map(async (coreItem) => {
-      const driveObj = await fetchJson(coreItem.$ref);
-      const teamRef = (driveObj as { team?: { $ref?: string } }).team?.$ref;
-      const teamObj = teamRef ? await fetchJson(teamRef) : null;
+      const driveObj = (await fetchJson(coreItem.$ref)) as FootballDriveResponse;
+      const teamRef = driveObj.team?.$ref;
+      const teamObj = teamRef ? ((await fetchJson(teamRef)) as FootballTeamResponse) : null;
       return {
-        ...(driveObj as Record<string, unknown>),
         id: coreItem.id,
+        description: driveObj.description ?? "",
+        displayResult: driveObj.displayResult,
         team: teamObj,
+        plays: driveObj.plays?.items ?? [],
       };
     }),
   );
 
-  const filteredDriveObjs = driveObjs.filter(
-    (driveObj) =>
-      Array.isArray((driveObj as { plays?: unknown[] }).plays) &&
-      ((driveObj as { plays?: unknown[] }).plays?.length ?? 0) > 0,
-  );
+  const filteredDriveObjs = driveObjs.filter((driveObj) => driveObj.plays.length > 0);
 
   const summaryWithDrives = summaryObj as {
     drives?: {
-      current?: Record<string, unknown>;
-      previous?: Record<string, unknown>[];
+      current?: FootballResolvedDrive;
+      previous?: FootballResolvedDrive[];
     };
     boxscore?: {
       teams?: any[];
@@ -215,8 +260,8 @@ async function getFootballLog(
 
   if (filteredDriveObjs.length > 0) {
     summaryWithDrives.drives = {
-      current: filteredDriveObjs[0] as Record<string, unknown>,
-      previous: filteredDriveObjs.slice(1).reverse() as Record<string, unknown>[],
+      current: filteredDriveObjs[0],
+      previous: filteredDriveObjs.slice(1).reverse(),
     };
   }
 
@@ -234,28 +279,27 @@ async function getFootballLog(
     .filter((drive) => drive?.team);
 
   const playByPlay = drives.map((drive) => {
-    const plays = ((drive as any).plays ?? []).slice().reverse();
+    const plays = drive.plays.slice().reverse();
     return {
-      team: (drive as any).team?.shortDisplayName ?? "",
-      result: (drive as any).displayResult,
+      team: drive.team?.shortDisplayName ?? "",
+      result: drive.displayResult,
       plays: plays
-        .filter((play: any) => play.participants)
-        .map((play: any) => ({
+        .filter((play) => play.participants)
+        .map((play) => ({
           down: play.start?.downDistanceText ?? "",
           text: play.text ?? "",
           clock: `Q${play.period?.number ?? ""} ${play.clock?.displayValue ?? ""}`.trim(),
           distance: play.statYardage ?? 0,
         })),
-      description: (drive as any).description ?? "",
-      score: `${(drive as any).plays?.[0]?.awayScore ?? ""} - ${(drive as any).plays?.[0]?.homeScore ?? ""}`,
-      yardsToEndzone: (drive as any).plays?.[0]?.end?.yardsToEndzone ?? 100,
+      description: drive.description,
+      score: `${drive.plays[0]?.awayScore ?? ""} - ${drive.plays[0]?.homeScore ?? ""}`,
+      yardsToEndzone: drive.plays[0]?.end?.yardsToEndzone ?? 100,
     } satisfies DriveType;
   });
 
   const timestamp =
-    ((summaryWithDrives.drives.current as any)?.plays ?? [])
-      .map((play: any) => play.wallclock)
-      .find(Boolean) ?? Date.now();
+    (summaryWithDrives.drives.current?.plays ?? []).map((play) => play.wallclock).find(Boolean) ??
+    Date.now();
 
   return {
     gameId: espnId,
