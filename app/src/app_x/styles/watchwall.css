@@ -340,6 +340,10 @@
   flex: 1;
 }
 
+.screen-card-secondary .screen-iframe {
+  pointer-events: none;
+}
+
 .screen-card-secondary .screen-focus-label {
   font-size: clamp(1.8rem, 4vw, 3rem);
 }

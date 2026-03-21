@@ -56,7 +56,7 @@ function parseStreamsFromHtml(html: string, category: Category): Stream[] {
 
       return {
         title,
-        slug: title.split(" vs ").at(-1)?.trim() ?? title,
+        slug: (title.split(" vs ").at(-1)?.trim() ?? title).replaceAll(" ", ""),
       } satisfies Stream;
     })
     .filter((stream): stream is Stream => stream !== null);
