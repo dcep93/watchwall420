@@ -1,7 +1,7 @@
 import { useEffect, useState, type Ref } from "react";
 import ReactDomServer from "react-dom/server";
 import type { Host, Stream, StreamSlug } from "../config/types";
-import { renderLog } from "../lib/renderStream";
+import renderLog from "../lib/renderLog";
 
 export default function Multiscreen<T>(props: {
   containerRef?: Ref<HTMLElement>;
