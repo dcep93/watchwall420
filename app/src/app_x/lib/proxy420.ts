@@ -6,7 +6,8 @@ const CACHE_STORE_NAME = "responses";
 type ProxyFetchTextArgs = {
   url: string;
   options?: RequestInit;
-  maxAgeMs?: number;
+  localMaxAgeMs?: number;
+  remoteMaxAgeMs?: number;
 };
 
 type CacheEntry = {
@@ -17,7 +18,7 @@ type CacheEntry = {
 
 export async function fetchTextThroughProxy(args: ProxyFetchTextArgs) {
   const cacheKey = getCacheKey(args);
-  const cachedText = await getCachedText(cacheKey, args.maxAgeMs).catch(() => undefined);
+  const cachedText = await getCachedText(cacheKey, args.localMaxAgeMs).catch(() => undefined);
   if (cachedText !== undefined) {
     return cachedText;
   }
@@ -28,6 +29,7 @@ export async function fetchTextThroughProxy(args: ProxyFetchTextArgs) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
+      maxAgeMs: args.remoteMaxAgeMs,
       url: args.url,
       options: args.options,
     }),
