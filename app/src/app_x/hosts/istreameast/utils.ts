@@ -1,5 +1,3 @@
-import { STREAM_SOURCE_PATTERN } from "./constants";
-
 export function escapeForRegex(value: string) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
@@ -20,10 +18,6 @@ export function resolveUrl(candidate: string, baseUrl: string) {
   } catch {
     return "";
   }
-}
-
-export function isPlayableSourceUrl(value: string) {
-  return STREAM_SOURCE_PATTERN.test(new URL(value).pathname + new URL(value).search);
 }
 
 export function buildStreamSlug(title: string, rawUrl: string) {
