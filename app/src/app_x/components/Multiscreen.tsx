@@ -53,6 +53,7 @@ function ScreenCard<T>(props: {
   onFocus: () => void;
   onRemove: () => void;
 }) {
+  const [titleTooltip, setTitleTooltip] = useState("");
   const screenBodyClassName = [
     "screen-spotlight-body",
     props.isFocused && props.displayLogs ? "" : "screen-spotlight-body-no-log",
@@ -79,6 +80,7 @@ function ScreenCard<T>(props: {
           .join(" ")}
         label={props.stream.title}
         onClick={props.onRemove}
+        title={titleTooltip}
       />
       <div className={screenBodyClassName}>
         {props.isFocused && props.displayLogs ? (
@@ -95,6 +97,7 @@ function ScreenCard<T>(props: {
           ].join(" ")}
           stream={props.stream}
           onClick={props.isFocused ? undefined : props.onFocus}
+          onDebugTitleChange={setTitleTooltip}
         />
       </div>
     </article>
@@ -105,11 +108,16 @@ function ScreenTitleBar(props: {
   label: string;
   className: string;
   onClick?: () => void;
+  title?: string;
 }) {
   const content = <span className="screen-letter">{props.label}</span>;
 
   if (!props.onClick) {
-    return <div className={props.className}>{content}</div>;
+    return (
+      <div className={props.className} title={props.title}>
+        {content}
+      </div>
+    );
   }
 
   return (
@@ -117,6 +125,7 @@ function ScreenTitleBar(props: {
       type="button"
       className={props.className}
       aria-label={`Remove screen ${props.label}`}
+      title={props.title}
       onClick={props.onClick}
     >
       {content}
@@ -129,6 +138,7 @@ function ScreenContent<T>(props: {
   stream: Stream;
   className: string;
   onClick?: () => void;
+  onDebugTitleChange?: (value: string) => void;
 }) {
   const [srcDoc, setSrcDoc] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -138,10 +148,12 @@ function ScreenContent<T>(props: {
 
     setErrorMessage("");
     setSrcDoc("");
+    props.onDebugTitleChange?.("");
 
     props.host
       .getIframeParams(props.stream)
       .then((iframeParams) => {
+        props.onDebugTitleChange?.(JSON.stringify(iframeParams, null, 2));
         console.log("watchwall:getIframeParams", {
           streamTitle: props.stream.title,
           iframeParams,
@@ -160,7 +172,9 @@ function ScreenContent<T>(props: {
         console.error(error);
         if (!isActive) return;
         setSrcDoc("");
-        setErrorMessage(getStreamContentErrorMessage(error));
+        const nextErrorMessage = getStreamContentErrorMessage(error);
+        setErrorMessage(nextErrorMessage);
+        props.onDebugTitleChange?.(nextErrorMessage);
       });
 
     return () => {
