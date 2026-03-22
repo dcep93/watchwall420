@@ -2,55 +2,42 @@ import type { ReactElement } from "react";
 import type { IframeParams } from "./types";
 
 export function renderIstreameastPlayerDocument(iframeParams: IframeParams): ReactElement {
-  const scrollGuardScript = `
+  const scrollLockScript = `
     (() => {
-      const MESSAGE_SOURCE = "watchwall420-extension";
-      const POOEMBED_LOADED = "watchwall420:pooembed-loaded";
-      let releaseHorizontalScrollGuard = null;
-
-      window.addEventListener("message", (event) => {
-        if (event.data?.source !== MESSAGE_SOURCE || event.data?.type !== POOEMBED_LOADED) {
-          return;
-        }
-
-        releaseHorizontalScrollGuard?.();
-        releaseHorizontalScrollGuard = holdTopHorizontalScrollPosition();
-      });
-
-      function holdTopHorizontalScrollPosition() {
-        const scrollWindow = window.top ?? window;
-        const lockedX = scrollWindow.scrollX;
-        let frameId = 0;
-        let released = false;
+      const topWindow = window.top ?? window;
+      const lockCurrentHorizontalScroll = () => {
+        const lockedX = topWindow.scrollX;
 
         const restoreScrollX = () => {
-          if (released) {
+          if (topWindow.scrollX !== lockedX) {
+            topWindow.scrollTo(lockedX, topWindow.scrollY);
             return;
           }
 
-          if (scrollWindow.scrollX !== lockedX) {
-            scrollWindow.scrollTo(lockedX, scrollWindow.scrollY);
-          }
-
-          frameId = window.requestAnimationFrame(restoreScrollX);
+          topWindow.requestAnimationFrame(restoreScrollX);
         };
 
         restoreScrollX();
+      };
 
-        function release() {
-          if (released) {
-            return;
-          }
+      const attachLoadListener = () => {
+        const playerFrame = document.getElementById("watchwall-player-frame");
 
-          released = true;
-          window.cancelAnimationFrame(frameId);
-
-          if (scrollWindow.scrollX !== lockedX) {
-            scrollWindow.scrollTo(lockedX, scrollWindow.scrollY);
-          }
+        if (playerFrame) {
+          playerFrame.addEventListener(
+            "load",
+            () => {
+              lockCurrentHorizontalScroll();
+            },
+            { once: true },
+          );
         }
+      };
 
-        return release;
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", attachLoadListener, { once: true });
+      } else {
+        attachLoadListener();
       }
     })();
   `;
@@ -61,7 +48,7 @@ export function renderIstreameastPlayerDocument(iframeParams: IframeParams): Rea
         <base href={iframeParams._1_rawUrl} />
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
-        <script dangerouslySetInnerHTML={{ __html: scrollGuardScript }} />
+        <script dangerouslySetInnerHTML={{ __html: scrollLockScript }} />
       </head>
       <body
         style={{
@@ -72,6 +59,7 @@ export function renderIstreameastPlayerDocument(iframeParams: IframeParams): Rea
         }}
       >
         <iframe
+          id="watchwall-player-frame"
           src={iframeParams._2_embedPageUrl}
           frameBorder="0"
           style={{

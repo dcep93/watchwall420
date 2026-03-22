@@ -69,11 +69,14 @@ export default function WatchwallApp() {
       return;
     }
 
-    multiscreenRef.current?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-      inline: "start",
-    });
+    const multiscreenRect = multiscreenRef.current?.getBoundingClientRect();
+    if (multiscreenRect) {
+      window.scrollTo({
+        top: window.scrollY + multiscreenRect.top,
+        left: window.scrollX + multiscreenRect.left,
+        behavior: "smooth",
+      });
+    }
 
     hasScrolledFromInitialHashRef.current = true;
   }, [shouldScrollToMultiscreenOnLoad]);
