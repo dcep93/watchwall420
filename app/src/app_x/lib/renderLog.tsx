@@ -1,11 +1,11 @@
 /* eslint-disable react-refresh/only-export-components */
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import type { Stream } from "../config/types";
 import Autoscroller from "./Autoscroller";
 import { fetchLeagueLog, leagueConfigs } from "./renderLog/leagues";
 import type { LogType } from "./renderLog/types";
 
-const POLL_INTERVAL_MS = 3 * 1000;
+const POLL_INTERVAL_MS = 10 * 1000;
 
 export default function renderLog(stream: Stream, logDelayMs: number): ReactNode {
   return <StreamLog stream={stream} logDelayMs={logDelayMs} />;
@@ -14,72 +14,89 @@ export default function renderLog(stream: Stream, logDelayMs: number): ReactNode
 function StreamLog(props: { stream: Stream; logDelayMs: number }) {
   const config = leagueConfigs[props.stream.category];
   const [displayedLog, setDisplayedLog] = useState<LogType | null>(null);
-  const [latestFetchedLog, setLatestFetchedLog] = useState<LogType | null>(null);
   const [errorMessage, setErrorMessage] = useState("");
   const espnGameUrl = getEspnGameUrl(props.stream, config);
+  const pendingTimeoutIdsRef = useRef<number[]>([]);
+  const isMountedRef = useRef(false);
+
+  const clearPendingLogTimeouts = useCallback(() => {
+    for (const timeoutId of pendingTimeoutIdsRef.current) {
+      window.clearTimeout(timeoutId);
+    }
+
+    pendingTimeoutIdsRef.current = [];
+  }, []);
+
+  const queueDelayedLogUpdate = useCallback((nextLog: LogType) => {
+    const timeoutId = window.setTimeout(() => {
+      pendingTimeoutIdsRef.current = pendingTimeoutIdsRef.current.filter(
+        (pendingTimeoutId) => pendingTimeoutId !== timeoutId,
+      );
+
+      if (!isMountedRef.current) {
+        return;
+      }
+
+      setDisplayedLog(nextLog);
+    }, Math.max(0, props.logDelayMs));
+
+    pendingTimeoutIdsRef.current.push(timeoutId);
+  }, [props.logDelayMs]);
+
+  const fetchAndHandleLog = useCallback((shouldRenderImmediately = false) => {
+    if (!config || !hasEspnGame(props.stream)) {
+      return Promise.resolve();
+    }
+
+    return fetchLeagueLog(props.stream.espn_id, config)
+      .then((nextLog) => {
+        if (!isMountedRef.current || !nextLog) {
+          return;
+        }
+
+        if (shouldRenderImmediately) {
+          clearPendingLogTimeouts();
+          setDisplayedLog(nextLog);
+        } else {
+          queueDelayedLogUpdate(nextLog);
+        }
+
+        setErrorMessage("");
+      })
+      .catch((error: unknown) => {
+        console.error("watchwall:fetchLog", error);
+
+        if (!isMountedRef.current) {
+          return;
+        }
+
+        setErrorMessage("Unable to load play-by-play.");
+      });
+  }, [clearPendingLogTimeouts, config, props.stream, queueDelayedLogUpdate]);
 
   useEffect(() => {
-    let isActive = true;
+    isMountedRef.current = true;
 
+    return () => {
+      isMountedRef.current = false;
+      clearPendingLogTimeouts();
+    };
+  }, [clearPendingLogTimeouts]);
+
+  useEffect(() => {
     if (!config || !hasEspnGame(props.stream)) {
       return;
     }
 
-    const updateLog = (shouldBypassDelay = false) =>
-      fetchLeagueLog(props.stream.espn_id, config)
-        .then((nextLog) => {
-          if (!isActive || !nextLog) return;
-          setLatestFetchedLog((currentLog) =>
-            !currentLog || nextLog.timestamp >= currentLog.timestamp ? nextLog : currentLog,
-          );
-          if (shouldBypassDelay) {
-            setDisplayedLog(nextLog);
-          }
-          setErrorMessage("");
-        })
-        .catch((error: unknown) => {
-          console.error("watchwall:fetchLog", error);
-          if (!isActive) return;
-          setErrorMessage("Unable to load play-by-play.");
-        });
-
-    void updateLog();
+    void fetchAndHandleLog();
     const interval = window.setInterval(() => {
-      void updateLog();
+      void fetchAndHandleLog();
     }, POLL_INTERVAL_MS);
 
     return () => {
-      isActive = false;
       window.clearInterval(interval);
     };
-  }, [config, props.stream]);
-
-  useEffect(() => {
-    if (!latestFetchedLog) {
-      return;
-    }
-
-    const delayMs = Math.max(0, props.logDelayMs);
-    const applyWhenReady = () => {
-      setDisplayedLog((currentLog) =>
-        !currentLog || latestFetchedLog.timestamp >= currentLog.timestamp ? latestFetchedLog : currentLog,
-      );
-    };
-
-    if (delayMs === 0) {
-      applyWhenReady();
-      return;
-    }
-
-    const remainingDelayMs = latestFetchedLog.timestamp + delayMs - Date.now();
-    if (remainingDelayMs <= 0) {
-      applyWhenReady();
-      return;
-    }
-
-    const timeoutId = window.setTimeout(applyWhenReady, remainingDelayMs);
-    return () => window.clearTimeout(timeoutId);
-  }, [latestFetchedLog, props.logDelayMs]);
+  }, [config, fetchAndHandleLog, props.logDelayMs, props.stream]);
 
   if (!props.stream.espn_id || props.stream.espn_id < 0) {
     return <div className="watchwall-log-empty">No ESPN game linked.</div>;
@@ -96,20 +113,7 @@ function StreamLog(props: { stream: Stream; logDelayMs: number }) {
         role="button"
         tabIndex={0}
         onClick={() => {
-          if (!config || !hasEspnGame(props.stream)) return;
-          void fetchLeagueLog(props.stream.espn_id, config)
-            .then((nextLog) => {
-              if (!nextLog) return;
-              setLatestFetchedLog((currentLog) =>
-                !currentLog || nextLog.timestamp >= currentLog.timestamp ? nextLog : currentLog,
-              );
-              setDisplayedLog(nextLog);
-              setErrorMessage("");
-            })
-            .catch((error: unknown) => {
-              console.error("watchwall:fetchLog", error);
-              setErrorMessage("Unable to load play-by-play.");
-            });
+          void fetchAndHandleLog(true);
         }}
         onKeyDown={(event) => {
           if (event.key === "Enter" || event.key === " ") {
@@ -129,20 +133,7 @@ function StreamLog(props: { stream: Stream; logDelayMs: number }) {
       log={displayedLog}
       espnGameUrl={espnGameUrl}
       onClick={() => {
-        if (!config || !hasEspnGame(props.stream)) return;
-        void fetchLeagueLog(props.stream.espn_id, config)
-          .then((nextLog) => {
-            if (!nextLog) return;
-            setLatestFetchedLog((currentLog) =>
-              !currentLog || nextLog.timestamp >= currentLog.timestamp ? nextLog : currentLog,
-            );
-            setDisplayedLog(nextLog);
-            setErrorMessage("");
-          })
-          .catch((error: unknown) => {
-            console.error("watchwall:fetchLog", error);
-            setErrorMessage("Unable to load play-by-play.");
-          });
+        void fetchAndHandleLog(true);
       }}
     />
   );
