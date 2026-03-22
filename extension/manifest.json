@@ -22,7 +22,17 @@
         "https://pooembed.eu/embed-noads/*"
       ],
       "js": [
-        "content.js"
+        "pooembed.js"
+      ],
+      "all_frames": true,
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://embedsports.top/embed/*"
+      ],
+      "js": [
+        "embedsports.js"
       ],
       "all_frames": true,
       "run_at": "document_idle"
