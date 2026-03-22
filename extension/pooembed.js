@@ -25,10 +25,20 @@
       return;
     }
 
+    console.log("watchwall:toggle-mute:received-in-pooembed", event.data);
     const video = document.querySelector("video");
     if (video instanceof HTMLVideoElement) {
+      console.log("watchwall:toggle-mute:toggling-video", {
+        mutedBefore: video.muted,
+      });
       video.muted = !video.muted;
+      console.log("watchwall:toggle-mute:toggled-video", {
+        mutedAfter: video.muted,
+      });
+      return;
     }
+
+    console.log("watchwall:toggle-mute:no-video-found");
   });
 
   enableScrollDebugging();

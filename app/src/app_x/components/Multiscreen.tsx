@@ -209,6 +209,10 @@ function ScreenContent<T>(props: {
       return;
     }
 
+    console.log("watchwall:toggle-mute:post-to-wrapper", {
+      title: indexedTitle,
+      muteToggleRequestId,
+    });
     iframeElement.contentWindow?.postMessage(
       {
         source: "watchwall420-app",
