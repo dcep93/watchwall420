@@ -390,6 +390,19 @@ function renderStatRows(lines: string[][]) {
 
 type ParsedScoreType = [number, number];
 
+type ScoringRunCandidate = {
+  startClock: string;
+  endClock: string;
+  durationSeconds: number | null;
+  scoreDelta: ParsedScoreType;
+  baseScore: ParsedScoreType;
+  endScore: ParsedScoreType;
+  scoringTeamIndex: 0 | 1;
+  runPoints: number;
+  opponentPoints: number;
+  netPoints: number;
+};
+
 function getScoringRunLabel(playByPlay: LogType["playByPlay"], leagueCategory: string) {
   const scoringSnapshots = buildScoringSnapshots(playByPlay);
   if (scoringSnapshots.length === 0) {
@@ -398,62 +411,54 @@ function getScoringRunLabel(playByPlay: LogType["playByPlay"], leagueCategory: s
 
   const latestSnapshot = scoringSnapshots[scoringSnapshots.length - 1];
   const latestClock = getLatestClockLabel(playByPlay) || latestSnapshot.clock;
-  let bestRun:
-    | {
-        delta: ParsedScoreType;
-        clock: string;
-        durationSeconds: number | null;
-      }
-    | null = null;
+  let bestRun: ScoringRunCandidate | null = null;
+  let bestInterestScore = Number.NEGATIVE_INFINITY;
 
   for (let index = 0; index < scoringSnapshots.length; index += 1) {
     const startSnapshot = scoringSnapshots[index];
     const baseScore = index > 0 ? scoringSnapshots[index - 1].score : ([0, 0] as ParsedScoreType);
-    const durationStartClock = index > 0 ? scoringSnapshots[index - 1].clock : startSnapshot.clock;
-    const delta = subtractScores(latestSnapshot.score, baseScore);
-    const margin = Math.abs(delta[0] - delta[1]);
-    const totalPoints = delta[0] + delta[1];
-    const durationSeconds = getRunDurationSeconds(durationStartClock, latestClock, leagueCategory);
-
-    if (margin === 0 || totalPoints === 0) {
+    const startClock = index > 0 ? scoringSnapshots[index - 1].clock : startSnapshot.clock;
+    const scoreDelta = subtractScores(latestSnapshot.score, baseScore);
+    const scoringTeamIndex = getScoringTeamIndex(scoreDelta);
+    if (scoringTeamIndex === null) {
       continue;
     }
 
-    if (!bestRun) {
-      bestRun = { delta, clock: durationStartClock, durationSeconds };
+    const candidate: ScoringRunCandidate = {
+      startClock,
+      endClock: latestClock,
+      durationSeconds: getRunDurationSeconds(startClock, latestClock, leagueCategory),
+      scoreDelta,
+      baseScore,
+      endScore: latestSnapshot.score,
+      scoringTeamIndex,
+      runPoints: scoreDelta[scoringTeamIndex],
+      opponentPoints: scoreDelta[1 - scoringTeamIndex],
+      netPoints: scoreDelta[scoringTeamIndex] - scoreDelta[1 - scoringTeamIndex],
+    };
+
+    if (!isInterestingLatestRunCandidate(candidate, latestClock, leagueCategory)) {
       continue;
     }
 
-    const bestMargin = Math.abs(bestRun.delta[0] - bestRun.delta[1]);
-    const bestTotalPoints = bestRun.delta[0] + bestRun.delta[1];
-    const prefersCurrentDuration =
-      durationSeconds !== null &&
-      (bestRun.durationSeconds === null || durationSeconds < bestRun.durationSeconds);
-    const prefersCurrentTotalPoints = totalPoints > bestTotalPoints;
-    if (
-      margin > bestMargin ||
-      (margin === bestMargin && prefersCurrentDuration) ||
-      (
-        margin === bestMargin &&
-        durationSeconds === bestRun.durationSeconds &&
-        prefersCurrentTotalPoints
-      )
-    ) {
-      bestRun = { delta, clock: durationStartClock, durationSeconds };
+    const interestScore = scoreLatestRunInterest(candidate, leagueCategory);
+    if (interestScore > bestInterestScore) {
+      bestRun = candidate;
+      bestInterestScore = interestScore;
     }
   }
 
-  if (!bestRun || bestRun.delta[0] === bestRun.delta[1]) {
+  if (!bestRun) {
     return null;
   }
 
   const durationLabel = formatRunDuration(
-    bestRun.clock,
-    latestClock,
+    bestRun.startClock,
+    bestRun.endClock,
     leagueCategory,
   );
 
-  return `${bestRun.delta[0]}-${bestRun.delta[1]}${durationLabel ? ` in last ${durationLabel}` : ""}`;
+  return `${bestRun.runPoints}-${bestRun.opponentPoints}${durationLabel ? ` in last ${durationLabel}` : ""}`;
 }
 
 function buildScoringSnapshots(playByPlay: LogType["playByPlay"]) {
@@ -506,6 +511,112 @@ function subtractScores(left: ParsedScoreType, right: ParsedScoreType): ParsedSc
   return [left[0] - right[0], left[1] - right[1]];
 }
 
+function getScoringTeamIndex(scoreDelta: ParsedScoreType): 0 | 1 | null {
+  if (scoreDelta[0] === scoreDelta[1]) {
+    return null;
+  }
+
+  return scoreDelta[0] > scoreDelta[1] ? 0 : 1;
+}
+
+function isInterestingLatestRunCandidate(
+  candidate: ScoringRunCandidate,
+  latestClock: string,
+  leagueCategory: string,
+) {
+  if (candidate.netPoints <= 0) {
+    return false;
+  }
+
+  if (candidate.runPoints < 4) {
+    return false;
+  }
+
+  if (candidate.runPoints >= 6 && candidate.opponentPoints <= candidate.runPoints - 4) {
+    return true;
+  }
+
+  const isLateAndCloseWindow = isLateAndCloseGameWindow(candidate, latestClock, leagueCategory);
+  if (isLateAndCloseWindow && candidate.netPoints >= 4) {
+    return true;
+  }
+
+  return candidate.runPoints >= 5 && candidate.opponentPoints <= 1;
+}
+
+function scoreLatestRunInterest(
+  candidate: ScoringRunCandidate,
+  leagueCategory: string,
+) {
+  const durationMinutes =
+    candidate.durationSeconds !== null ? Math.max(candidate.durationSeconds / 60, 0.75) : 3.5;
+  const paceScore = (candidate.netPoints * candidate.runPoints) / Math.pow(durationMinutes, 0.8);
+  const unansweredBonus =
+    candidate.opponentPoints === 0
+      ? 18
+      : candidate.opponentPoints <= 2
+        ? 8
+        : 0;
+
+  const startMargin = getScoreMarginForTeam(candidate.baseScore, candidate.scoringTeamIndex);
+  const endMargin = getScoreMarginForTeam(candidate.endScore, candidate.scoringTeamIndex);
+  const startDeficitBonus = startMargin < 0 ? Math.min(14, Math.abs(startMargin) * 1.5) : 0;
+  const closeGameBonus = Math.abs(startMargin) <= 4 ? 10 : Math.abs(startMargin) <= 8 ? 4 : 0;
+  const leadChangeBonus = startMargin < 0 && endMargin > 0 ? 18 : startMargin <= 0 && endMargin > 0 ? 12 : 0;
+  const separationBonus =
+    endMargin >= 7 && startMargin <= 3 ? 8 : endMargin >= 4 && startMargin <= 0 ? 5 : 0;
+  const lateBonus = getLateGameBonus(candidate.endClock, leagueCategory);
+
+  return (
+    paceScore +
+    unansweredBonus +
+    startDeficitBonus +
+    closeGameBonus +
+    leadChangeBonus +
+    separationBonus +
+    lateBonus
+  );
+}
+
+function getScoreMarginForTeam(score: ParsedScoreType, teamIndex: 0 | 1) {
+  const teamScore = score[teamIndex];
+  const opponentScore = score[1 - teamIndex];
+  return teamScore - opponentScore;
+}
+
+function isLateAndCloseGameWindow(
+  candidate: ScoringRunCandidate,
+  latestClock: string,
+  leagueCategory: string,
+) {
+  const clockConfig = getClockConfig(leagueCategory);
+  const remainingSeconds = parseClockLabelToRemainingSeconds(latestClock, clockConfig);
+  if (remainingSeconds === null) {
+    return false;
+  }
+
+  const endMargin = Math.abs(getScoreMarginForTeam(candidate.endScore, candidate.scoringTeamIndex));
+  return remainingSeconds <= 2 * 60 && endMargin <= 6;
+}
+
+function getLateGameBonus(endClock: string, leagueCategory: string) {
+  const clockConfig = getClockConfig(leagueCategory);
+  const remainingSeconds = parseClockLabelToRemainingSeconds(endClock, clockConfig);
+  if (remainingSeconds === null) {
+    return 0;
+  }
+
+  if (remainingSeconds <= 2 * 60) {
+    return 14;
+  }
+
+  if (remainingSeconds <= 5 * 60) {
+    return 7;
+  }
+
+  return 0;
+}
+
 function getDriveClockLabel(drive: LogType["playByPlay"][number]) {
   const plays = drive.plays || [];
   for (let index = plays.length - 1; index >= 0; index -= 1) {
@@ -548,6 +659,16 @@ function getRunDurationSeconds(startClock: string, endClock: string, leagueCateg
 }
 
 function parseGameClockToElapsedSeconds(clockLabel: string, leagueCategory: string) {
+  const clockConfig = getClockConfig(leagueCategory);
+  return parseGameClockToElapsedSecondsWithConfig(clockLabel, clockConfig);
+}
+
+function parseGameClockToElapsedSecondsWithConfig(
+  clockLabel: string,
+  clockConfig:
+    | { regulationPeriods: number; regulationPeriodSeconds: number; overtimePeriodSeconds: number }
+    | null,
+) {
   const match = clockLabel.match(/^[A-Z](\d+)\s+(\d+):(\d{2})$/i);
   if (!match) {
     return null;
@@ -560,7 +681,6 @@ function parseGameClockToElapsedSeconds(clockLabel: string, leagueCategory: stri
     return null;
   }
 
-  const clockConfig = getClockConfig(leagueCategory);
   if (!clockConfig) {
     return null;
   }
@@ -573,6 +693,32 @@ function parseGameClockToElapsedSeconds(clockLabel: string, leagueCategory: stri
   const periodDurationSeconds = getPeriodDurationSeconds(period, clockConfig);
   const remainingSeconds = minutes * 60 + seconds;
   return elapsedSeconds + Math.max(0, periodDurationSeconds - remainingSeconds);
+}
+
+function parseClockLabelToRemainingSeconds(
+  clockLabel: string,
+  clockConfig:
+    | { regulationPeriods: number; regulationPeriodSeconds: number; overtimePeriodSeconds: number }
+    | null,
+) {
+  const match = clockLabel.match(/^[A-Z](\d+)\s+(\d+):(\d{2})$/i);
+  if (!match || !clockConfig) {
+    return null;
+  }
+
+  const period = parseInt(match[1], 10);
+  const minutes = parseInt(match[2], 10);
+  const seconds = parseInt(match[3], 10);
+  if (!Number.isFinite(period) || !Number.isFinite(minutes) || !Number.isFinite(seconds)) {
+    return null;
+  }
+
+  let remainingSeconds = minutes * 60 + seconds;
+  for (let currentPeriod = period + 1; currentPeriod <= clockConfig.regulationPeriods; currentPeriod += 1) {
+    remainingSeconds += getPeriodDurationSeconds(currentPeriod, clockConfig);
+  }
+
+  return remainingSeconds;
 }
 
 function getClockConfig(leagueCategory: string) {
