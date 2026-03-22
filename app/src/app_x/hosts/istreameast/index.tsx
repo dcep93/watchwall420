@@ -37,9 +37,9 @@ export const istreameastHost: Host<IframeParams> = {
     const watchPage = parseStreamWatchPage(watchPageHtml);
 
     const iframeParams = {
+      _0_fetchedAtMs: Date.now(),
       _1_rawUrl: stream.raw_url,
       _2_embedPageUrl: watchPage.embedPageUrl,
-      _3_fetchedAtMs: Date.now(),
     };
 
     if (!iframeParams._2_embedPageUrl) {
