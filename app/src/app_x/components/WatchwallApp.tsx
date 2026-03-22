@@ -29,9 +29,6 @@ export default function WatchwallApp() {
   const streams = filterStreamsByCategory(allStreams, category);
   const { hadHashSelectionOnLoad, selectedSlugs, selectedStreams, setSelectedSlugs } =
     useSelectedStreamIds(allStreams);
-  const [hasResumedFromHashSelection, setHasResumedFromHashSelection] = useState(
-    !hadHashSelectionOnLoad,
-  );
   const multiscreenRef = useRef<HTMLElement | null>(null);
   const hasScrolledFromInitialHashRef = useRef(false);
 
@@ -56,16 +53,7 @@ export default function WatchwallApp() {
 
   const resolvedFocusedSlug =
     selectedStreams.find((stream) => stream.slug === focusedSlug)?.slug ?? selectedStreams[0]?.slug;
-  const shouldShowResumePrompt =
-    !IS_DEV &&
-    isAuthorized &&
-    !hasResumedFromHashSelection &&
-    hadHashSelectionOnLoad &&
-    selectedStreams.length > 0;
-  const shouldScrollToMultiscreenOnLoad =
-    hadHashSelectionOnLoad &&
-    selectedStreams.length > 0 &&
-    (shouldShowResumePrompt || IS_DEV);
+  const shouldScrollToMultiscreenOnLoad = hadHashSelectionOnLoad && selectedStreams.length > 0;
 
   useEffect(() => {
     if (!shouldScrollToMultiscreenOnLoad || hasScrolledFromInitialHashRef.current) {
@@ -83,20 +71,6 @@ export default function WatchwallApp() {
 
     hasScrolledFromInitialHashRef.current = true;
   }, [shouldScrollToMultiscreenOnLoad]);
-
-  useEffect(() => {
-    if (!shouldShowResumePrompt) return;
-
-    const resumeFromHashSelection = () => setHasResumedFromHashSelection(true);
-
-    window.addEventListener("keydown", resumeFromHashSelection, { once: true });
-    window.addEventListener("click", resumeFromHashSelection, { once: true });
-
-    return () => {
-      window.removeEventListener("keydown", resumeFromHashSelection);
-      window.removeEventListener("click", resumeFromHashSelection);
-    };
-  }, [shouldShowResumePrompt]);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -176,7 +150,6 @@ export default function WatchwallApp() {
     setFocusedSlug("");
     setDisplayLogs(true);
     setSelectedSlugs([]);
-    setHasResumedFromHashSelection(true);
     hasScrolledFromInitialHashRef.current = false;
   }
 
@@ -207,27 +180,19 @@ export default function WatchwallApp() {
         onClearCache={handleClearCache}
       />
       {selectedStreams.length > 0 ? (
-        shouldShowResumePrompt ? (
-          <section ref={multiscreenRef} className="multiscreen-column resume-column">
-            <div className="resume-message">
-              <p>Press any key or click to resume.</p>
-            </div>
-          </section>
-        ) : (
-          <Multiscreen
-            containerRef={multiscreenRef}
-            host={HOST}
-            streams={selectedStreams}
-            displayLogs={displayLogs}
-            logDelayMs={logDelayMs}
-            focusedSlug={resolvedFocusedSlug}
-            muteToggleSlug={muteToggleSlug}
-            muteToggleRequestId={muteToggleRequestId}
-            onRefreshStream={handleRefreshStream}
-            onRemove={handleRemove}
-            onFocus={setFocusedSlug}
-          />
-        )
+        <Multiscreen
+          containerRef={multiscreenRef}
+          host={HOST}
+          streams={selectedStreams}
+          displayLogs={displayLogs}
+          logDelayMs={logDelayMs}
+          focusedSlug={resolvedFocusedSlug}
+          muteToggleSlug={muteToggleSlug}
+          muteToggleRequestId={muteToggleRequestId}
+          onRefreshStream={handleRefreshStream}
+          onRemove={handleRemove}
+          onFocus={setFocusedSlug}
+        />
       ) : null}
     </main>
   );

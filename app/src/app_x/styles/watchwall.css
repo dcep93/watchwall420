@@ -145,27 +145,6 @@
   grid-template-rows: minmax(0, 1fr);
 }
 
-.resume-column {
-  align-items: center;
-  justify-content: center;
-}
-
-.resume-message {
-  width: min(32rem, 100%);
-  padding: 32px;
-  border: 1px solid var(--ww-border);
-  border-radius: 28px;
-  background: var(--ww-panel);
-  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.25);
-  text-align: center;
-}
-
-.resume-message p {
-  margin: 0;
-  color: var(--ww-text-strong);
-  font-size: clamp(1.2rem, 2vw, 1.8rem);
-}
-
 .panel-header {
   display: flex;
   align-items: center;
