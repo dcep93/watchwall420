@@ -757,6 +757,20 @@
     min-height: 460px;
   }
 
+  .screen-card-spotlight .screen-focus-spotlight {
+    width: 100vw;
+    max-width: 100%;
+    aspect-ratio: 16 / 9;
+    justify-self: center;
+    align-self: start;
+  }
+
+  .screen-card-spotlight .screen-iframe,
+  .screen-card-spotlight .screen-content-error {
+    width: 100%;
+    height: 100%;
+  }
+
   .screen-card-secondary {
     min-width: 220px;
   }
