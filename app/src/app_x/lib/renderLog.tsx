@@ -458,7 +458,7 @@ function getScoringRunLabel(playByPlay: LogType["playByPlay"], leagueCategory: s
     leagueCategory,
   );
 
-  return `${bestRun.runPoints}-${bestRun.opponentPoints}${durationLabel ? ` in last ${durationLabel}` : ""}`;
+  return `${bestRun.scoreDelta[0]}-${bestRun.scoreDelta[1]}${durationLabel ? ` in last ${durationLabel}` : ""}`;
 }
 
 function buildScoringSnapshots(playByPlay: LogType["playByPlay"]) {
