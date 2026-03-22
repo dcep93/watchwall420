@@ -8,19 +8,20 @@ function scrollLockScriptRunner() {
   const TOGGLE_MUTE = "watchwall420:toggle-mute";
   let lastSetMutedMessage: unknown = null;
 
-  const lockCurrentHorizontalScroll = () => {
+  const lockCurrentScrollPosition = () => {
     const lockedX = topWindow.scrollX;
+    const lockedY = topWindow.scrollY;
 
-    const restoreScrollX = () => {
-      if (topWindow.scrollX !== lockedX) {
-        topWindow.scrollTo(lockedX, topWindow.scrollY);
+    const restoreScrollPosition = () => {
+      if (topWindow.scrollX !== lockedX || topWindow.scrollY !== lockedY) {
+        topWindow.scrollTo(lockedX, lockedY);
         return;
       }
 
-      topWindow.requestAnimationFrame(restoreScrollX);
+      topWindow.requestAnimationFrame(restoreScrollPosition);
     };
 
-    restoreScrollX();
+    restoreScrollPosition();
   };
 
   const attachLoadListener = () => {
@@ -59,7 +60,7 @@ function scrollLockScriptRunner() {
         if (lastSetMutedMessage) {
           forwardMessage(lastSetMutedMessage);
         }
-        lockCurrentHorizontalScroll();
+        lockCurrentScrollPosition();
       },
       { once: true },
     );
