@@ -16,14 +16,24 @@ export default function Menu(props: {
   onLogDelayMsChange: (value: number) => void;
   onClearCache: () => void;
 }) {
+  const shaTooltip = formatShaTooltip(shaDetailsRaw);
+
   return (
     <aside className="menu-column">
-      <h1
-        className="menu-title"
-        title={formatShaTooltip(shaDetailsRaw)}
-      >
-        watchwall420
-      </h1>
+      <div className="menu-title-wrap">
+        <h1
+          className="menu-title"
+          title={shaTooltip}
+        >
+          watchwall420
+        </h1>
+        <button
+          type="button"
+          className="menu-title-overlay-button"
+          aria-label="Show build details"
+          onClick={() => alert(shaTooltip)}
+        />
+      </div>
 
       <div className="stream-list">
         {props.streams.map((stream) => (
