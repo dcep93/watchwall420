@@ -1,7 +1,10 @@
+import { useEffect, useState } from "react";
 import shaDetailsRaw from "../config/sha.json?raw";
 import type { Category, Stream, StreamCategory, StreamSlug } from "../config/types";
 import Guide from "./Guide";
 import Options from "./Options";
+
+const MOBILE_LAYOUT_MAX_WIDTH_PX = 960;
 
 export default function Menu(props: {
   category: Category;
@@ -16,11 +19,37 @@ export default function Menu(props: {
   onLogDelayMsChange: (value: number) => void;
   onClearCache: () => void;
 }) {
+  const [isMobileLayout, setIsMobileLayout] = useState(() => {
+    if (typeof window === "undefined") {
+      return false;
+    }
+
+    return window.innerWidth <= MOBILE_LAYOUT_MAX_WIDTH_PX;
+  });
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const mediaQuery = window.matchMedia(`(max-width: ${MOBILE_LAYOUT_MAX_WIDTH_PX}px)`);
+    const onChange = (event: MediaQueryListEvent) => {
+      setIsMobileLayout(event.matches);
+    };
+
+    setIsMobileLayout(mediaQuery.matches);
+    mediaQuery.addEventListener("change", onChange);
+
+    return () => {
+      mediaQuery.removeEventListener("change", onChange);
+    };
+  }, []);
+
   return (
     <aside className="menu-column">
       <h1
         className="menu-title"
-        title={formatShaTooltip(shaDetailsRaw)}
+        title={isMobileLayout ? undefined : formatShaTooltip(shaDetailsRaw)}
       >
         watchwall420
       </h1>
