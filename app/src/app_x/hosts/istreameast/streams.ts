@@ -30,7 +30,8 @@ export function parseStreamsFromHtml(
         return null;
       }
 
-      const title = titleElement.textContent?.trim() ?? "";
+      const rawTitle = titleElement.textContent?.trim() ?? "";
+      const title = rawTitle.split(/ vs /i).reverse().join(" @ ");
       const rawUrl = getRawUrl(eventCard);
       if (!title || !rawUrl || seenRawUrls.has(rawUrl)) {
         return null;
