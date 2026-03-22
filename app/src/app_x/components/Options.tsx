@@ -38,7 +38,9 @@ export default function Options(props: {
   categories: readonly StreamCategory[];
   onCategoryChange: (value: Category) => void;
   displayLogs: boolean;
+  logDelayMs: number;
   onDisplayLogsChange: (value: boolean) => void;
+  onLogDelayMsChange: (value: number) => void;
   onClearCache: () => void;
 }) {
   return (
@@ -83,12 +85,21 @@ export default function Options(props: {
         <input
           className="option-input"
           aria-label="log delay ms"
-          defaultValue="40,000"
+          value={formatNumberWithSeparators(props.logDelayMs)}
           inputMode="numeric"
+          onChange={(event) => {
+            const nextValue = event.target.value;
+            const digitsOnly = nextValue.replace(/[^\d]/g, "");
+            props.onLogDelayMsChange(Number(digitsOnly || "0"));
+          }}
         />
       </div>
     </section>
   );
+}
+
+function formatNumberWithSeparators(value: number) {
+  return new Intl.NumberFormat("en-US").format(value);
 }
 
 function OptionCheckbox(props: {

@@ -25,6 +25,7 @@ export default function WatchwallApp() {
   const [muteToggleSlug, setMuteToggleSlug] = useState<StreamSlug>("");
   const [muteToggleRequestId, setMuteToggleRequestId] = useState(0);
   const [displayLogs, setDisplayLogs] = useState(true);
+  const [logDelayMs, setLogDelayMs] = useState(40_000);
   const streams = filterStreamsByCategory(allStreams, category);
   const { hadHashSelectionOnLoad, selectedSlugs, selectedStreams, setSelectedSlugs } =
     useSelectedStreamIds(allStreams);
@@ -190,11 +191,13 @@ export default function WatchwallApp() {
         category={category}
         categories={hostCategories}
         displayLogs={displayLogs}
+        logDelayMs={logDelayMs}
         streams={streams ?? []}
         selectedSlugs={selectedSlugs}
         onCategoryChange={setCategory}
         onToggle={handleToggle}
         onDisplayLogsChange={setDisplayLogs}
+        onLogDelayMsChange={setLogDelayMs}
         onClearCache={handleClearCache}
       />
       {selectedStreams.length > 0 ? (
@@ -210,6 +213,7 @@ export default function WatchwallApp() {
             host={HOST}
             streams={selectedStreams}
             displayLogs={displayLogs}
+            logDelayMs={logDelayMs}
             focusedSlug={resolvedFocusedSlug}
             muteToggleSlug={muteToggleSlug}
             muteToggleRequestId={muteToggleRequestId}

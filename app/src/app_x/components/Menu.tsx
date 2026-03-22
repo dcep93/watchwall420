@@ -11,7 +11,9 @@ export default function Menu(props: {
   onToggle: (streamSlug: StreamSlug) => void;
   onCategoryChange: (value: Category) => void;
   displayLogs: boolean;
+  logDelayMs: number;
   onDisplayLogsChange: (value: boolean) => void;
+  onLogDelayMsChange: (value: number) => void;
   onClearCache: () => void;
 }) {
   return (
@@ -40,8 +42,10 @@ export default function Menu(props: {
         category={props.category}
         categories={props.categories}
         displayLogs={props.displayLogs}
+        logDelayMs={props.logDelayMs}
         onCategoryChange={props.onCategoryChange}
         onDisplayLogsChange={props.onDisplayLogsChange}
+        onLogDelayMsChange={props.onLogDelayMsChange}
         onClearCache={props.onClearCache}
       />
     </aside>

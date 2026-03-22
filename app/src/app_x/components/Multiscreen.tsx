@@ -8,6 +8,7 @@ export default function Multiscreen<T>(props: {
   host: Host<T>;
   streams: Stream[];
   displayLogs: boolean;
+  logDelayMs: number;
   focusedSlug?: StreamSlug;
   muteToggleSlug?: StreamSlug;
   muteToggleRequestId: number;
@@ -36,6 +37,7 @@ export default function Multiscreen<T>(props: {
             stream={stream}
             streamIndex={index}
             displayLogs={displayLogs}
+            logDelayMs={props.logDelayMs}
             isFocused={stream.slug === focusedStream?.slug}
             shouldToggleMute={stream.slug === props.muteToggleSlug}
             muteToggleRequestId={props.muteToggleRequestId}
@@ -54,6 +56,7 @@ function ScreenCard<T>(props: {
   stream: Stream;
   streamIndex: number;
   displayLogs: boolean;
+  logDelayMs: number;
   isFocused: boolean;
   shouldToggleMute: boolean;
   muteToggleRequestId: number;
@@ -98,7 +101,7 @@ function ScreenCard<T>(props: {
       <div className={screenBodyClassName}>
         {props.isFocused && props.displayLogs ? (
           <div className="log-panel log-panel-spotlight">
-            <div className="log-entry">{renderLog(props.stream)}</div>
+            <div className="log-entry">{renderLog(props.stream, props.logDelayMs)}</div>
           </div>
         ) : null}
         <ScreenContent
