@@ -150,6 +150,7 @@ function StreamLog(props: { stream: Stream; logDelayMs: number; refreshRequestId
     <LogView
       log={displayedLog}
       espnGameUrl={espnGameUrl}
+      leagueCategory={props.stream.category}
       onClick={() => {
         void fetchAndHandleLog(true);
       }}
@@ -161,7 +162,12 @@ function hasEspnGame(stream: Stream) {
   return Boolean(stream.espn_id && stream.espn_id > 0);
 }
 
-function LogView(props: { log: LogType; espnGameUrl: string | null; onClick: () => void }) {
+function LogView(props: {
+  log: LogType;
+  espnGameUrl: string | null;
+  leagueCategory: string;
+  onClick: () => void;
+}) {
   const playByPlay = useMemo(() => {
     const drives = [...(props.log.playByPlay || [])];
     if (drives.length > 1 && drives[0].description === drives[1].description) {
@@ -169,6 +175,10 @@ function LogView(props: { log: LogType; espnGameUrl: string | null; onClick: () 
     }
     return drives;
   }, [props.log.playByPlay]);
+  const scoringRun = useMemo(
+    () => getScoringRunLabel(playByPlay, props.leagueCategory),
+    [playByPlay, props.leagueCategory],
+  );
 
   return (
     <div
@@ -202,6 +212,7 @@ function LogView(props: { log: LogType; espnGameUrl: string | null; onClick: () 
             </div>
           ))}
         </div>
+        {scoringRun ? <div className="watchwall-log-scoring-run">scoring run: {scoringRun}</div> : null}
         <div className="watchwall-log-spacer" />
         {playByPlay.slice().reverse().map((drive, index) => (
           <div key={`${drive.team}-${drive.description}-${index}`} className="watchwall-log-event-row">
@@ -375,4 +386,226 @@ function renderStatRows(lines: string[][]) {
       ))}
     </>
   );
+}
+
+type ParsedScoreType = [number, number];
+
+function getScoringRunLabel(playByPlay: LogType["playByPlay"], leagueCategory: string) {
+  const scoringSnapshots = buildScoringSnapshots(playByPlay);
+  if (scoringSnapshots.length === 0) {
+    return null;
+  }
+
+  const latestSnapshot = scoringSnapshots[scoringSnapshots.length - 1];
+  const latestClock = getLatestClockLabel(playByPlay) || latestSnapshot.clock;
+  let bestRun:
+    | {
+        delta: ParsedScoreType;
+        clock: string;
+        durationSeconds: number | null;
+      }
+    | null = null;
+
+  for (let index = 0; index < scoringSnapshots.length; index += 1) {
+    const startSnapshot = scoringSnapshots[index];
+    const baseScore = index > 0 ? scoringSnapshots[index - 1].score : ([0, 0] as ParsedScoreType);
+    const durationStartClock = index > 0 ? scoringSnapshots[index - 1].clock : startSnapshot.clock;
+    const delta = subtractScores(latestSnapshot.score, baseScore);
+    const margin = Math.abs(delta[0] - delta[1]);
+    const totalPoints = delta[0] + delta[1];
+    const durationSeconds = getRunDurationSeconds(durationStartClock, latestClock, leagueCategory);
+
+    if (margin === 0 || totalPoints === 0) {
+      continue;
+    }
+
+    if (!bestRun) {
+      bestRun = { delta, clock: durationStartClock, durationSeconds };
+      continue;
+    }
+
+    const bestMargin = Math.abs(bestRun.delta[0] - bestRun.delta[1]);
+    const bestTotalPoints = bestRun.delta[0] + bestRun.delta[1];
+    const prefersCurrentDuration =
+      durationSeconds !== null &&
+      (bestRun.durationSeconds === null || durationSeconds < bestRun.durationSeconds);
+    const prefersCurrentTotalPoints = totalPoints > bestTotalPoints;
+    if (
+      margin > bestMargin ||
+      (margin === bestMargin && prefersCurrentDuration) ||
+      (
+        margin === bestMargin &&
+        durationSeconds === bestRun.durationSeconds &&
+        prefersCurrentTotalPoints
+      )
+    ) {
+      bestRun = { delta, clock: durationStartClock, durationSeconds };
+    }
+  }
+
+  if (!bestRun || bestRun.delta[0] === bestRun.delta[1]) {
+    return null;
+  }
+
+  const durationLabel = formatRunDuration(
+    bestRun.clock,
+    latestClock,
+    leagueCategory,
+  );
+
+  return `${bestRun.delta[0]}-${bestRun.delta[1]}${durationLabel ? ` in last ${durationLabel}` : ""}`;
+}
+
+function buildScoringSnapshots(playByPlay: LogType["playByPlay"]) {
+  const snapshots: { score: ParsedScoreType; clock: string }[] = [];
+  let previousScore: ParsedScoreType | null = null;
+
+  for (const drive of playByPlay) {
+    const score = parseScore(drive.score);
+    if (!score) {
+      continue;
+    }
+
+    if (!previousScore) {
+      previousScore = score;
+      if (score[0] === 0 && score[1] === 0) {
+        continue;
+      }
+
+      snapshots.push({
+        score,
+        clock: getDriveClockLabel(drive),
+      });
+      continue;
+    }
+
+    if (previousScore && score[0] === previousScore[0] && score[1] === previousScore[1]) {
+      continue;
+    }
+
+    snapshots.push({
+      score,
+      clock: getDriveClockLabel(drive),
+    });
+    previousScore = score;
+  }
+
+  return snapshots;
+}
+
+function parseScore(score: string): ParsedScoreType | null {
+  const parts = score.split("-").map((part) => parseInt(part.trim(), 10));
+  if (parts.length !== 2 || parts.some((part) => Number.isNaN(part))) {
+    return null;
+  }
+
+  return [parts[0], parts[1]];
+}
+
+function subtractScores(left: ParsedScoreType, right: ParsedScoreType): ParsedScoreType {
+  return [left[0] - right[0], left[1] - right[1]];
+}
+
+function getDriveClockLabel(drive: LogType["playByPlay"][number]) {
+  const plays = drive.plays || [];
+  for (let index = plays.length - 1; index >= 0; index -= 1) {
+    if (plays[index].clock) {
+      return plays[index].clock;
+    }
+  }
+
+  return "";
+}
+
+function getLatestClockLabel(playByPlay: LogType["playByPlay"]) {
+  for (let driveIndex = playByPlay.length - 1; driveIndex >= 0; driveIndex -= 1) {
+    const clock = getDriveClockLabel(playByPlay[driveIndex]);
+    if (clock) {
+      return clock;
+    }
+  }
+
+  return "";
+}
+
+function formatRunDuration(startClock: string, endClock: string, leagueCategory: string) {
+  const durationSeconds = getRunDurationSeconds(startClock, endClock, leagueCategory);
+  if (durationSeconds === null) {
+    return null;
+  }
+
+  return formatSeconds(durationSeconds);
+}
+
+function getRunDurationSeconds(startClock: string, endClock: string, leagueCategory: string) {
+  const startSeconds = parseGameClockToElapsedSeconds(startClock, leagueCategory);
+  const endSeconds = parseGameClockToElapsedSeconds(endClock, leagueCategory);
+  if (startSeconds === null || endSeconds === null || endSeconds <= startSeconds) {
+    return null;
+  }
+
+  return endSeconds - startSeconds;
+}
+
+function parseGameClockToElapsedSeconds(clockLabel: string, leagueCategory: string) {
+  const match = clockLabel.match(/^[A-Z](\d+)\s+(\d+):(\d{2})$/i);
+  if (!match) {
+    return null;
+  }
+
+  const period = parseInt(match[1], 10);
+  const minutes = parseInt(match[2], 10);
+  const seconds = parseInt(match[3], 10);
+  if (!Number.isFinite(period) || !Number.isFinite(minutes) || !Number.isFinite(seconds)) {
+    return null;
+  }
+
+  const clockConfig = getClockConfig(leagueCategory);
+  if (!clockConfig) {
+    return null;
+  }
+
+  let elapsedSeconds = 0;
+  for (let currentPeriod = 1; currentPeriod < period; currentPeriod += 1) {
+    elapsedSeconds += getPeriodDurationSeconds(currentPeriod, clockConfig);
+  }
+
+  const periodDurationSeconds = getPeriodDurationSeconds(period, clockConfig);
+  const remainingSeconds = minutes * 60 + seconds;
+  return elapsedSeconds + Math.max(0, periodDurationSeconds - remainingSeconds);
+}
+
+function getClockConfig(leagueCategory: string) {
+  if (["NFL", "CFB", "CFL"].includes(leagueCategory)) {
+    return { regulationPeriods: 4, regulationPeriodSeconds: 15 * 60, overtimePeriodSeconds: 10 * 60 };
+  }
+
+  if (leagueCategory === "NBA") {
+    return { regulationPeriods: 4, regulationPeriodSeconds: 12 * 60, overtimePeriodSeconds: 5 * 60 };
+  }
+
+  if (leagueCategory === "NCAAB") {
+    return { regulationPeriods: 2, regulationPeriodSeconds: 20 * 60, overtimePeriodSeconds: 5 * 60 };
+  }
+
+  if (leagueCategory === "NHL") {
+    return { regulationPeriods: 3, regulationPeriodSeconds: 20 * 60, overtimePeriodSeconds: 5 * 60 };
+  }
+
+  return null;
+}
+
+function getPeriodDurationSeconds(
+  period: number,
+  config: { regulationPeriods: number; regulationPeriodSeconds: number; overtimePeriodSeconds: number },
+) {
+  return period <= config.regulationPeriods
+    ? config.regulationPeriodSeconds
+    : config.overtimePeriodSeconds;
+}
+
+function formatSeconds(totalSeconds: number) {
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return `${minutes}:${String(seconds).padStart(2, "0")}`;
 }

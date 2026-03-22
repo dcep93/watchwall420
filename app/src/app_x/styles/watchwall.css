@@ -584,6 +584,14 @@
   font-weight: 700;
 }
 
+.watchwall-log-scoring-run {
+  margin-top: 0.65em;
+  color: var(--ww-text-muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: lowercase;
+}
+
 .watchwall-log-spacer {
   height: 1em;
 }
