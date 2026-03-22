@@ -1,4 +1,4 @@
-import { useEffect, useState, type CSSProperties, type Ref } from "react";
+import { useCallback, useEffect, useState, type CSSProperties, type Ref } from "react";
 import ReactDomServer from "react-dom/server";
 import type { Host, Stream, StreamSlug } from "../config/types";
 import renderLog from "../lib/renderLog";
@@ -76,6 +76,9 @@ function ScreenCard<T>(props: {
   const [titleTooltip, setTitleTooltip] = useState("");
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [refreshScreen, setRefreshScreen] = useState<(() => Promise<void>) | null>(null);
+  const handleRefreshReady = useCallback((refresh: () => Promise<void>) => {
+    setRefreshScreen(() => refresh);
+  }, []);
   const indexedTitle = formatIndexedStreamTitle(props.stream.title, props.streamIndex);
   const screenBodyClassName = [
     "screen-spotlight-body",
@@ -132,9 +135,7 @@ function ScreenCard<T>(props: {
           onRefreshStream={props.onRefreshStream}
           stream={props.stream}
           onRefreshButtonStateChange={setIsRefreshing}
-          onRefreshReady={(refresh) => {
-            setRefreshScreen(() => refresh);
-          }}
+          onRefreshReady={handleRefreshReady}
           onClick={props.isFocused ? undefined : props.onFocus}
           onDebugTitleChange={setTitleTooltip}
         />

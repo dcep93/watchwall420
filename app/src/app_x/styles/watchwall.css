@@ -398,11 +398,14 @@
 
 .screen-spotlight-body-no-log {
   grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
 }
 
 .screen-focus-spotlight {
   display: grid;
   place-items: center;
+  height: 100%;
+  max-height: 100%;
   border-radius: 0;
   background: transparent;
 }
@@ -829,6 +832,15 @@
     align-self: start;
     min-height: min(56.25vw, 56.25svh);
     overflow: hidden;
+  }
+
+  .screen-card-spotlight .screen-spotlight-body-no-log .screen-focus-spotlight {
+    grid-row: 1;
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    aspect-ratio: auto;
+    min-height: 0;
   }
 
   .screen-card-spotlight .screen-iframe,
