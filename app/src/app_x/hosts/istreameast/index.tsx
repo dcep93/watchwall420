@@ -2,7 +2,6 @@ import type { Host } from "../../config/types";
 import { fetchEspnScheduleEventsForCategories } from "../../lib/espn";
 import { ISTREAMEAST_URL } from "./constants";
 import { renderIstreameastPlayerDocument } from "./iframe";
-import { resolveEmbedPlayback } from "./playback";
 import { fetchIstreameastHtml, fetchIstreameastPageText } from "./proxy";
 import { parseStreamWatchPage, parseStreamsFromHtml } from "./streams";
 import type { IframeParams } from "./types";
@@ -36,8 +35,6 @@ export const istreameastHost: Host<IframeParams> = {
     const iframeParams = {
       _1_rawUrl: stream.raw_url,
       _2_embedPageUrl: watchPage.embedPageUrl,
-      _3_iframeSourcePageUrl: "",
-      _4_fid: "",
     };
 
     if (!iframeParams._2_embedPageUrl) {
@@ -51,11 +48,6 @@ export const istreameastHost: Host<IframeParams> = {
         )}`,
       );
     }
-
-    const resolvedPlayback = await resolveEmbedPlayback(iframeParams._2_embedPageUrl);
-
-    iframeParams._3_iframeSourcePageUrl = resolvedPlayback.iframeSourcePageUrl;
-    iframeParams._4_fid = resolvedPlayback.fid;
 
     return iframeParams;
   },
