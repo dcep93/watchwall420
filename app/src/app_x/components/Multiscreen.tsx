@@ -140,28 +140,25 @@ function ScreenContent<T>(props: {
   onClick?: () => void;
   onDebugTitleChange?: (value: string) => void;
 }) {
+  const { className, host, onClick, onDebugTitleChange, stream } = props;
   const [srcDoc, setSrcDoc] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     let isActive = true;
 
-    setErrorMessage("");
-    setSrcDoc("");
-    props.onDebugTitleChange?.("");
+    onDebugTitleChange?.("");
 
-    props.host
-      .getIframeParams(props.stream)
+    host
+      .getIframeParams(stream)
       .then((iframeParams) => {
-        props.onDebugTitleChange?.(JSON.stringify(iframeParams, null, 2));
+        onDebugTitleChange?.(JSON.stringify(iframeParams, null, 2));
         console.log("watchwall:getIframeParams", {
-          streamTitle: props.stream.title,
+          streamTitle: stream.title,
           iframeParams,
         });
 
-        return ReactDomServer.renderToStaticMarkup(
-          props.host.getIframeDocStrElement(iframeParams),
-        );
+        return ReactDomServer.renderToStaticMarkup(host.getIframeDocStrElement(iframeParams));
       })
       .then((renderedSrcDoc) => {
         if (!isActive) return;
@@ -174,22 +171,22 @@ function ScreenContent<T>(props: {
         setSrcDoc("");
         const nextErrorMessage = getStreamContentErrorMessage(error);
         setErrorMessage(nextErrorMessage);
-        props.onDebugTitleChange?.(nextErrorMessage);
+        onDebugTitleChange?.(nextErrorMessage);
       });
 
     return () => {
       isActive = false;
     };
-  }, [props.host, props.stream]);
+  }, [host, onDebugTitleChange, stream]);
 
   return (
-    <div className={props.className}>
-      {props.onClick ? (
+    <div className={className}>
+      {onClick ? (
         <button
           type="button"
           className="screen-focus-overlay"
-          aria-label={`Focus screen ${props.stream.title}`}
-          onClick={props.onClick}
+          aria-label={`Focus screen ${stream.title}`}
+          onClick={onClick}
         />
       ) : null}
       {errorMessage ? (
@@ -199,7 +196,7 @@ function ScreenContent<T>(props: {
       ) : (
         <iframe
           className="screen-iframe"
-          title={props.stream.title}
+          title={stream.title}
           srcDoc={srcDoc}
           loading="eager"
           referrerPolicy="no-referrer"
