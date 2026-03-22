@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import PasswordGate from "./PasswordGate";
+import { HOST } from "../config/data";
+import type { Category, Stream, StreamSlug } from "../config/types";
+import useSelectedStreamIds from "../hooks/useSelectedStreamIds";
+import { getInitialAuthorized, unlock } from "../lib/auth";
 import Menu from "./Menu";
 import Multiscreen from "./Multiscreen";
 import { filterStreamsByCategory, getDefaultCategory } from "./optionsShared";
-import { getInitialAuthorized, unlock } from "../lib/auth";
-import useSelectedStreamIds from "../hooks/useSelectedStreamIds";
-import { HOST } from "../config/data";
-import type { Category, Stream, StreamSlug } from "../config/types";
+import PasswordGate from "./PasswordGate";
 
 const IS_DEV = import.meta.env.DEV;
 
@@ -25,7 +25,7 @@ export default function WatchwallApp() {
   const [muteToggleSlug, setMuteToggleSlug] = useState<StreamSlug>("");
   const [muteToggleRequestId, setMuteToggleRequestId] = useState(0);
   const [displayLogs, setDisplayLogs] = useState(true);
-  const [logDelayMs, setLogDelayMs] = useState(40_000);
+  const [logDelayMs, setLogDelayMs] = useState(120_000);
   const streams = filterStreamsByCategory(allStreams, category);
   const { hadHashSelectionOnLoad, selectedSlugs, selectedStreams, setSelectedSlugs } =
     useSelectedStreamIds(allStreams);
