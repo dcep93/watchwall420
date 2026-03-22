@@ -22,6 +22,8 @@ export default function WatchwallApp() {
   const [allStreams, setAllStreams] = useState<Stream[] | null>(null);
   const [streamReloadKey, setStreamReloadKey] = useState(0);
   const [focusedSlug, setFocusedSlug] = useState<StreamSlug>("");
+  const [muteToggleSlug, setMuteToggleSlug] = useState<StreamSlug>("");
+  const [muteToggleRequestId, setMuteToggleRequestId] = useState(0);
   const [displayLogs, setDisplayLogs] = useState(true);
   const streams = filterStreamsByCategory(allStreams, category);
   const { hadHashSelectionOnLoad, selectedSlugs, selectedStreams, setSelectedSlugs } =
@@ -118,12 +120,18 @@ export default function WatchwallApp() {
         return;
       }
 
+      if (nextStream.slug === resolvedFocusedSlug) {
+        setMuteToggleSlug(nextStream.slug);
+        setMuteToggleRequestId((current) => current + 1);
+        return;
+      }
+
       setFocusedSlug(nextStream.slug);
     };
 
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [selectedStreams]);
+  }, [resolvedFocusedSlug, selectedStreams]);
 
   function handleToggle(streamSlug: StreamSlug) {
     if (selectedSlugs.includes(streamSlug)) {
@@ -203,6 +211,8 @@ export default function WatchwallApp() {
             streams={selectedStreams}
             displayLogs={displayLogs}
             focusedSlug={resolvedFocusedSlug}
+            muteToggleSlug={muteToggleSlug}
+            muteToggleRequestId={muteToggleRequestId}
             onRemove={handleRemove}
             onFocus={setFocusedSlug}
           />

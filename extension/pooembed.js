@@ -1,8 +1,10 @@
 (() => {
   const HOST_HOSTNAMES = new Set(["localhost", "watchwall420.web.app"]);
   const MESSAGE_SOURCE = "watchwall420-extension";
+  const APP_MESSAGE_SOURCE = "watchwall420-app";
   const POOEMBED_LOADED = "watchwall420:pooembed-loaded";
   const POOEMBED_SCROLL_DEBUG = "watchwall420:pooembed-scroll-debug";
+  const TOGGLE_MUTE = "watchwall420:toggle-mute";
   const ancestorOrigins = Array.from(window.location.ancestorOrigins ?? []);
   const isDescendantOfWatchwallHost = ancestorOrigins.some((origin) =>
     HOST_HOSTNAMES.has(new URL(origin).hostname),
@@ -17,6 +19,17 @@
   if (!isDescendantOfWatchwallHost) {
     return;
   }
+
+  window.addEventListener("message", (event) => {
+    if (event.data?.source !== APP_MESSAGE_SOURCE || event.data?.type !== TOGGLE_MUTE) {
+      return;
+    }
+
+    const video = document.querySelector("video");
+    if (video instanceof HTMLVideoElement) {
+      video.muted = !video.muted;
+    }
+  });
 
   enableScrollDebugging();
   waitForVideoElement();

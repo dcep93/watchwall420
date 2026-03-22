@@ -9,6 +9,8 @@ export default function Multiscreen<T>(props: {
   streams: Stream[];
   displayLogs: boolean;
   focusedSlug?: StreamSlug;
+  muteToggleSlug?: StreamSlug;
+  muteToggleRequestId: number;
   onRemove: (streamSlug: StreamSlug) => void;
   onFocus: (streamSlug: StreamSlug) => void;
 }) {
@@ -35,6 +37,8 @@ export default function Multiscreen<T>(props: {
             streamIndex={index}
             displayLogs={displayLogs}
             isFocused={stream.slug === focusedStream?.slug}
+            shouldToggleMute={stream.slug === props.muteToggleSlug}
+            muteToggleRequestId={props.muteToggleRequestId}
             isSolo={streams.length === 1}
             onFocus={() => onFocus(stream.slug)}
             onRemove={() => onRemove(stream.slug)}
@@ -51,6 +55,8 @@ function ScreenCard<T>(props: {
   streamIndex: number;
   displayLogs: boolean;
   isFocused: boolean;
+  shouldToggleMute: boolean;
+  muteToggleRequestId: number;
   isSolo: boolean;
   onFocus: () => void;
   onRemove: () => void;
@@ -99,6 +105,8 @@ function ScreenCard<T>(props: {
             "screen-focus",
             props.isFocused ? "screen-focus-spotlight" : "screen-focus-secondary",
           ].join(" ")}
+          shouldToggleMute={props.shouldToggleMute}
+          muteToggleRequestId={props.muteToggleRequestId}
           stream={props.stream}
           onClick={props.isFocused ? undefined : props.onFocus}
           onDebugTitleChange={setTitleTooltip}
@@ -142,12 +150,24 @@ function ScreenContent<T>(props: {
   stream: Stream;
   indexedTitle: string;
   className: string;
+  shouldToggleMute: boolean;
+  muteToggleRequestId: number;
   onClick?: () => void;
   onDebugTitleChange?: (value: string) => void;
 }) {
-  const { className, host, indexedTitle, onClick, onDebugTitleChange, stream } = props;
+  const {
+    className,
+    host,
+    indexedTitle,
+    muteToggleRequestId,
+    onClick,
+    onDebugTitleChange,
+    shouldToggleMute,
+    stream,
+  } = props;
   const [srcDoc, setSrcDoc] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [iframeElement, setIframeElement] = useState<HTMLIFrameElement | null>(null);
 
   useEffect(() => {
     let isActive = true;
@@ -184,6 +204,20 @@ function ScreenContent<T>(props: {
     };
   }, [host, onDebugTitleChange, stream]);
 
+  useEffect(() => {
+    if (!iframeElement || !shouldToggleMute || muteToggleRequestId === 0) {
+      return;
+    }
+
+    iframeElement.contentWindow?.postMessage(
+      {
+        source: "watchwall420-app",
+        type: "watchwall420:toggle-mute",
+      },
+      "*",
+    );
+  }, [iframeElement, muteToggleRequestId, shouldToggleMute]);
+
   return (
     <div className={className}>
       {onClick ? (
@@ -205,6 +239,7 @@ function ScreenContent<T>(props: {
           srcDoc={srcDoc}
           loading="eager"
           referrerPolicy="no-referrer"
+          ref={setIframeElement}
         />
       )}
     </div>
