@@ -146,8 +146,21 @@ export default function WatchwallApp() {
 
   async function handleRefreshStream(streamSlug: StreamSlug) {
     const fetchedStreams = await HOST.getStreams();
-    setAllStreams(fetchedStreams);
-    return fetchedStreams.find((stream) => stream.slug === streamSlug) ?? null;
+    const refreshedStream = fetchedStreams.find((stream) => stream.slug === streamSlug) ?? null;
+
+    if (refreshedStream) {
+      setAllStreams((currentStreams) => {
+        if (!currentStreams) {
+          return currentStreams;
+        }
+
+        return currentStreams.map((stream) =>
+          stream.slug === streamSlug ? refreshedStream : stream,
+        );
+      });
+    }
+
+    return refreshedStream;
   }
 
   function handleClearCache() {
