@@ -46,41 +46,16 @@
     video.autoplay = true;
     video.muted = true;
     video.playsInline = true;
-    let stopped = false;
+    console.log("watchwall:pooembed:play-attempt");
+    const playResult = video.play();
 
-    const stop = () => {
-      stopped = true;
-    };
+    if (!playResult || typeof playResult.then !== "function") {
+      return;
+    }
 
-    video.addEventListener("playing", stop, { once: true });
-
-    const tryPlay = () => {
-      if (stopped) {
-        return;
-      }
-
-      const playResult = video.play();
-
-      if (!playResult || typeof playResult.then !== "function") {
-        window.setTimeout(() => {
-          if (!stopped && video.paused) {
-            tryPlay();
-          }
-        }, 500);
-        return;
-      }
-
-      void playResult.catch(() => {
-      }).finally(() => {
-        window.setTimeout(() => {
-          if (!stopped && video.paused) {
-            tryPlay();
-          }
-        }, 500);
-      });
-    };
-
-    tryPlay();
+    void playResult.catch((error) => {
+      console.log("watchwall:pooembed:play-error", error);
+    });
   }
 
   function notifyParents(type) {
