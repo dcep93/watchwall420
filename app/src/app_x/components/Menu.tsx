@@ -69,19 +69,30 @@ function StreamToggle(props: {
   }
 
   return (
-    <div
-      role="button"
-      tabIndex={0}
-      className={`stream-toggle ${props.isSelected ? "is-selected" : ""}`}
-      onClick={handleActivate}
-      onKeyDown={(event) => {
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          handleActivate(event);
-        }
-      }}
-    >
-      <span className="stream-name">{props.label}</span>
+    <div className="stream-toggle-row">
+      <div
+        role="button"
+        tabIndex={0}
+        className={`stream-toggle ${props.isSelected ? "is-selected" : ""}`}
+        onClick={handleActivate}
+        onKeyDown={(event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            handleActivate(event);
+          }
+        }}
+      >
+        <span className="stream-name">{props.label}</span>
+      </div>
+      <button
+        type="button"
+        className="stream-raw-link-button"
+        aria-label={`Open raw stream URL for ${props.label}`}
+        title={`Open raw stream URL for ${props.label}`}
+        onClick={() => window.location.assign(props.rawUrl)}
+      >
+        🔗
+      </button>
     </div>
   );
 }
