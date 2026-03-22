@@ -2,13 +2,9 @@
   const ancestorOrigins = Array.from(window.location.ancestorOrigins ?? []);
   const ancestorHostnames = ancestorOrigins.map((origin) => new URL(origin).hostname);
 
-  if (ancestorHostnames.includes("localhost")) {
-    alert("rendered as a descendant of localhost");
+  if (!["localhost", "watchwall420.web.app"].some((hostname) => ancestorHostnames.includes(hostname))) {
     return;
   }
 
-  if (ancestorHostnames.includes("watchwall420.web.app")) {
-    alert("rendered as a descendant of watchwall420.web.app");
-    return;
-  }
+  alert("content.js")
 })();
