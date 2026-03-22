@@ -4,12 +4,15 @@
   const APP_MESSAGE_SOURCE = "watchwall420-app";
   const POOEMBED_LOADED = "watchwall420:pooembed-loaded";
   const POOEMBED_SCROLL_DEBUG = "watchwall420:pooembed-scroll-debug";
+  const SET_MUTED = "watchwall420:set-muted";
   const TOGGLE_MUTE = "watchwall420:toggle-mute";
   const ancestorOrigins = Array.from(window.location.ancestorOrigins ?? []);
   const isDescendantOfWatchwallHost = ancestorOrigins.some((origin) =>
     HOST_HOSTNAMES.has(new URL(origin).hostname),
   );
   let hasUserInteracted = false;
+  let currentVideo = null;
+  let requestedMutedState = true;
 
   if (!isDescendantOfWatchwallHost) {
     return;
@@ -17,6 +20,7 @@
 
   const markUserInteraction = () => {
     hasUserInteracted = true;
+    applyRequestedMutedState();
   };
 
   window.addEventListener("pointerdown", markUserInteraction, { capture: true });
@@ -25,19 +29,26 @@
   window.addEventListener("click", markUserInteraction, { capture: true });
 
   window.addEventListener("message", (event) => {
-    if (event.data?.source !== APP_MESSAGE_SOURCE || event.data?.type !== TOGGLE_MUTE) {
+    if (event.data?.source !== APP_MESSAGE_SOURCE) {
       return;
     }
 
-    if (!hasUserInteracted) {
+    if (event.data?.type === SET_MUTED) {
+      requestedMutedState = event.data.muted !== false;
+      applyRequestedMutedState();
       return;
     }
 
-    const video = document.querySelector("video");
-    if (video instanceof HTMLVideoElement) {
-      video.muted = !video.muted;
+    if (event.data?.type !== TOGGLE_MUTE) {
       return;
     }
+
+    if (!hasUserInteracted || !(currentVideo instanceof HTMLVideoElement)) {
+      return;
+    }
+
+    currentVideo.muted = !currentVideo.muted;
+    requestedMutedState = currentVideo.muted;
   });
 
   enableScrollDebugging();
@@ -67,9 +78,10 @@
   }
 
   function init(video) {
+    currentVideo = video;
     video.autoplay = true;
-    video.muted = true;
     video.playsInline = true;
+    applyRequestedMutedState();
     const playResult = video.play();
 
     if (!playResult || typeof playResult.then !== "function") {
@@ -79,6 +91,21 @@
     void playResult.catch((error) => {
       console.log("watchwall:pooembed:play-error", error);
     });
+  }
+
+  function applyRequestedMutedState() {
+    if (!(currentVideo instanceof HTMLVideoElement)) {
+      return;
+    }
+
+    if (requestedMutedState) {
+      currentVideo.muted = true;
+      return;
+    }
+
+    if (hasUserInteracted) {
+      currentVideo.muted = false;
+    }
   }
 
   function enableScrollDebugging() {

@@ -105,6 +105,7 @@ function ScreenCard<T>(props: {
             "screen-focus",
             props.isFocused ? "screen-focus-spotlight" : "screen-focus-secondary",
           ].join(" ")}
+          isFocused={props.isFocused}
           shouldToggleMute={props.shouldToggleMute}
           muteToggleRequestId={props.muteToggleRequestId}
           stream={props.stream}
@@ -150,6 +151,7 @@ function ScreenContent<T>(props: {
   stream: Stream;
   indexedTitle: string;
   className: string;
+  isFocused: boolean;
   shouldToggleMute: boolean;
   muteToggleRequestId: number;
   onClick?: () => void;
@@ -158,6 +160,7 @@ function ScreenContent<T>(props: {
   const {
     className,
     host,
+    isFocused,
     indexedTitle,
     muteToggleRequestId,
     onClick,
@@ -213,6 +216,21 @@ function ScreenContent<T>(props: {
       "*",
     );
   }, [iframeElement, muteToggleRequestId, shouldToggleMute]);
+
+  useEffect(() => {
+    if (!iframeElement) {
+      return;
+    }
+
+    iframeElement.contentWindow?.postMessage(
+      {
+        source: "watchwall420-app",
+        type: "watchwall420:set-muted",
+        muted: !isFocused,
+      },
+      "*",
+    );
+  }, [iframeElement, isFocused]);
 
   return (
     <div className={className}>

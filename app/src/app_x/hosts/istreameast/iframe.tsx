@@ -6,6 +6,7 @@ export function renderIstreameastPlayerDocument(iframeParams: IframeParams): Rea
     (() => {
       const topWindow = window.top ?? window;
       const APP_MESSAGE_SOURCE = "watchwall420-app";
+      const SET_MUTED = "watchwall420:set-muted";
       const TOGGLE_MUTE = "watchwall420:toggle-mute";
       const lockCurrentHorizontalScroll = () => {
         const lockedX = topWindow.scrollX;
@@ -29,7 +30,7 @@ export function renderIstreameastPlayerDocument(iframeParams: IframeParams): Rea
           window.addEventListener("message", (event) => {
             if (
               event.data?.source !== APP_MESSAGE_SOURCE ||
-              event.data?.type !== TOGGLE_MUTE
+              ![TOGGLE_MUTE, SET_MUTED].includes(event.data?.type)
             ) {
               return;
             }
