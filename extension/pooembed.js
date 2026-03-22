@@ -9,36 +9,35 @@
   const isDescendantOfWatchwallHost = ancestorOrigins.some((origin) =>
     HOST_HOSTNAMES.has(new URL(origin).hostname),
   );
-
-  console.log("watchwall:pooembed:init", {
-    href: window.location.href,
-    ancestorOrigins,
-    isDescendantOfWatchwallHost,
-  });
+  let hasUserInteracted = false;
 
   if (!isDescendantOfWatchwallHost) {
     return;
   }
+
+  const markUserInteraction = () => {
+    hasUserInteracted = true;
+  };
+
+  window.addEventListener("pointerdown", markUserInteraction, { capture: true });
+  window.addEventListener("keydown", markUserInteraction, { capture: true });
+  window.addEventListener("touchstart", markUserInteraction, { capture: true });
+  window.addEventListener("click", markUserInteraction, { capture: true });
 
   window.addEventListener("message", (event) => {
     if (event.data?.source !== APP_MESSAGE_SOURCE || event.data?.type !== TOGGLE_MUTE) {
       return;
     }
 
-    console.log("watchwall:toggle-mute:received-in-pooembed", event.data);
-    const video = document.querySelector("video");
-    if (video instanceof HTMLVideoElement) {
-      console.log("watchwall:toggle-mute:toggling-video", {
-        mutedBefore: video.muted,
-      });
-      video.muted = !video.muted;
-      console.log("watchwall:toggle-mute:toggled-video", {
-        mutedAfter: video.muted,
-      });
+    if (!hasUserInteracted) {
       return;
     }
 
-    console.log("watchwall:toggle-mute:no-video-found");
+    const video = document.querySelector("video");
+    if (video instanceof HTMLVideoElement) {
+      video.muted = !video.muted;
+      return;
+    }
   });
 
   enableScrollDebugging();
@@ -71,7 +70,6 @@
     video.autoplay = true;
     video.muted = true;
     video.playsInline = true;
-    console.log("watchwall:pooembed:play-attempt");
     const playResult = video.play();
 
     if (!playResult || typeof playResult.then !== "function") {

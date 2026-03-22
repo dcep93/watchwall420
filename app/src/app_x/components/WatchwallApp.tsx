@@ -121,10 +121,6 @@ export default function WatchwallApp() {
       }
 
       if (nextStream.slug === resolvedFocusedSlug) {
-        console.log("watchwall:toggle-mute:request", {
-          slug: nextStream.slug,
-          index: nextIndex,
-        });
         setMuteToggleSlug(nextStream.slug);
         setMuteToggleRequestId((current) => current + 1);
         return;

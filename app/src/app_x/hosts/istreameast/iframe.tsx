@@ -34,7 +34,6 @@ export function renderIstreameastPlayerDocument(iframeParams: IframeParams): Rea
               return;
             }
 
-            console.log("watchwall:toggle-mute:forward-to-player-frame", event.data);
             playerFrame.contentWindow?.postMessage(event.data, "*");
           });
 

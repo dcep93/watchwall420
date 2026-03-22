@@ -12,8 +12,6 @@
       return;
     }
 
-    console.log("watchwall:toggle-mute:received-in-embedsports", event.data);
-
     document.querySelectorAll("iframe").forEach((iframe) => {
       iframe.contentWindow?.postMessage(event.data, "*");
     });

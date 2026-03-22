@@ -178,10 +178,6 @@ function ScreenContent<T>(props: {
       .getIframeParams(stream)
       .then((iframeParams) => {
         onDebugTitleChange?.(JSON.stringify(iframeParams, null, 2));
-        console.log("watchwall:getIframeParams", {
-          streamTitle: stream.title,
-          iframeParams,
-        });
 
         return ReactDomServer.renderToStaticMarkup(host.getIframeDocStrElement(iframeParams));
       })
@@ -209,10 +205,6 @@ function ScreenContent<T>(props: {
       return;
     }
 
-    console.log("watchwall:toggle-mute:post-to-wrapper", {
-      title: indexedTitle,
-      muteToggleRequestId,
-    });
     iframeElement.contentWindow?.postMessage(
       {
         source: "watchwall420-app",
