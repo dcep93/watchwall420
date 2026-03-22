@@ -16,7 +16,7 @@ export async function fetchJson(url: string) {
 }
 
 export function buildTeamSummaries(summaryObj: any) {
-  return ((((summaryObj as any).boxscore?.teams as any[]) ?? []).slice().reverse()).map(
+  return ((((summaryObj as any).boxscore?.teams as any[]) ?? []).slice()).map(
     (teamObj: any) => ({
       name: teamObj.team?.name ?? "",
       statistics: Object.fromEntries(
