@@ -11,7 +11,33 @@
     return;
   }
 
+  waitForVideoElement();
   notifyParents(POOEMBED_LOADED);
+
+  function waitForVideoElement() {
+    const checkForVideo = () => {
+      const video = document.querySelector("video");
+
+      if (video instanceof HTMLVideoElement) {
+        if (isVideoReady(video)) {
+          init(video);
+          return;
+        }
+      }
+
+      window.requestAnimationFrame(checkForVideo);
+    };
+
+    checkForVideo();
+  }
+
+  function init(video) {
+    void video.play();
+  }
+
+  function isVideoReady(video) {
+    return video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA;
+  }
 
   function notifyParents(type) {
     let currentWindow = window;
