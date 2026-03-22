@@ -2,57 +2,13 @@
   "manifest_version": 3,
   "name": "Watchwall420",
   "version": "0.2.0",
-  "description": "Assistant for watchwall420.web.app: allows fetching of logs.",
-  "permissions": [
-    "declarativeNetRequest"
-  ],
-  "host_permissions": [
-    "https://pooembed.eu/*"
-  ],
-  "background": {
-    "service_worker": "background.js"
-  },
-  "content_scripts": [
-    {
-      "matches": [
-        "http://localhost/*",
-        "https://localhost/*",
-        "https://watchwall420.web.app/*"
-      ],
-      "js": [
-        "content-script.js"
-      ],
-      "all_frames": true,
-      "run_at": "document_start"
-    }
-  ],
-  "declarative_net_request": {
-    "rule_resources": [
-      {
-        "id": "ruleset_1",
-        "enabled": true,
-        "path": "rules.json"
-      }
-    ]
-  },
+  "description": "Inactive Watchwall420 extension shell.",
   "icons": {
     "16": "icons/icon-16.png",
     "32": "icons/icon-32.png",
     "48": "icons/icon-48.png",
     "128": "icons/icon-128.png"
   },
-  "web_accessible_resources": [
-    {
-      "resources": [
-        "page-hook.js"
-      ],
-      "matches": [
-        "http://localhost/*",
-        "https://localhost/*",
-        "https://watchwall420.web.app/*"
-      ]
-    }
-  ],
   "action": {
     "default_title": "Watchwall420",
     "default_icon": {

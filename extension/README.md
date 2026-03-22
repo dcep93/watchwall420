@@ -1,13 +1,8 @@
 # Watchwall420 Chrome Extension
 
-Minimal Manifest V3 extension that rewrites the `Referer` header for requests to `https://pooembed.eu/*` when the request initiator is:
+Minimal Manifest V3 extension shell.
 
-- `localhost`
-- `watchwall420.web.app`
-
-The spoofed header value is:
-
-`https://embedsports.top/`
+It is currently inactive and only retains its icon metadata.
 
 ## Load in Chrome
 
