@@ -24,6 +24,8 @@ export default function WatchwallApp() {
   const [focusedSlug, setFocusedSlug] = useState<StreamSlug>("");
   const [muteToggleSlug, setMuteToggleSlug] = useState<StreamSlug>("");
   const [muteToggleRequestId, setMuteToggleRequestId] = useState(0);
+  const [logRefreshSlug, setLogRefreshSlug] = useState<StreamSlug>("");
+  const [logRefreshRequestId, setLogRefreshRequestId] = useState(0);
   const [displayLogs, setDisplayLogs] = useState(true);
   const [logDelayMs, setLogDelayMs] = useState(120_000);
   const streams = filterStreamsByCategory(allStreams, category);
@@ -84,6 +86,16 @@ export default function WatchwallApp() {
         return;
       }
 
+      if (/^(?:Digit|Numpad)0$/.test(event.code)) {
+        if (!displayLogs || !resolvedFocusedSlug) {
+          return;
+        }
+
+        setLogRefreshSlug(resolvedFocusedSlug);
+        setLogRefreshRequestId((current) => current + 1);
+        return;
+      }
+
       const match = event.code.match(/^(?:Digit|Numpad)([1-9])$/);
       if (!match) {
         return;
@@ -106,7 +118,7 @@ export default function WatchwallApp() {
 
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [resolvedFocusedSlug, selectedStreams]);
+  }, [displayLogs, resolvedFocusedSlug, selectedStreams]);
 
   function handleToggle(streamSlug: StreamSlug) {
     if (selectedSlugs.includes(streamSlug)) {
@@ -187,6 +199,8 @@ export default function WatchwallApp() {
           displayLogs={displayLogs}
           logDelayMs={logDelayMs}
           focusedSlug={resolvedFocusedSlug}
+          logRefreshSlug={logRefreshSlug}
+          logRefreshRequestId={logRefreshRequestId}
           muteToggleSlug={muteToggleSlug}
           muteToggleRequestId={muteToggleRequestId}
           onRefreshStream={handleRefreshStream}

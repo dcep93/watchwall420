@@ -10,6 +10,8 @@ export default function Multiscreen<T>(props: {
   displayLogs: boolean;
   logDelayMs: number;
   focusedSlug?: StreamSlug;
+  logRefreshSlug?: StreamSlug;
+  logRefreshRequestId: number;
   muteToggleSlug?: StreamSlug;
   muteToggleRequestId: number;
   onRefreshStream: (streamSlug: StreamSlug) => Promise<Stream | null>;
@@ -40,6 +42,8 @@ export default function Multiscreen<T>(props: {
             displayLogs={displayLogs}
             logDelayMs={props.logDelayMs}
             isFocused={stream.slug === focusedStream?.slug}
+            shouldRefreshLog={stream.slug === props.logRefreshSlug}
+            logRefreshRequestId={props.logRefreshRequestId}
             shouldToggleMute={stream.slug === props.muteToggleSlug}
             muteToggleRequestId={props.muteToggleRequestId}
             isSolo={streams.length === 1}
@@ -60,6 +64,8 @@ function ScreenCard<T>(props: {
   displayLogs: boolean;
   logDelayMs: number;
   isFocused: boolean;
+  shouldRefreshLog: boolean;
+  logRefreshRequestId: number;
   shouldToggleMute: boolean;
   muteToggleRequestId: number;
   isSolo: boolean;
@@ -104,7 +110,13 @@ function ScreenCard<T>(props: {
       <div className={screenBodyClassName}>
         {props.isFocused && props.displayLogs ? (
           <div className="log-panel log-panel-spotlight">
-            <div className="log-entry">{renderLog(props.stream, props.logDelayMs)}</div>
+            <div className="log-entry">
+              {renderLog(
+                props.stream,
+                props.logDelayMs,
+                props.shouldRefreshLog ? props.logRefreshRequestId : 0,
+              )}
+            </div>
           </div>
         ) : null}
         <ScreenContent

@@ -7,11 +7,21 @@ import type { LogType } from "./renderLog/types";
 
 const POLL_INTERVAL_MS = 10 * 1000;
 
-export default function renderLog(stream: Stream, logDelayMs: number): ReactNode {
-  return <StreamLog stream={stream} logDelayMs={logDelayMs} />;
+export default function renderLog(
+  stream: Stream,
+  logDelayMs: number,
+  refreshRequestId = 0,
+): ReactNode {
+  return (
+    <StreamLog
+      stream={stream}
+      logDelayMs={logDelayMs}
+      refreshRequestId={refreshRequestId}
+    />
+  );
 }
 
-function StreamLog(props: { stream: Stream; logDelayMs: number }) {
+function StreamLog(props: { stream: Stream; logDelayMs: number; refreshRequestId: number }) {
   const config = leagueConfigs[props.stream.category];
   const [displayedLog, setDisplayedLog] = useState<LogType | null>(null);
   const [errorMessage, setErrorMessage] = useState("");
@@ -97,6 +107,14 @@ function StreamLog(props: { stream: Stream; logDelayMs: number }) {
       window.clearInterval(interval);
     };
   }, [config, fetchAndHandleLog, props.logDelayMs, props.stream]);
+
+  useEffect(() => {
+    if (props.refreshRequestId === 0) {
+      return;
+    }
+
+    void fetchAndHandleLog(true);
+  }, [fetchAndHandleLog, props.refreshRequestId]);
 
   if (!props.stream.espn_id || props.stream.espn_id < 0) {
     return <div className="watchwall-log-empty">No ESPN game linked.</div>;
