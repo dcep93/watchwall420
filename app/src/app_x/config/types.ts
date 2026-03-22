@@ -13,9 +13,13 @@ export type Stream = {
 
 export type StreamSlug = Stream["slug"];
 
+export type GetIframeParamsOptions = {
+  maxAgeMs?: number;
+};
+
 export type Host<T> = {
   getLeagueCategories: () => readonly string[];
   getStreams: () => Promise<Stream[]>;
-  getIframeParams: (stream: Stream) => Promise<T>;
+  getIframeParams: (stream: Stream, options?: GetIframeParamsOptions) => Promise<T>;
   getIframeDocStrElement: (params: T) => ReactElement;
 };

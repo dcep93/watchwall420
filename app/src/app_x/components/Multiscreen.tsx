@@ -62,6 +62,8 @@ function ScreenCard<T>(props: {
   onRemove: () => void;
 }) {
   const [titleTooltip, setTitleTooltip] = useState("");
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [refreshScreen, setRefreshScreen] = useState<(() => void) | null>(null);
   const indexedTitle = formatIndexedStreamTitle(props.stream.title, props.streamIndex);
   const screenBodyClassName = [
     "screen-spotlight-body",
@@ -88,7 +90,9 @@ function ScreenCard<T>(props: {
           .filter(Boolean)
           .join(" ")}
         label={indexedTitle}
-        onClick={props.onRemove}
+        onRefresh={refreshScreen ?? undefined}
+        onClose={props.onRemove}
+        refreshDisabled={!refreshScreen || isRefreshing}
         title={titleTooltip}
       />
       <div className={screenBodyClassName}>
@@ -109,6 +113,10 @@ function ScreenCard<T>(props: {
           shouldToggleMute={props.shouldToggleMute}
           muteToggleRequestId={props.muteToggleRequestId}
           stream={props.stream}
+          onRefreshButtonStateChange={setIsRefreshing}
+          onRefreshReady={(refresh) => {
+            setRefreshScreen(() => refresh);
+          }}
           onClick={props.isFocused ? undefined : props.onFocus}
           onDebugTitleChange={setTitleTooltip}
         />
@@ -120,29 +128,45 @@ function ScreenCard<T>(props: {
 function ScreenTitleBar(props: {
   label: string;
   className: string;
-  onClick?: () => void;
+  onRefresh?: () => void;
+  onClose?: () => void;
+  refreshDisabled?: boolean;
   title?: string;
 }) {
-  const content = <span className="screen-letter">{props.label}</span>;
-
-  if (!props.onClick) {
-    return (
-      <div className={props.className} title={props.title}>
-        {content}
-      </div>
-    );
-  }
-
   return (
-    <button
-      type="button"
-      className={props.className}
-      aria-label={`Remove screen ${props.label}`}
+    <div
+      className={`screen-title-bar-shell ${props.className}`}
       title={props.title}
-      onClick={props.onClick}
+      role="button"
+      tabIndex={0}
+      aria-label={`Close screen ${props.label}`}
+      onClick={props.onClose}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          props.onClose?.();
+        }
+      }}
     >
-      {content}
-    </button>
+      <div className="screen-title-inner">
+        <span className="screen-letter">{props.label}</span>
+        {props.onRefresh ? (
+          <button
+            type="button"
+            className="screen-title-action"
+            aria-label={`Refresh screen ${props.label}`}
+            onClick={(event) => {
+              event.stopPropagation();
+              props.onRefresh?.();
+            }}
+            disabled={props.refreshDisabled}
+            title="Refresh stream"
+          >
+            🔄
+          </button>
+        ) : null}
+      </div>
+    </div>
   );
 }
 
@@ -154,6 +178,8 @@ function ScreenContent<T>(props: {
   isFocused: boolean;
   shouldToggleMute: boolean;
   muteToggleRequestId: number;
+  onRefreshReady?: (refresh: () => void) => void;
+  onRefreshButtonStateChange?: (isRefreshing: boolean) => void;
   onClick?: () => void;
   onDebugTitleChange?: (value: string) => void;
 }) {
@@ -165,20 +191,30 @@ function ScreenContent<T>(props: {
     muteToggleRequestId,
     onClick,
     onDebugTitleChange,
+    onRefreshButtonStateChange,
+    onRefreshReady,
     shouldToggleMute,
     stream,
   } = props;
   const [srcDoc, setSrcDoc] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [iframeElement, setIframeElement] = useState<HTMLIFrameElement | null>(null);
+  const [refreshRequestId, setRefreshRequestId] = useState(0);
+
+  useEffect(() => {
+    onRefreshReady?.(() => {
+      setRefreshRequestId((currentValue) => currentValue + 1);
+    });
+  }, [onRefreshReady]);
 
   useEffect(() => {
     let isActive = true;
 
     onDebugTitleChange?.("");
+    onRefreshButtonStateChange?.(true);
 
     host
-      .getIframeParams(stream)
+      .getIframeParams(stream, refreshRequestId > 0 ? { maxAgeMs: 0 } : undefined)
       .then((iframeParams) => {
         onDebugTitleChange?.(JSON.stringify(iframeParams, null, 2));
 
@@ -188,6 +224,7 @@ function ScreenContent<T>(props: {
         if (!isActive) return;
         setSrcDoc(renderedSrcDoc);
         setErrorMessage("");
+        onRefreshButtonStateChange?.(false);
       })
       .catch((error) => {
         console.error(error);
@@ -196,12 +233,14 @@ function ScreenContent<T>(props: {
         const nextErrorMessage = getStreamContentErrorMessage(error);
         setErrorMessage(nextErrorMessage);
         onDebugTitleChange?.(nextErrorMessage);
+        onRefreshButtonStateChange?.(false);
       });
 
     return () => {
       isActive = false;
+      onRefreshButtonStateChange?.(false);
     };
-  }, [host, onDebugTitleChange, stream]);
+  }, [host, onDebugTitleChange, onRefreshButtonStateChange, refreshRequestId, stream]);
 
   useEffect(() => {
     if (!iframeElement || !shouldToggleMute || muteToggleRequestId === 0) {

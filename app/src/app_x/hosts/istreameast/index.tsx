@@ -23,18 +23,23 @@ export const istreameastHost: Host<IframeParams> = {
     );
     return parseStreamsFromHtml(streamListHtml, espnEvents, supportedCategories);
   },
-  async getIframeParams(stream) {
+  async getIframeParams(stream, options) {
     if (!stream.raw_url) {
       throw new Error(`Missing raw stream URL for "${stream.title}".`);
     }
 
     const watchPageUrl = new URL(stream.raw_url, ISTREAMEAST_URL).toString();
-    const watchPageHtml = await fetchIstreameastPageText(watchPageUrl);
+    const watchPageHtml = await fetchIstreameastPageText(
+      watchPageUrl,
+      options?.maxAgeMs,
+      options?.maxAgeMs,
+    );
     const watchPage = parseStreamWatchPage(watchPageHtml);
 
     const iframeParams = {
       _1_rawUrl: stream.raw_url,
       _2_embedPageUrl: watchPage.embedPageUrl,
+      _3_fetchedAtMs: Date.now(),
     };
 
     if (!iframeParams._2_embedPageUrl) {

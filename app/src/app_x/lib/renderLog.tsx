@@ -15,6 +15,7 @@ function StreamLog(props: { stream: Stream }) {
   const config = leagueConfigs[props.stream.category];
   const [log, setLog] = useState<LogType | null>(null);
   const [errorMessage, setErrorMessage] = useState("");
+  const espnGameUrl = getEspnGameUrl(props.stream, config);
 
   useEffect(() => {
     let isActive = true;
@@ -58,17 +59,22 @@ function StreamLog(props: { stream: Stream }) {
   }
 
   if (!log) {
-    return <div className="watchwall-log-empty">{errorMessage || "Loading log..."}</div>;
+    return (
+      <div className="watchwall-log-empty">
+        <LogActions espnGameUrl={espnGameUrl} />
+        <div>{errorMessage || "Loading log..."}</div>
+      </div>
+    );
   }
 
-  return <LogView log={log} />;
+  return <LogView log={log} espnGameUrl={espnGameUrl} />;
 }
 
 function hasEspnGame(stream: Stream) {
   return Boolean(stream.espn_id && stream.espn_id > 0);
 }
 
-function LogView(props: { log: LogType }) {
+function LogView(props: { log: LogType; espnGameUrl: string | null }) {
   const playByPlay = useMemo(() => {
     const drives = [...(props.log.playByPlay || [])];
     if (drives.length > 1 && drives[0].description === drives[1].description) {
@@ -82,6 +88,7 @@ function LogView(props: { log: LogType }) {
       <div className="watchwall-log-content watchwall-log-top">
         <div className="watchwall-log-topbar">
           <span>{new Date(props.log.timestamp).toLocaleTimeString()}</span>
+          <LogActions espnGameUrl={props.espnGameUrl} />
         </div>
         <div className="watchwall-log-team-summary-row">
           {props.log.teams.map((team) => (
@@ -165,6 +172,23 @@ function LogView(props: { log: LogType }) {
   );
 }
 
+function LogActions(props: { espnGameUrl: string | null }) {
+  if (!props.espnGameUrl) {
+    return null;
+  }
+
+  return (
+    <a
+      className="watchwall-log-link"
+      href={props.espnGameUrl}
+      target="_blank"
+      rel="noreferrer"
+    >
+      open in espn
+    </a>
+  );
+}
+
 function renderTeamStatistics(statistics: Record<string, string>) {
   const fieldGoals = statistics["fieldGoalsMade-fieldGoalsAttempted"];
   const threePointers = statistics["threePointFieldGoalsMade-threePointFieldGoalsAttempted"];
@@ -217,6 +241,17 @@ function renderTeamStatistics(statistics: Record<string, string>) {
       .slice(0, 4)
       .map(([key, value]) => [key, value]),
   );
+}
+
+function getEspnGameUrl(
+  stream: Stream,
+  config: { sport: string; espnLeague: string } | null | undefined,
+) {
+  if (!hasEspnGame(stream) || !config) {
+    return null;
+  }
+
+  return `https://www.espn.com/${config.espnLeague}/game?gameId=${stream.espn_id}`;
 }
 
 function renderStatRows(lines: string[][]) {

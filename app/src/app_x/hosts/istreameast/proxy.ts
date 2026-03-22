@@ -22,11 +22,15 @@ export async function fetchIstreameastHtml(
   });
 }
 
-export async function fetchIstreameastPageText(targetUrl: string) {
+export async function fetchIstreameastPageText(
+  targetUrl: string,
+  localMaxAgeMs = LOCAL_PROXY_CACHE_MAX_AGE_MS,
+  remoteMaxAgeMs = REMOTE_PROXY_CACHE_MAX_AGE_MS,
+) {
   return fetchTextThroughProxy({
     url: targetUrl,
-    localMaxAgeMs: LOCAL_PROXY_CACHE_MAX_AGE_MS,
-    remoteMaxAgeMs: REMOTE_PROXY_CACHE_MAX_AGE_MS,
+    localMaxAgeMs,
+    remoteMaxAgeMs,
     options: {
       headers: {
         "user-agent": WATCHWALL_USER_AGENT,
