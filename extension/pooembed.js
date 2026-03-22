@@ -1,9 +1,6 @@
 (() => {
   const HOST_HOSTNAMES = new Set(["localhost", "watchwall420.web.app"]);
-  const MESSAGE_SOURCE = "watchwall420-extension";
   const APP_MESSAGE_SOURCE = "watchwall420-app";
-  const POOEMBED_LOADED = "watchwall420:pooembed-loaded";
-  const POOEMBED_SCROLL_DEBUG = "watchwall420:pooembed-scroll-debug";
   const SET_MUTED = "watchwall420:set-muted";
   const TOGGLE_MUTE = "watchwall420:toggle-mute";
   const ancestorOrigins = Array.from(window.location.ancestorOrigins ?? []);
@@ -50,9 +47,7 @@
     requestedMutedState = currentVideo.muted;
   });
 
-  enableScrollDebugging();
   waitForVideoElement();
-  notifyParents(POOEMBED_LOADED);
 
   function waitForVideoElement() {
     let stopped = false;
@@ -107,55 +102,4 @@
     }
   }
 
-  function enableScrollDebugging() {
-    const report = (label, extra = {}) => {
-      notifyParents(POOEMBED_SCROLL_DEBUG, {
-        label,
-        href: window.location.href,
-        scrollX: window.scrollX,
-        scrollY: window.scrollY,
-        activeTagName: document.activeElement instanceof Element ? document.activeElement.tagName : null,
-        stack: new Error().stack,
-        ...extra,
-      });
-    };
-
-    const wrapMethod = (target, methodName, label) => {
-      const original = target?.[methodName];
-
-      if (typeof original !== "function") {
-        return;
-      }
-
-      target[methodName] = function wrappedMethod(...args) {
-        report(label, { args });
-        return original.apply(this, args);
-      };
-    };
-
-    wrapMethod(window, "scroll", "pooembed.window.scroll");
-    wrapMethod(window, "scrollTo", "pooembed.window.scrollTo");
-    wrapMethod(window, "scrollBy", "pooembed.window.scrollBy");
-    wrapMethod(Element.prototype, "scrollIntoView", "pooembed.Element.scrollIntoView");
-    wrapMethod(Element.prototype, "scroll", "pooembed.Element.scroll");
-    wrapMethod(Element.prototype, "scrollTo", "pooembed.Element.scrollTo");
-    wrapMethod(Element.prototype, "scrollBy", "pooembed.Element.scrollBy");
-
-    const originalFocus = HTMLElement.prototype.focus;
-    if (typeof originalFocus === "function") {
-      HTMLElement.prototype.focus = function wrappedFocus(...args) {
-        report("pooembed.HTMLElement.focus", { args });
-        return originalFocus.apply(this, args);
-      };
-    }
-  }
-
-  function notifyParents(type, extra = {}) {
-    let currentWindow = window;
-
-    while (currentWindow.parent && currentWindow.parent !== currentWindow) {
-      currentWindow = currentWindow.parent;
-      currentWindow.postMessage({ source: MESSAGE_SOURCE, type, ...extra }, "*");
-    }
-  }
 })();

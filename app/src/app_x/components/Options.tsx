@@ -73,8 +73,6 @@ export default function Options(props: {
           clear cache
         </button>
       </div>
-      <OptionCheckbox defaultChecked label="autorefresh" />
-      <OptionCheckbox label="follow remote" />
       <OptionCheckbox
         checked={props.displayLogs}
         label="display logs"
@@ -104,22 +102,16 @@ function formatNumberWithSeparators(value: number) {
 
 function OptionCheckbox(props: {
   label: string;
-  checked?: boolean;
-  defaultChecked?: boolean;
-  onChange?: (value: boolean) => void;
+  checked: boolean;
+  onChange: (value: boolean) => void;
 }) {
   return (
     <div className="option-row">
       <label>
         <input
           checked={props.checked}
-          defaultChecked={props.defaultChecked}
           type="checkbox"
-          onChange={
-            props.onChange
-              ? (event) => props.onChange?.(event.target.checked)
-              : undefined
-          }
+          onChange={(event) => props.onChange(event.target.checked)}
         />
         <span> {props.label}</span>
       </label>
