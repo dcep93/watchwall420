@@ -1,72 +1,80 @@
 import type { ReactElement } from "react";
 import type { IframeParams } from "./types";
 
-export function renderIstreameastPlayerDocument(iframeParams: IframeParams): ReactElement {
-  const scrollLockScript = `
-    (() => {
-      const topWindow = window.top ?? window;
-      const APP_MESSAGE_SOURCE = "watchwall420-app";
-      const SET_MUTED = "watchwall420:set-muted";
-      const TOGGLE_MUTE = "watchwall420:toggle-mute";
-      let lastSetMutedMessage = null;
-      const lockCurrentHorizontalScroll = () => {
-        const lockedX = topWindow.scrollX;
+function scrollLockScriptRunner() {
+  const topWindow = window.top ?? window;
+  const APP_MESSAGE_SOURCE = "watchwall420-app";
+  const SET_MUTED = "watchwall420:set-muted";
+  const TOGGLE_MUTE = "watchwall420:toggle-mute";
+  let lastSetMutedMessage: unknown = null;
 
-        const restoreScrollX = () => {
-          if (topWindow.scrollX !== lockedX) {
-            topWindow.scrollTo(lockedX, topWindow.scrollY);
-            return;
-          }
+  const lockCurrentHorizontalScroll = () => {
+    const lockedX = topWindow.scrollX;
 
-          topWindow.requestAnimationFrame(restoreScrollX);
-        };
-
-        restoreScrollX();
-      };
-
-      const attachLoadListener = () => {
-        const playerFrame = document.getElementById("watchwall-player-frame");
-
-        if (playerFrame) {
-          const forwardMessage = (message) => {
-            playerFrame.contentWindow?.postMessage(message, "*");
-          };
-
-          window.addEventListener("message", (event) => {
-            if (
-              event.data?.source !== APP_MESSAGE_SOURCE ||
-              ![TOGGLE_MUTE, SET_MUTED].includes(event.data?.type)
-            ) {
-              return;
-            }
-
-            if (event.data.type === SET_MUTED) {
-              lastSetMutedMessage = event.data;
-            }
-
-            forwardMessage(event.data);
-          });
-
-          playerFrame.addEventListener(
-            "load",
-            () => {
-              if (lastSetMutedMessage) {
-                forwardMessage(lastSetMutedMessage);
-              }
-              lockCurrentHorizontalScroll();
-            },
-            { once: true },
-          );
-        }
-      };
-
-      if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", attachLoadListener, { once: true });
-      } else {
-        attachLoadListener();
+    const restoreScrollX = () => {
+      if (topWindow.scrollX !== lockedX) {
+        topWindow.scrollTo(lockedX, topWindow.scrollY);
+        return;
       }
-    })();
-  `;
+
+      topWindow.requestAnimationFrame(restoreScrollX);
+    };
+
+    restoreScrollX();
+  };
+
+  const attachLoadListener = () => {
+    const playerFrame = document.getElementById("watchwall-player-frame");
+
+    if (!playerFrame) {
+      return;
+    }
+
+    const forwardMessage = (message: unknown) => {
+      if (!(playerFrame instanceof HTMLIFrameElement)) {
+        return;
+      }
+
+      playerFrame.contentWindow?.postMessage(message, "*");
+    };
+
+    window.addEventListener("message", (event) => {
+      if (
+        event.data?.source !== APP_MESSAGE_SOURCE ||
+        ![TOGGLE_MUTE, SET_MUTED].includes(event.data?.type)
+      ) {
+        return;
+      }
+
+      if (event.data.type === SET_MUTED) {
+        lastSetMutedMessage = event.data;
+      }
+
+      forwardMessage(event.data);
+    });
+
+    playerFrame.addEventListener(
+      "load",
+      () => {
+        if (lastSetMutedMessage) {
+          forwardMessage(lastSetMutedMessage);
+        }
+        lockCurrentHorizontalScroll();
+      },
+      { once: true },
+    );
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", attachLoadListener, { once: true });
+    return;
+  }
+
+  attachLoadListener();
+}
+
+export function renderIstreameastPlayerDocument(iframeParams: IframeParams): ReactElement {
+  const scrollLockScript = `(${scrollLockScriptRunner.toString()})();`;
 
   return (
     <html lang="en">
