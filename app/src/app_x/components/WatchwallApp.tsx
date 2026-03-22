@@ -158,6 +158,12 @@ export default function WatchwallApp() {
     }
   }
 
+  async function handleRefreshStream(streamSlug: StreamSlug) {
+    const fetchedStreams = await HOST.getStreams();
+    setAllStreams(fetchedStreams);
+    return fetchedStreams.find((stream) => stream.slug === streamSlug) ?? null;
+  }
+
   function handleClearCache() {
     const url = new URL(window.location.href);
     url.hash = "";
@@ -217,6 +223,7 @@ export default function WatchwallApp() {
             focusedSlug={resolvedFocusedSlug}
             muteToggleSlug={muteToggleSlug}
             muteToggleRequestId={muteToggleRequestId}
+            onRefreshStream={handleRefreshStream}
             onRemove={handleRemove}
             onFocus={setFocusedSlug}
           />

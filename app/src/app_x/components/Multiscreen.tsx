@@ -12,6 +12,7 @@ export default function Multiscreen<T>(props: {
   focusedSlug?: StreamSlug;
   muteToggleSlug?: StreamSlug;
   muteToggleRequestId: number;
+  onRefreshStream: (streamSlug: StreamSlug) => Promise<Stream | null>;
   onRemove: (streamSlug: StreamSlug) => void;
   onFocus: (streamSlug: StreamSlug) => void;
 }) {
@@ -42,6 +43,7 @@ export default function Multiscreen<T>(props: {
             shouldToggleMute={stream.slug === props.muteToggleSlug}
             muteToggleRequestId={props.muteToggleRequestId}
             isSolo={streams.length === 1}
+            onRefreshStream={props.onRefreshStream}
             onFocus={() => onFocus(stream.slug)}
             onRemove={() => onRemove(stream.slug)}
           />
@@ -61,12 +63,13 @@ function ScreenCard<T>(props: {
   shouldToggleMute: boolean;
   muteToggleRequestId: number;
   isSolo: boolean;
+  onRefreshStream: (streamSlug: StreamSlug) => Promise<Stream | null>;
   onFocus: () => void;
   onRemove: () => void;
 }) {
   const [titleTooltip, setTitleTooltip] = useState("");
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [refreshScreen, setRefreshScreen] = useState<(() => void) | null>(null);
+  const [refreshScreen, setRefreshScreen] = useState<(() => Promise<void>) | null>(null);
   const indexedTitle = formatIndexedStreamTitle(props.stream.title, props.streamIndex);
   const screenBodyClassName = [
     "screen-spotlight-body",
@@ -105,7 +108,6 @@ function ScreenCard<T>(props: {
           </div>
         ) : null}
         <ScreenContent
-          key={props.stream.raw_url}
           host={props.host}
           indexedTitle={indexedTitle}
           className={[
@@ -115,6 +117,7 @@ function ScreenCard<T>(props: {
           isFocused={props.isFocused}
           shouldToggleMute={props.shouldToggleMute}
           muteToggleRequestId={props.muteToggleRequestId}
+          onRefreshStream={props.onRefreshStream}
           stream={props.stream}
           onRefreshButtonStateChange={setIsRefreshing}
           onRefreshReady={(refresh) => {
@@ -131,7 +134,7 @@ function ScreenCard<T>(props: {
 function ScreenTitleBar(props: {
   label: string;
   className: string;
-  onRefresh?: () => void;
+  onRefresh?: () => Promise<void>;
   onClose?: () => void;
   refreshDisabled?: boolean;
   title?: string;
@@ -160,7 +163,7 @@ function ScreenTitleBar(props: {
             aria-label={`Refresh screen ${props.label}`}
             onClick={(event) => {
               event.stopPropagation();
-              props.onRefresh?.();
+              void props.onRefresh?.();
             }}
             disabled={props.refreshDisabled}
             title="Refresh stream"
@@ -181,7 +184,8 @@ function ScreenContent<T>(props: {
   isFocused: boolean;
   shouldToggleMute: boolean;
   muteToggleRequestId: number;
-  onRefreshReady?: (refresh: () => void) => void;
+  onRefreshStream: (streamSlug: StreamSlug) => Promise<Stream | null>;
+  onRefreshReady?: (refresh: () => Promise<void>) => void;
   onRefreshButtonStateChange?: (isRefreshing: boolean) => void;
   onClick?: () => void;
   onDebugTitleChange?: (value: string) => void;
@@ -194,6 +198,7 @@ function ScreenContent<T>(props: {
     muteToggleRequestId,
     onClick,
     onDebugTitleChange,
+    onRefreshStream,
     onRefreshButtonStateChange,
     onRefreshReady,
     shouldToggleMute,
@@ -203,21 +208,44 @@ function ScreenContent<T>(props: {
   const [errorMessage, setErrorMessage] = useState("");
   const [iframeElement, setIframeElement] = useState<HTMLIFrameElement | null>(null);
   const [refreshRequestId, setRefreshRequestId] = useState(0);
+  const [refreshOverride, setRefreshOverride] = useState<{
+    sourceStreamKey: string;
+    stream: Stream;
+  } | null>(null);
+  const streamKey = getStreamKey(stream);
+  const resolvedStream = refreshOverride?.sourceStreamKey === streamKey ? refreshOverride.stream : stream;
 
   useEffect(() => {
-    onRefreshReady?.(() => {
+    onRefreshReady?.(async () => {
+      onRefreshButtonStateChange?.(true);
+      const nextStream =
+        (await onRefreshStream(stream.slug).catch((error: unknown) => {
+          console.error(error);
+          return null;
+        })) ?? stream;
+      setRefreshOverride({
+        sourceStreamKey: getStreamKey(stream),
+        stream: nextStream,
+      });
       setRefreshRequestId((currentValue) => currentValue + 1);
     });
-  }, [onRefreshReady]);
+  }, [onRefreshButtonStateChange, onRefreshReady, onRefreshStream, stream]);
 
   useEffect(() => {
     let isActive = true;
+    const streamForRequest: Stream = {
+      category: resolvedStream.category,
+      espn_id: resolvedStream.espn_id,
+      raw_url: resolvedStream.raw_url,
+      slug: resolvedStream.slug,
+      title: resolvedStream.title,
+    };
 
     onDebugTitleChange?.("");
     onRefreshButtonStateChange?.(true);
 
     host
-      .getIframeParams(stream, refreshRequestId > 0 ? { maxAgeMs: 0 } : undefined)
+      .getIframeParams(streamForRequest, refreshRequestId > 0 ? { maxAgeMs: 0 } : undefined)
       .then((iframeParams) => {
         onDebugTitleChange?.(JSON.stringify(iframeParams, null, 2));
 
@@ -243,7 +271,17 @@ function ScreenContent<T>(props: {
       isActive = false;
       onRefreshButtonStateChange?.(false);
     };
-  }, [host, onDebugTitleChange, onRefreshButtonStateChange, refreshRequestId, stream]);
+  }, [
+    host,
+    onDebugTitleChange,
+    onRefreshButtonStateChange,
+    refreshRequestId,
+    resolvedStream.category,
+    resolvedStream.espn_id,
+    resolvedStream.raw_url,
+    resolvedStream.slug,
+    resolvedStream.title,
+  ]);
 
   useEffect(() => {
     if (!iframeElement || !shouldToggleMute || muteToggleRequestId === 0) {
@@ -290,7 +328,7 @@ function ScreenContent<T>(props: {
         </pre>
       ) : (
         <iframe
-          key={`${stream.slug}-${refreshRequestId}`}
+          key={`${resolvedStream.slug}-${resolvedStream.raw_url}-${refreshRequestId}`}
           className="screen-iframe"
           title={indexedTitle}
           srcDoc={srcDoc}
@@ -313,6 +351,16 @@ function getStreamContentErrorMessage(error: unknown) {
   }
 
   return "Unable to load stream.";
+}
+
+function getStreamKey(stream: Stream) {
+  return [
+    stream.category,
+    stream.espn_id,
+    stream.raw_url,
+    stream.slug,
+    stream.title,
+  ].join("\u0000");
 }
 
 function formatIndexedStreamTitle(title: string, index: number) {
