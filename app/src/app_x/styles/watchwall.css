@@ -715,6 +715,22 @@
   margin-top: 10px;
 }
 
+.option-row-grouped {
+  justify-content: flex-start;
+}
+
+.option-row-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.option-row-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .option-row label {
   cursor: default;
 }

@@ -47,6 +47,19 @@ export default function Options(props: {
     <section className="menu-card">
       <div className="menu-card-header">
         <h2>Options</h2>
+        <button
+          className="secondary-button secondary-button-inline"
+          type="button"
+          onClick={async () => {
+            const didClearCache = await clearAppCache();
+            if (!didClearCache) return;
+            props.onClearCache();
+          }}
+        >
+          clear cache
+        </button>
+      </div>
+      <div className="option-row">
         <select
           aria-label="categories"
           className="option-input option-input-inline"
@@ -61,36 +74,31 @@ export default function Options(props: {
             </option>
           ))}
         </select>
-        <button
-          className="secondary-button secondary-button-inline"
-          type="button"
-          onClick={async () => {
-            const didClearCache = await clearAppCache();
-            if (!didClearCache) return;
-            props.onClearCache();
-          }}
-        >
-          clear cache
-        </button>
       </div>
-      <OptionCheckbox
-        checked={props.displayLogs}
-        label="display logs"
-        onChange={props.onDisplayLogsChange}
-      />
-      <div className="option-row">
-        <span>log delay ms</span>
-        <input
-          className="option-input"
-          aria-label="log delay ms"
-          value={formatNumberWithSeparators(props.logDelayMs)}
-          inputMode="numeric"
-          onChange={(event) => {
-            const nextValue = event.target.value;
-            const digitsOnly = nextValue.replace(/[^\d]/g, "");
-            props.onLogDelayMsChange(Number(digitsOnly || "0"));
-          }}
-        />
+      <div className="option-row option-row-grouped">
+        <div className="option-row-controls">
+          <input
+            className="option-input"
+            aria-label="log delay ms"
+            value={formatNumberWithSeparators(props.logDelayMs)}
+            inputMode="numeric"
+            onChange={(event) => {
+              const nextValue = event.target.value;
+              const digitsOnly = nextValue.replace(/[^\d]/g, "");
+              props.onLogDelayMsChange(Number(digitsOnly || "0"));
+            }}
+          />
+        </div>
+        <div className="option-row-label">
+          <span>log delay ms</span>
+          <input
+            checked={props.displayLogs}
+            type="checkbox"
+            aria-label="display logs"
+            title="Display logs"
+            onChange={(event) => props.onDisplayLogsChange(event.target.checked)}
+          />
+        </div>
       </div>
     </section>
   );
@@ -98,23 +106,4 @@ export default function Options(props: {
 
 function formatNumberWithSeparators(value: number) {
   return new Intl.NumberFormat("en-US").format(value);
-}
-
-function OptionCheckbox(props: {
-  label: string;
-  checked: boolean;
-  onChange: (value: boolean) => void;
-}) {
-  return (
-    <div className="option-row">
-      <label>
-        <input
-          checked={props.checked}
-          type="checkbox"
-          onChange={(event) => props.onChange(event.target.checked)}
-        />
-        <span> {props.label}</span>
-      </label>
-    </div>
-  );
 }
