@@ -1,16 +1,15 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useReducer, useState } from "react";
 import type { Stream, StreamSlug } from "../config/types";
 
 function parseSelectedSlugsFromHash(
   hash: string,
-  allowedSlugs: Set<StreamSlug> | null,
 ): StreamSlug[] {
   return hash
     .replace(/^#/, "")
     .split(",")
     .map((slug) => slug.trim())
     .filter((slug, index, array): slug is StreamSlug =>
-      isAllowedUniqueSlug(slug, index, array, allowedSlugs),
+      isAllowedUniqueSlug(slug, index, array),
     );
 }
 
@@ -18,13 +17,11 @@ function isAllowedUniqueSlug(
   slug: string,
   index: number,
   array: string[],
-  allowedSlugs: Set<StreamSlug> | null,
 ): slug is StreamSlug {
   if (!slug || array.indexOf(slug) !== index) {
     return false;
   }
-
-  return allowedSlugs ? allowedSlugs.has(slug as StreamSlug) : true;
+  return true;
 }
 
 function writeSelectedSlugsToHash(slugs: StreamSlug[]) {
@@ -48,58 +45,180 @@ function hashMatchesSelectedSlugs(slugs: StreamSlug[]) {
   return window.location.hash.replace(/^#/, "") === serializeSelectedSlugs(slugs);
 }
 
+type SelectionState = {
+  selectedSlugs: StreamSlug[];
+  selectedStreamsBySlug: Partial<Record<StreamSlug, Stream>>;
+};
+
+type SelectionAction =
+  | {
+      type: "setSelectedSlugs";
+      selectedSlugs: StreamSlug[];
+      streams: Stream[] | null;
+    }
+  | {
+      type: "hydrateMissingSelectedStreams";
+      streams: Stream[] | null;
+    }
+  | {
+      type: "replaceSelectedStream";
+      stream: Stream;
+    };
+
+function buildStreamsBySlug(streams: Stream[] | null) {
+  return new Map((streams ?? []).map((stream) => [stream.slug, stream] as const));
+}
+
+function applySelectedSlugs(
+  state: SelectionState,
+  selectedSlugs: StreamSlug[],
+  streams: Stream[] | null,
+): SelectionState {
+  const streamsBySlug = buildStreamsBySlug(streams);
+  const selectedStreamsBySlug: Partial<Record<StreamSlug, Stream>> = {};
+
+  for (const selectedSlug of selectedSlugs) {
+    const lockedStream = state.selectedStreamsBySlug[selectedSlug];
+    const currentStream = streamsBySlug.get(selectedSlug);
+
+    if (lockedStream) {
+      selectedStreamsBySlug[selectedSlug] = lockedStream;
+      continue;
+    }
+
+    if (currentStream) {
+      selectedStreamsBySlug[selectedSlug] = currentStream;
+    }
+  }
+
+  return {
+    selectedSlugs,
+    selectedStreamsBySlug,
+  };
+}
+
+function selectedStreamsReducer(state: SelectionState, action: SelectionAction): SelectionState {
+  if (action.type === "setSelectedSlugs") {
+    return applySelectedSlugs(state, action.selectedSlugs, action.streams);
+  }
+
+  if (action.type === "hydrateMissingSelectedStreams") {
+    const streamsBySlug = buildStreamsBySlug(action.streams);
+    let nextSelectedStreamsBySlug = state.selectedStreamsBySlug;
+    let didChange = false;
+
+    for (const selectedSlug of state.selectedSlugs) {
+      if (nextSelectedStreamsBySlug[selectedSlug]) {
+        continue;
+      }
+
+      const currentStream = streamsBySlug.get(selectedSlug);
+      if (!currentStream) {
+        continue;
+      }
+
+      if (!didChange) {
+        nextSelectedStreamsBySlug = { ...state.selectedStreamsBySlug };
+        didChange = true;
+      }
+
+      nextSelectedStreamsBySlug[selectedSlug] = currentStream;
+    }
+
+    if (!didChange) {
+      return state;
+    }
+
+    return {
+      ...state,
+      selectedStreamsBySlug: nextSelectedStreamsBySlug,
+    };
+  }
+
+  if (!state.selectedSlugs.includes(action.stream.slug)) {
+    return state;
+  }
+
+  return {
+    ...state,
+    selectedStreamsBySlug: {
+      ...state.selectedStreamsBySlug,
+      [action.stream.slug]: action.stream,
+    },
+  };
+}
+
 export default function useSelectedStreamIds(streams: Stream[] | null) {
-  const allowedSlugs = useMemo(
-    () => (streams ? new Set<StreamSlug>(streams.map((stream) => stream.slug)) : null),
-    [streams],
-  );
   const [initialHash] = useState(() => window.location.hash);
-  const initialSelectedSlugs = useMemo(
-    () => parseSelectedSlugsFromHash(initialHash, allowedSlugs),
-    [initialHash, allowedSlugs],
+  const initialSelectedSlugs = useMemo(() => parseSelectedSlugsFromHash(initialHash), [initialHash]);
+  const [state, dispatch] = useReducer(
+    selectedStreamsReducer,
+    initialSelectedSlugs,
+    (selectedSlugs): SelectionState =>
+      applySelectedSlugs(
+        {
+          selectedSlugs: [],
+          selectedStreamsBySlug: {},
+        },
+        selectedSlugs,
+        streams,
+      ),
   );
-  const [selectedSlugs, setSelectedSlugs] = useState<StreamSlug[]>(() =>
-    parseSelectedSlugsFromHash(window.location.hash, allowedSlugs),
-  );
+
+  function setSelectedSlugs(selectedSlugs: StreamSlug[]) {
+    dispatch({
+      type: "setSelectedSlugs",
+      selectedSlugs,
+      streams,
+    });
+  }
+
+  function replaceSelectedStream(stream: Stream) {
+    dispatch({
+      type: "replaceSelectedStream",
+      stream,
+    });
+  }
 
   useEffect(() => {
     const onHashChange = () => {
-      setSelectedSlugs(parseSelectedSlugsFromHash(window.location.hash, allowedSlugs));
+      dispatch({
+        type: "setSelectedSlugs",
+        selectedSlugs: parseSelectedSlugsFromHash(window.location.hash),
+        streams,
+      });
     };
 
     window.addEventListener("hashchange", onHashChange);
     return () => window.removeEventListener("hashchange", onHashChange);
-  }, [allowedSlugs]);
+  }, [streams]);
 
   useEffect(() => {
-    setSelectedSlugs(parseSelectedSlugsFromHash(window.location.hash, allowedSlugs));
-  }, [allowedSlugs]);
+    dispatch({
+      type: "hydrateMissingSelectedStreams",
+      streams,
+    });
+  }, [streams]);
 
   useEffect(() => {
-    if (!allowedSlugs) return;
-    if (!hashMatchesSelectedSlugs(selectedSlugs)) {
-      writeSelectedSlugsToHash(selectedSlugs);
+    if (!hashMatchesSelectedSlugs(state.selectedSlugs)) {
+      writeSelectedSlugsToHash(state.selectedSlugs);
     }
-  }, [selectedSlugs, allowedSlugs]);
+  }, [state.selectedSlugs]);
 
   const selectedStreams = useMemo(
-    () => {
-      if (!streams) {
-        return [];
-      }
-
-      const streamsBySlug = new Map(streams.map((stream) => [stream.slug, stream] as const));
-      return selectedSlugs
-        .map((slug) => streamsBySlug.get(slug))
-        .filter((stream): stream is Stream => stream !== undefined);
-    },
-    [selectedSlugs, streams],
+    () =>
+      state.selectedSlugs
+        .map((slug) => state.selectedStreamsBySlug[slug])
+        .filter((stream): stream is Stream => stream !== undefined),
+    [state.selectedSlugs, state.selectedStreamsBySlug],
   );
 
   return {
     hadHashSelectionOnLoad: initialSelectedSlugs.length > 0,
-    selectedSlugs,
+    selectedSlugs: state.selectedSlugs,
     selectedStreams,
     setSelectedSlugs,
+    replaceSelectedStream,
   };
 }

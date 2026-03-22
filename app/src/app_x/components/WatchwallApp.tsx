@@ -29,7 +29,13 @@ export default function WatchwallApp() {
   const [displayLogs, setDisplayLogs] = useState(true);
   const [logDelayMs, setLogDelayMs] = useState(120_000);
   const streams = filterStreamsByCategory(allStreams, category);
-  const { hadHashSelectionOnLoad, selectedSlugs, selectedStreams, setSelectedSlugs } =
+  const {
+    hadHashSelectionOnLoad,
+    selectedSlugs,
+    selectedStreams,
+    setSelectedSlugs,
+    replaceSelectedStream,
+  } =
     useSelectedStreamIds(allStreams);
   const multiscreenRef = useRef<HTMLElement | null>(null);
   const hasScrolledFromInitialHashRef = useRef(false);
@@ -147,17 +153,10 @@ export default function WatchwallApp() {
   async function handleRefreshStream(streamSlug: StreamSlug) {
     const fetchedStreams = await HOST.getStreams();
     const refreshedStream = fetchedStreams.find((stream) => stream.slug === streamSlug) ?? null;
+    setAllStreams(fetchedStreams);
 
     if (refreshedStream) {
-      setAllStreams((currentStreams) => {
-        if (!currentStreams) {
-          return currentStreams;
-        }
-
-        return currentStreams.map((stream) =>
-          stream.slug === streamSlug ? refreshedStream : stream,
-        );
-      });
+      replaceSelectedStream(refreshedStream);
     }
 
     return refreshedStream;
