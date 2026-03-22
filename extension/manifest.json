@@ -15,5 +15,17 @@
       "16": "icons/icon-16.png",
       "32": "icons/icon-32.png"
     }
-  }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://pooembed.eu/embed-noads/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "all_frames": true,
+      "run_at": "document_idle"
+    }
+  ]
 }
