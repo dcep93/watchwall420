@@ -827,7 +827,7 @@
     aspect-ratio: 16 / 9;
     justify-self: center;
     align-self: start;
-    min-height: 0;
+    min-height: min(56.25vw, 56.25svh);
     overflow: hidden;
   }
 
