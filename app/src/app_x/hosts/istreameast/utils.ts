@@ -18,7 +18,7 @@ export function resolveUrl(candidate: string, baseUrl: string) {
 
 export function buildStreamSlug(title: string, rawUrl: string) {
   const normalizedTitle = title
-    .split(/ vs /i)
+    .split(/ @ /i)
     .at(-1)
     ?.trim()
     .replaceAll(" ", "");
