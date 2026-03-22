@@ -7,6 +7,12 @@
     HOST_HOSTNAMES.has(new URL(origin).hostname),
   );
 
+  console.log("watchwall:pooembed:init", {
+    href: window.location.href,
+    ancestorOrigins,
+    isDescendantOfWatchwallHost,
+  });
+
   if (!isDescendantOfWatchwallHost) {
     return;
   }
@@ -15,14 +21,19 @@
   notifyParents(POOEMBED_LOADED);
 
   function waitForVideoElement() {
+    let stopped = false;
+
     const checkForVideo = () => {
+      if (stopped) {
+        return;
+      }
+
       const video = document.querySelector("video");
 
       if (video instanceof HTMLVideoElement) {
-        if (isVideoReady(video)) {
-          init(video);
-          return;
-        }
+        stopped = true;
+        init(video);
+        return;
       }
 
       window.requestAnimationFrame(checkForVideo);
@@ -32,11 +43,44 @@
   }
 
   function init(video) {
-    void video.play();
-  }
+    video.autoplay = true;
+    video.muted = true;
+    video.playsInline = true;
+    let stopped = false;
 
-  function isVideoReady(video) {
-    return video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA;
+    const stop = () => {
+      stopped = true;
+    };
+
+    video.addEventListener("playing", stop, { once: true });
+
+    const tryPlay = () => {
+      if (stopped) {
+        return;
+      }
+
+      const playResult = video.play();
+
+      if (!playResult || typeof playResult.then !== "function") {
+        window.setTimeout(() => {
+          if (!stopped && video.paused) {
+            tryPlay();
+          }
+        }, 500);
+        return;
+      }
+
+      void playResult.catch(() => {
+      }).finally(() => {
+        window.setTimeout(() => {
+          if (!stopped && video.paused) {
+            tryPlay();
+          }
+        }, 500);
+      });
+    };
+
+    tryPlay();
   }
 
   function notifyParents(type) {
