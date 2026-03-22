@@ -287,6 +287,7 @@ function ScreenContent<T>(props: {
         </pre>
       ) : (
         <iframe
+          key={`${stream.slug}-${refreshRequestId}`}
           className="screen-iframe"
           title={indexedTitle}
           srcDoc={srcDoc}
