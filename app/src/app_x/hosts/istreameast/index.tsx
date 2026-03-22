@@ -10,9 +10,16 @@ function getSupportedIstreameastCategories() {
   return ["NFL", "NBA", "MLB", "NHL", "CFL", "CFB", "NCAAB", "UFC", "SOCCER", "F1"] as const;
 }
 
+function appendFetchTimeMs(rawUrl: string, fetchTimeMs: number) {
+  const url = new URL(rawUrl);
+  url.searchParams.set("fetchTimeMs", String(fetchTimeMs));
+  return url.toString();
+}
+
 export const istreameastHost: Host<IframeParams> = {
   getLeagueCategories: getSupportedIstreameastCategories,
   async getStreams() {
+    const fetchTimeMs = Date.now();
     const streamListHtml = await fetchIstreameastHtml();
     const supportedCategories = getSupportedIstreameastCategories();
     const espnEvents = await fetchEspnScheduleEventsForCategories("ALL", supportedCategories).catch(
@@ -21,7 +28,10 @@ export const istreameastHost: Host<IframeParams> = {
         return [];
       },
     );
-    return parseStreamsFromHtml(streamListHtml, espnEvents, supportedCategories);
+    return parseStreamsFromHtml(streamListHtml, espnEvents, supportedCategories).map((stream) => ({
+      ...stream,
+      raw_url: appendFetchTimeMs(stream.raw_url, fetchTimeMs),
+    }));
   },
   async getIframeParams(stream, options) {
     if (!stream.raw_url) {
