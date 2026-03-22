@@ -1,7 +1,10 @@
+import { useEffect, useState } from "react";
 import shaDetailsRaw from "../config/sha.json?raw";
 import type { Category, Stream, StreamCategory, StreamSlug } from "../config/types";
 import Guide from "./Guide";
 import Options from "./Options";
+
+const MOBILE_MENU_BREAKPOINT_PX = 960;
 
 export default function Menu(props: {
   category: Category;
@@ -17,6 +20,7 @@ export default function Menu(props: {
   onClearCache: () => void;
 }) {
   const shaTooltip = formatShaTooltip(shaDetailsRaw);
+  const isMobile = useIsMobileMenu();
 
   return (
     <aside className="menu-column">
@@ -27,12 +31,14 @@ export default function Menu(props: {
         >
           watchwall420
         </h1>
-        <button
-          type="button"
-          className="menu-title-overlay-button"
-          aria-label="Show build details"
-          onClick={() => alert(shaTooltip)}
-        />
+        {isMobile ? (
+          <button
+            type="button"
+            className="menu-title-overlay-button"
+            aria-label="Show build details"
+            onClick={() => alert(shaTooltip)}
+          />
+        ) : null}
       </div>
 
       <div className="stream-list">
@@ -105,6 +111,23 @@ function StreamToggle(props: {
       </button>
     </div>
   );
+}
+
+function useIsMobileMenu() {
+  const [isMobile, setIsMobile] = useState(() =>
+    window.innerWidth <= MOBILE_MENU_BREAKPOINT_PX,
+  );
+
+  useEffect(() => {
+    function handleResize() {
+      setIsMobile(window.innerWidth <= MOBILE_MENU_BREAKPOINT_PX);
+    }
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  return isMobile;
 }
 
 function formatShaTooltip(raw: string) {
