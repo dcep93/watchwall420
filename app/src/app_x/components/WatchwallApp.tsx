@@ -95,6 +95,36 @@ export default function WatchwallApp() {
     };
   }, [shouldShowResumePrompt]);
 
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      const target = event.target;
+      if (
+        target instanceof HTMLInputElement ||
+        target instanceof HTMLTextAreaElement ||
+        target instanceof HTMLSelectElement ||
+        (target instanceof HTMLElement && target.isContentEditable)
+      ) {
+        return;
+      }
+
+      const match = event.code.match(/^(?:Digit|Numpad)([1-9])$/);
+      if (!match) {
+        return;
+      }
+
+      const nextIndex = Number(match[1]) - 1;
+      const nextStream = selectedStreams[nextIndex];
+      if (!nextStream) {
+        return;
+      }
+
+      setFocusedSlug(nextStream.slug);
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [selectedStreams]);
+
   function handleToggle(streamSlug: StreamSlug) {
     if (selectedSlugs.includes(streamSlug)) {
       const remainingSlugs = removeStreamSlug(selectedSlugs, streamSlug);

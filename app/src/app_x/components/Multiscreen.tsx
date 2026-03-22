@@ -27,11 +27,12 @@ export default function Multiscreen<T>(props: {
           } as CSSProperties
         }
       >
-        {streams.map((stream) => (
+        {streams.map((stream, index) => (
           <ScreenCard
             key={stream.slug}
             host={host}
             stream={stream}
+            streamIndex={index}
             displayLogs={displayLogs}
             isFocused={stream.slug === focusedStream?.slug}
             isSolo={streams.length === 1}
@@ -47,6 +48,7 @@ export default function Multiscreen<T>(props: {
 function ScreenCard<T>(props: {
   host: Host<T>;
   stream: Stream;
+  streamIndex: number;
   displayLogs: boolean;
   isFocused: boolean;
   isSolo: boolean;
@@ -54,6 +56,7 @@ function ScreenCard<T>(props: {
   onRemove: () => void;
 }) {
   const [titleTooltip, setTitleTooltip] = useState("");
+  const indexedTitle = formatIndexedStreamTitle(props.stream.title, props.streamIndex);
   const screenBodyClassName = [
     "screen-spotlight-body",
     props.isFocused && props.displayLogs ? "" : "screen-spotlight-body-no-log",
@@ -78,7 +81,7 @@ function ScreenCard<T>(props: {
         ]
           .filter(Boolean)
           .join(" ")}
-        label={props.stream.title}
+        label={indexedTitle}
         onClick={props.onRemove}
         title={titleTooltip}
       />
@@ -91,6 +94,7 @@ function ScreenCard<T>(props: {
         <ScreenContent
           key={props.stream.raw_url}
           host={props.host}
+          indexedTitle={indexedTitle}
           className={[
             "screen-focus",
             props.isFocused ? "screen-focus-spotlight" : "screen-focus-secondary",
@@ -136,11 +140,12 @@ function ScreenTitleBar(props: {
 function ScreenContent<T>(props: {
   host: Host<T>;
   stream: Stream;
+  indexedTitle: string;
   className: string;
   onClick?: () => void;
   onDebugTitleChange?: (value: string) => void;
 }) {
-  const { className, host, onClick, onDebugTitleChange, stream } = props;
+  const { className, host, indexedTitle, onClick, onDebugTitleChange, stream } = props;
   const [srcDoc, setSrcDoc] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -185,7 +190,7 @@ function ScreenContent<T>(props: {
         <button
           type="button"
           className="screen-focus-overlay"
-          aria-label={`Focus screen ${stream.title}`}
+          aria-label={`Focus screen ${indexedTitle}`}
           onClick={onClick}
         />
       ) : null}
@@ -196,7 +201,7 @@ function ScreenContent<T>(props: {
       ) : (
         <iframe
           className="screen-iframe"
-          title={stream.title}
+          title={indexedTitle}
           srcDoc={srcDoc}
           loading="eager"
           referrerPolicy="no-referrer"
@@ -216,4 +221,8 @@ function getStreamContentErrorMessage(error: unknown) {
   }
 
   return "Unable to load stream.";
+}
+
+function formatIndexedStreamTitle(title: string, index: number) {
+  return `(${index + 1}) ${title}`;
 }
