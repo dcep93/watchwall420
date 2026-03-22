@@ -164,6 +164,12 @@
   gap: 12px;
 }
 
+.stream-toggle-row {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+}
+
 .stream-toggle,
 .primary-button {
   appearance: none;
@@ -193,6 +199,28 @@
   border-radius: 20px;
   color: inherit;
   text-align: left;
+}
+
+.stream-raw-link-button {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--ww-border);
+  border-radius: 20px;
+  background: transparent;
+  color: var(--ww-text);
+  min-width: 56px;
+  padding: 0;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    background 160ms ease;
+}
+
+.stream-raw-link-button:hover {
+  transform: translateY(-1px);
 }
 
 .stream-toggle.is-selected,
@@ -826,5 +854,9 @@
 
   .screen-card-secondary {
     min-width: 220px;
+  }
+
+  .stream-raw-link-button {
+    display: inline-flex;
   }
 }
