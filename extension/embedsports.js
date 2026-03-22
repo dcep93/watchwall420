@@ -2,6 +2,7 @@
   const APP_MESSAGE_SOURCE = "watchwall420-app";
   const SET_MUTED = "watchwall420:set-muted";
   const TOGGLE_MUTE = "watchwall420:toggle-mute";
+  let lastSetMutedMessage = null;
   const hideDontfoid = () => {
     const dontfoid = document.querySelector("#dontfoid");
 
@@ -15,6 +16,12 @@
 
   hideDontfoid();
 
+  const forwardToChildIframes = (message) => {
+    document.querySelectorAll("iframe").forEach((iframe) => {
+      iframe.contentWindow?.postMessage(message, "*");
+    });
+  };
+
   window.addEventListener("message", (event) => {
     if (
       event.data?.source !== APP_MESSAGE_SOURCE ||
@@ -23,8 +30,27 @@
       return;
     }
 
-    document.querySelectorAll("iframe").forEach((iframe) => {
-      iframe.contentWindow?.postMessage(event.data, "*");
-    });
+    if (event.data.type === SET_MUTED) {
+      lastSetMutedMessage = event.data;
+    }
+
+    forwardToChildIframes(event.data);
   });
+
+  window.addEventListener(
+    "load",
+    (event) => {
+      if (!lastSetMutedMessage) {
+        return;
+      }
+
+      const target = event.target;
+      if (!(target instanceof HTMLIFrameElement)) {
+        return;
+      }
+
+      target.contentWindow?.postMessage(lastSetMutedMessage, "*");
+    },
+    true,
+  );
 })();

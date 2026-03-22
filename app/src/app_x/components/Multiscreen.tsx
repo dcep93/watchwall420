@@ -160,8 +160,8 @@ function ScreenContent<T>(props: {
   const {
     className,
     host,
-    isFocused,
     indexedTitle,
+    isFocused,
     muteToggleRequestId,
     onClick,
     onDebugTitleChange,

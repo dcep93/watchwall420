@@ -8,6 +8,7 @@ export function renderIstreameastPlayerDocument(iframeParams: IframeParams): Rea
       const APP_MESSAGE_SOURCE = "watchwall420-app";
       const SET_MUTED = "watchwall420:set-muted";
       const TOGGLE_MUTE = "watchwall420:toggle-mute";
+      let lastSetMutedMessage = null;
       const lockCurrentHorizontalScroll = () => {
         const lockedX = topWindow.scrollX;
 
@@ -27,6 +28,10 @@ export function renderIstreameastPlayerDocument(iframeParams: IframeParams): Rea
         const playerFrame = document.getElementById("watchwall-player-frame");
 
         if (playerFrame) {
+          const forwardMessage = (message) => {
+            playerFrame.contentWindow?.postMessage(message, "*");
+          };
+
           window.addEventListener("message", (event) => {
             if (
               event.data?.source !== APP_MESSAGE_SOURCE ||
@@ -35,12 +40,19 @@ export function renderIstreameastPlayerDocument(iframeParams: IframeParams): Rea
               return;
             }
 
-            playerFrame.contentWindow?.postMessage(event.data, "*");
+            if (event.data.type === SET_MUTED) {
+              lastSetMutedMessage = event.data;
+            }
+
+            forwardMessage(event.data);
           });
 
           playerFrame.addEventListener(
             "load",
             () => {
+              if (lastSetMutedMessage) {
+                forwardMessage(lastSetMutedMessage);
+              }
               lockCurrentHorizontalScroll();
             },
             { once: true },

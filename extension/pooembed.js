@@ -20,7 +20,6 @@
 
   const markUserInteraction = () => {
     hasUserInteracted = true;
-    applyRequestedMutedState();
   };
 
   window.addEventListener("pointerdown", markUserInteraction, { capture: true });
