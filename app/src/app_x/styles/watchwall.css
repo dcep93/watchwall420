@@ -496,6 +496,10 @@
   box-shadow: none;
 }
 
+.log-panel-hidden {
+  display: none;
+}
+
 .log-entry {
   margin-top: 0;
   padding: 0;
@@ -630,11 +634,17 @@
 }
 
 .watchwall-log-scoring-run {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2em;
   margin-top: 0.65em;
   color: var(--ww-text-muted);
   font-size: 0.82rem;
   font-weight: 700;
-  text-transform: lowercase;
+}
+
+.watchwall-log-scoring-run-item {
+  display: block;
 }
 
 .watchwall-log-spacer {

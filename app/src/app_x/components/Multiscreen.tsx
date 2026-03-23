@@ -86,6 +86,7 @@ function ScreenCard<T>(props: {
   ]
     .filter(Boolean)
     .join(" ");
+  const showLogPanel = props.isFocused && props.displayLogs;
 
   return (
     <article
@@ -111,8 +112,17 @@ function ScreenCard<T>(props: {
         title={titleTooltip}
       />
       <div className={screenBodyClassName}>
-        {props.isFocused && props.displayLogs ? (
-          <div className="log-panel log-panel-spotlight">
+        {props.displayLogs ? (
+          <div
+            className={[
+              "log-panel",
+              "log-panel-spotlight",
+              showLogPanel ? "" : "log-panel-hidden",
+            ]
+              .filter(Boolean)
+              .join(" ")}
+            aria-hidden={!showLogPanel}
+          >
             <div className="log-entry">
               {renderLog(
                 props.stream,

@@ -175,8 +175,8 @@ function LogView(props: {
     }
     return drives;
   }, [props.log.playByPlay]);
-  const scoringRun = useMemo(
-    () => getScoringRunLabel(playByPlay, props.leagueCategory),
+  const scoringRuns = useMemo(
+    () => getScoringRunLabels(playByPlay, props.leagueCategory),
     [playByPlay, props.leagueCategory],
   );
 
@@ -212,7 +212,15 @@ function LogView(props: {
             </div>
           ))}
         </div>
-        {scoringRun ? <div className="watchwall-log-scoring-run">scoring run: {scoringRun}</div> : null}
+        {scoringRuns.length > 0 ? (
+          <div className="watchwall-log-scoring-run">
+            {scoringRuns.map((scoringRun) => (
+              <span key={scoringRun} className="watchwall-log-scoring-run-item">
+                {scoringRun}
+              </span>
+            ))}
+          </div>
+        ) : null}
         <div className="watchwall-log-spacer" />
         {playByPlay.slice().reverse().map((drive, index) => (
           <div key={`${drive.team}-${drive.description}-${index}`} className="watchwall-log-event-row">
@@ -399,16 +407,15 @@ type ScoringRunCandidate = {
   scoreDelta: ParsedScoreType;
 };
 
-function getScoringRunLabel(playByPlay: LogType["playByPlay"], leagueCategory: string) {
+function getScoringRunLabels(playByPlay: LogType["playByPlay"], leagueCategory: string) {
   const scoringSnapshots = buildScoringSnapshots(playByPlay);
   if (scoringSnapshots.length === 0) {
-    return null;
+    return [];
   }
 
   const latestSnapshot = scoringSnapshots[scoringSnapshots.length - 1];
   const latestClock = getLatestClockLabel(playByPlay) || latestSnapshot.clock;
-  let bestRun: ScoringRunCandidate | null = null;
-  let bestInterestScore = Number.NEGATIVE_INFINITY;
+  const rankedRuns: { candidate: ScoringRunCandidate; interestScore: number; label: string }[] = [];
 
   for (let index = 0; index < scoringSnapshots.length; index += 1) {
     const startSnapshot = scoringSnapshots[index];
@@ -430,23 +437,35 @@ function getScoringRunLabel(playByPlay: LogType["playByPlay"], leagueCategory: s
       continue;
     }
 
-    if (interestScore > bestInterestScore) {
-      bestRun = candidate;
-      bestInterestScore = interestScore;
-    }
+    const durationLabel = formatRunDuration(
+      candidate.startClock,
+      candidate.endClock,
+      leagueCategory,
+    );
+    const label = `${candidate.scoreDelta[0]}-${candidate.scoreDelta[1]}${
+      durationLabel ? ` in last ${durationLabel}` : ""
+    }`;
+
+    rankedRuns.push({
+      candidate,
+      interestScore,
+      label,
+    });
   }
 
-  if (!bestRun) {
-    return null;
-  }
+  return rankedRuns
+    .sort((left, right) => {
+      if (right.interestScore !== left.interestScore) {
+        return right.interestScore - left.interestScore;
+      }
 
-  const durationLabel = formatRunDuration(
-    bestRun.startClock,
-    bestRun.endClock,
-    leagueCategory,
-  );
-
-  return `${bestRun.scoreDelta[0]}-${bestRun.scoreDelta[1]}${durationLabel ? ` in last ${durationLabel}` : ""}`;
+      const leftTotal = left.candidate.scoreDelta[0] + left.candidate.scoreDelta[1];
+      const rightTotal = right.candidate.scoreDelta[0] + right.candidate.scoreDelta[1];
+      return rightTotal - leftTotal;
+    })
+    .filter((run, index, runs) => runs.findIndex((candidate) => candidate.label === run.label) === index)
+    .slice(0, 2)
+    .map((run) => run.label);
 }
 
 function buildScoringSnapshots(playByPlay: LogType["playByPlay"]) {
