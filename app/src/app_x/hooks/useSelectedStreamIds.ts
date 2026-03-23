@@ -69,15 +69,24 @@ function buildStreamsBySlug(streams: Stream[] | null) {
   return new Map((streams ?? []).map((stream) => [stream.slug, stream] as const));
 }
 
+function syncSelectedSlugsWithStreams(
+  selectedSlugs: StreamSlug[],
+  streamsBySlug: Map<StreamSlug, Stream>,
+) {
+  return selectedSlugs.filter((selectedSlug) => streamsBySlug.has(selectedSlug));
+}
+
 function applySelectedSlugs(
   state: SelectionState,
   selectedSlugs: StreamSlug[],
   streams: Stream[] | null,
 ): SelectionState {
   const streamsBySlug = buildStreamsBySlug(streams);
+  const nextSelectedSlugs =
+    streams === null ? selectedSlugs : syncSelectedSlugsWithStreams(selectedSlugs, streamsBySlug);
   const selectedStreamsBySlug: Partial<Record<StreamSlug, Stream>> = {};
 
-  for (const selectedSlug of selectedSlugs) {
+  for (const selectedSlug of nextSelectedSlugs) {
     const lockedStream = state.selectedStreamsBySlug[selectedSlug];
     const currentStream = streamsBySlug.get(selectedSlug);
 
@@ -92,7 +101,7 @@ function applySelectedSlugs(
   }
 
   return {
-    selectedSlugs,
+    selectedSlugs: nextSelectedSlugs,
     selectedStreamsBySlug,
   };
 }
@@ -103,7 +112,17 @@ function selectedStreamsReducer(state: SelectionState, action: SelectionAction):
   }
 
   if (action.type === "hydrateMissingSelectedStreams") {
+    if (action.streams === null) {
+      return state;
+    }
+
     const streamsBySlug = buildStreamsBySlug(action.streams);
+    const nextSelectedSlugs = syncSelectedSlugsWithStreams(state.selectedSlugs, streamsBySlug);
+
+    if (nextSelectedSlugs.length !== state.selectedSlugs.length) {
+      return applySelectedSlugs(state, nextSelectedSlugs, action.streams);
+    }
+
     let nextSelectedStreamsBySlug = state.selectedStreamsBySlug;
     let didChange = false;
 
