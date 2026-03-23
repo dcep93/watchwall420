@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import type { Stream } from "../../config/types";
 import { buildTeamSummaries, fetchJson, findStatIndex } from "./shared";
 import type { BoxScoreType, DriveType, HockeyLeagueConfig, LogType } from "./types";
 
@@ -14,11 +15,11 @@ type HockeyRenderedPlay = {
 };
 
 export async function getHockeyLog(
-  espnId: number,
+  stream: Stream,
   config: HockeyLeagueConfig,
 ): Promise<LogType | null> {
   const summaryObj = await fetchJson(
-    `https://site.web.api.espn.com/apis/site/v2/sports/${config.sport}/${config.espnLeague}/summary?region=us&lang=en&contentorigin=espn&event=${espnId}`,
+    `https://site.web.api.espn.com/apis/site/v2/sports/${config.sport}/${config.espnLeague}/summary?region=us&lang=en&contentorigin=espn&event=${stream.espn_id}`,
   );
 
   const plays = (((summaryObj as any).plays as any[]) ?? []).slice();
@@ -38,7 +39,7 @@ export async function getHockeyLog(
 
   return {
     timestamp,
-    teams: buildTeamSummaries(summaryObj),
+    teams: buildTeamSummaries(summaryObj, stream.title),
     playByPlay: buildHockeyPlayByPlay(plays, teamsById),
     boxScore: buildHockeyBoxScore((summaryObj as any).boxscore?.players ?? [], config.boxScoreKeys),
   };

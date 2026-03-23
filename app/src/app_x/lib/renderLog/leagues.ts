@@ -1,3 +1,4 @@
+import type { Stream } from "../../config/types";
 import { getBaseballLog } from "./baseball";
 import { getBasketballLog } from "./basketball";
 import { getFootballLog } from "./football";
@@ -57,23 +58,23 @@ export const leagueConfigs: Record<string, LeagueConfig> = {
 };
 
 export async function fetchLeagueLog(
-  espnId: number,
+  stream: Stream,
   config: LeagueConfig,
 ): Promise<LogType | null> {
   if (isFootballLeagueConfig(config)) {
-    return getFootballLog(espnId, config);
+    return getFootballLog(stream, config);
   }
 
   if (isBasketballLeagueConfig(config)) {
-    return getBasketballLog(espnId, config);
+    return getBasketballLog(stream, config);
   }
 
   if (isBaseballLeagueConfig(config)) {
-    return getBaseballLog(espnId, config);
+    return getBaseballLog(stream, config);
   }
 
   if (isHockeyLeagueConfig(config)) {
-    return getHockeyLog(espnId, config);
+    return getHockeyLog(stream, config);
   }
 
   return null;

@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import type { Stream } from "../../config/types";
 import { buildTeamSummaries, fetchJson } from "./shared";
 import type { BasketballLeagueConfig, DriveType, LogType } from "./types";
 
 export async function getBasketballLog(
-  espnId: number,
+  stream: Stream,
   config: BasketballLeagueConfig,
 ): Promise<LogType | null> {
   const summaryObj = await fetchJson(
-    `https://site.web.api.espn.com/apis/site/v2/sports/${config.sport}/${config.espnLeague}/summary?region=us&lang=en&contentorigin=espn&event=${espnId}`,
+    `https://site.web.api.espn.com/apis/site/v2/sports/${config.sport}/${config.espnLeague}/summary?region=us&lang=en&contentorigin=espn&event=${stream.espn_id}`,
   );
 
   const teamsById = Object.fromEntries(
@@ -41,7 +42,7 @@ export async function getBasketballLog(
 
   return {
     timestamp,
-    teams: buildTeamSummaries(summaryObj),
+    teams: buildTeamSummaries(summaryObj, stream.title),
     playByPlay: buildBasketballPlayByPlay(plays, teamsById),
     boxScore: buildBasketballBoxScore((summaryObj as any).boxscore?.players ?? [], config.boxScoreKeys),
   };

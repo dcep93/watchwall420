@@ -58,7 +58,7 @@ function StreamLog(props: { stream: Stream; logDelayMs: number; refreshRequestId
       return Promise.resolve();
     }
 
-    return fetchLeagueLog(props.stream.espn_id, config)
+    return fetchLeagueLog(props.stream, config)
       .then((nextLog) => {
         if (!isMountedRef.current || !nextLog) {
           return;

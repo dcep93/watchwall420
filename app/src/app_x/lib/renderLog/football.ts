@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import type { Stream } from "../../config/types";
 import { buildDefaultBoxScore, buildTeamSummaries, fetchJson } from "./shared";
 import type { DriveType, FootballLeagueConfig, LogType } from "./types";
 
@@ -48,15 +49,15 @@ type FootballResolvedDrive = {
 };
 
 export async function getFootballLog(
-  espnId: number,
+  stream: Stream,
   config: FootballLeagueConfig,
 ): Promise<LogType | null> {
   const [summaryObj, coreObj] = await Promise.all([
     fetchJson(
-      `https://site.web.api.espn.com/apis/site/v2/sports/${config.sport}/${config.espnLeague}/summary?region=us&lang=en&contentorigin=espn&event=${espnId}`,
+      `https://site.web.api.espn.com/apis/site/v2/sports/${config.sport}/${config.espnLeague}/summary?region=us&lang=en&contentorigin=espn&event=${stream.espn_id}`,
     ),
     fetchJson(
-      `https://sports.core.api.espn.com/v2/sports/${config.sport}/leagues/${config.espnLeague}/events/${espnId}/competitions/${espnId}/drives?limit=1000`,
+      `https://sports.core.api.espn.com/v2/sports/${config.sport}/leagues/${config.espnLeague}/events/${stream.espn_id}/competitions/${stream.espn_id}/drives?limit=1000`,
     ),
   ]);
 
@@ -133,7 +134,7 @@ export async function getFootballLog(
 
   return {
     timestamp,
-    teams: buildTeamSummaries(summaryObj),
+    teams: buildTeamSummaries(summaryObj, stream.title),
     playByPlay,
     boxScore: buildDefaultBoxScore(summaryWithDrives.boxscore?.players ?? [], config.boxScoreKeys),
   };
