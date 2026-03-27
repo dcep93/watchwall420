@@ -14,6 +14,23 @@ function removeStreamSlug(slugs: StreamSlug[], streamSlug: StreamSlug) {
   return slugs.filter((slug) => slug !== streamSlug);
 }
 
+function focusReplacementStream(
+  remainingSlugs: StreamSlug[],
+  setFocusedSlug: (value: StreamSlug) => void,
+  setMuteToggleSlug: (value: StreamSlug) => void,
+  setMuteToggleRequestId: (updater: (current: number) => number) => void,
+) {
+  const nextFocusedSlug = remainingSlugs[0] ?? "";
+  setFocusedSlug(nextFocusedSlug);
+
+  if (!nextFocusedSlug) {
+    return;
+  }
+
+  setMuteToggleSlug(nextFocusedSlug);
+  setMuteToggleRequestId((current) => current + 1);
+}
+
 export default function WatchwallApp() {
   const hostCategories = HOST.getLeagueCategories();
   const defaultCategory = getDefaultCategory(hostCategories);
@@ -131,7 +148,12 @@ export default function WatchwallApp() {
       const remainingSlugs = removeStreamSlug(selectedSlugs, streamSlug);
       setSelectedSlugs(remainingSlugs);
       if (resolvedFocusedSlug === streamSlug) {
-        setFocusedSlug(remainingSlugs[0] ?? "");
+        focusReplacementStream(
+          remainingSlugs,
+          setFocusedSlug,
+          setMuteToggleSlug,
+          setMuteToggleRequestId,
+        );
       }
       return;
     }
@@ -146,7 +168,12 @@ export default function WatchwallApp() {
     const remainingSlugs = removeStreamSlug(selectedSlugs, streamSlug);
     setSelectedSlugs(remainingSlugs);
     if (resolvedFocusedSlug === streamSlug) {
-      setFocusedSlug(remainingSlugs[0] ?? "");
+      focusReplacementStream(
+        remainingSlugs,
+        setFocusedSlug,
+        setMuteToggleSlug,
+        setMuteToggleRequestId,
+      );
     }
   }
 
