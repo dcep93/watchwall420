@@ -10,6 +10,7 @@
   let hasUserInteracted = false;
   let currentVideo = null;
   let requestedMutedState = true;
+  let didMute = null;
 
   if (!isDescendantOfWatchwallHost) {
     return;
@@ -45,6 +46,7 @@
 
     currentVideo.muted = !currentVideo.muted;
     requestedMutedState = currentVideo.muted;
+    didMute = false;
   });
 
   waitForVideoElement();
@@ -73,6 +75,7 @@
 
   function init(video) {
     currentVideo = video;
+    didMute = null;
     video.autoplay = true;
     video.playsInline = true;
     applyRequestedMutedState();
@@ -93,13 +96,16 @@
     }
 
     if (requestedMutedState) {
+      didMute = didMute ?? !currentVideo.muted;
       currentVideo.muted = true;
       return;
     }
 
-    if (hasUserInteracted) {
+    if (hasUserInteracted && didMute) {
       currentVideo.muted = false;
     }
+
+    didMute = false;
   }
 
 })();
