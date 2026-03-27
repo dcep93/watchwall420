@@ -127,7 +127,7 @@ function StreamLog(props: { stream: Stream; logDelayMs: number; refreshRequestId
   if (!displayedLog) {
     return (
       <div
-        className="watchwall-log-empty"
+        className="watchwall-log-empty watchwall-log-empty-refreshable"
         role="button"
         tabIndex={0}
         onClick={() => {

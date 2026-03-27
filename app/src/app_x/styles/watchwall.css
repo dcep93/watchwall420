@@ -522,6 +522,17 @@
   font-size: 0.85rem;
 }
 
+.watchwall-log-empty-refreshable {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
 .watchwall-log {
   height: 100%;
   display: flex;
