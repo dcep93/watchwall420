@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Stream } from "../../config/types";
-import { buildTeamSummaries, fetchJson } from "./shared";
+import { buildTeamSummaries, fetchJson, isHomeTeamBoxScoreTeam } from "./shared";
 import type { BasketballLeagueConfig, DriveType, LogType } from "./types";
 
 export async function getBasketballLog(
@@ -213,7 +213,7 @@ function buildBasketballBoxScore(players: any[], keys: readonly string[]) {
 
   return keys.map((key) => {
     const config = statConfig[key];
-    const athletes = (players || []).flatMap((team: any) => {
+    const athletes = (players || []).flatMap((team: any, teamIndex: number) => {
       const statBlock = team.statistics?.[0];
       if (!statBlock || !config) return [];
       const blockKeys = statBlock.keys || [];
@@ -233,6 +233,7 @@ function buildBasketballBoxScore(players: any[], keys: readonly string[]) {
           stats: columnIndexes.map((columnIndex) =>
             columnIndex >= 0 ? athlete.stats[columnIndex] || "" : "",
           ),
+          isHomeTeam: isHomeTeamBoxScoreTeam(teamIndex),
           rank: parseFloat(athlete.stats[rankIndex] || "0") || 0,
           labels,
         }));
@@ -243,7 +244,7 @@ function buildBasketballBoxScore(players: any[], keys: readonly string[]) {
       labels: athletes[0]?.labels || [],
       players: athletes
         .sort((left, right) => right.rank - left.rank)
-        .map(({ name, stats }) => ({ name, stats })),
+        .map(({ name, stats, isHomeTeam }) => ({ name, stats, isHomeTeam })),
     };
   });
 }

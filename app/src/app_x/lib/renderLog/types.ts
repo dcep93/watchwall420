@@ -16,7 +16,7 @@ export type DriveType = {
 export type BoxScoreType = {
   key: string;
   labels: string[];
-  players?: { name: string; stats: string[] }[];
+  players?: { name: string; stats: string[]; isHomeTeam?: boolean }[];
 };
 
 export type LogType = {

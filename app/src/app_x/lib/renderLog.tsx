@@ -271,7 +271,10 @@ function LogView(props: {
                   </thead>
                   <tbody>
                     {(boxScore.players || []).map((player) => (
-                      <tr key={player.name}>
+                      <tr
+                        key={player.name}
+                        className={player.isHomeTeam ? "watchwall-log-box-score-row watchwall-log-box-score-row-home" : "watchwall-log-box-score-row"}
+                      >
                         <td className="watchwall-log-player-name">{player.name}</td>
                         {player.stats.map((stat, index) => (
                           <td key={`${player.name}-${index}`}>{stat}</td>

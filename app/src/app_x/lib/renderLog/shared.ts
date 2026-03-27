@@ -43,27 +43,34 @@ export function buildDefaultBoxScore(players: any[], keys: readonly string[]): B
   return keys.map((key) => ({
     key,
     labels: players?.[0]?.statistics?.find((stat: any) => stat.name === key)?.labels || [],
-    players: []
-      .concat(
-        ...(players || [])
-          .map((team: any) => team.statistics?.find((stat: any) => stat.name === key))
-          .filter(Boolean)
-          .map((statBlock: any) => statBlock.athletes || []),
-      )
-      .map((athlete: any) => ({
-        name: athlete.athlete?.displayName ?? "",
-        stats: athlete.stats ?? [],
-        rank:
-          athlete.stats
-            ?.map((stat: string) => parseFloat(String(stat).split("/")[0]))
-            .find((stat: number) => !Number.isNaN(stat)) || 0,
-      }))
+    players: (players || [])
+      .flatMap((team: any, teamIndex: number) => {
+        const statBlock = team.statistics?.find((stat: any) => stat.name === key);
+        if (!statBlock) {
+          return [];
+        }
+
+        const isHomeTeam = isHomeTeamBoxScoreTeam(teamIndex);
+        return (statBlock.athletes || []).map((athlete: any) => ({
+          name: athlete.athlete?.displayName ?? "",
+          stats: athlete.stats ?? [],
+          isHomeTeam,
+          rank:
+            athlete.stats
+              ?.map((stat: string) => parseFloat(String(stat).split("/")[0]))
+              .find((stat: number) => !Number.isNaN(stat)) || 0,
+        }));
+      })
       .sort((left, right) => right.rank - left.rank),
   }));
 }
 
 export function findStatIndex(keys: string[], aliases: readonly string[]) {
   return keys.findIndex((key) => aliases.includes(key));
+}
+
+export function isHomeTeamBoxScoreTeam(teamIndex: number) {
+  return teamIndex === 1;
 }
 
 function orderTeamSummariesByTitle(teamSummaries: TeamSummary[], streamTitle: string) {

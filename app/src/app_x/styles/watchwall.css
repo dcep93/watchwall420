@@ -688,6 +688,10 @@
   padding-bottom: 20px;
 }
 
+.watchwall-log-box-score-row-home {
+  background: rgba(232, 206, 171, 0.08);
+}
+
 .watchwall-log-box-score td,
 .watchwall-log-box-score th {
   padding: 2px 4px;

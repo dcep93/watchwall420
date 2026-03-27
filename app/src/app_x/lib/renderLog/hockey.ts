@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Stream } from "../../config/types";
-import { buildTeamSummaries, fetchJson, findStatIndex } from "./shared";
+import { buildTeamSummaries, fetchJson, findStatIndex, isHomeTeamBoxScoreTeam } from "./shared";
 import type { BoxScoreType, DriveType, HockeyLeagueConfig, LogType } from "./types";
 
 type HockeyRenderedPlay = {
@@ -342,7 +342,7 @@ function buildHockeyBoxScore(players: any[], keys: readonly string[]): BoxScoreT
       return { key, labels: [], players: [] };
     }
 
-    const athletes = (players || []).flatMap((team: any) => {
+    const athletes = (players || []).flatMap((team: any, teamIndex: number) => {
       const statBlock = (team.statistics || []).find((stat: any) =>
         config.blockNames.includes(stat.name) || config.blockNames.includes(stat.type),
       );
@@ -363,6 +363,7 @@ function buildHockeyBoxScore(players: any[], keys: readonly string[]): BoxScoreT
           stats: columnIndexes.map((columnIndex) =>
             columnIndex >= 0 ? athlete.stats[columnIndex] || "" : "",
           ),
+          isHomeTeam: isHomeTeamBoxScoreTeam(teamIndex),
           rank: rankIndex >= 0 ? parseFloat(String(athlete.stats?.[rankIndex] || "0")) || 0 : 0,
           labels,
         }));
@@ -373,7 +374,7 @@ function buildHockeyBoxScore(players: any[], keys: readonly string[]): BoxScoreT
       labels: athletes[0]?.labels || [],
       players: athletes
         .sort((left, right) => right.rank - left.rank)
-        .map(({ name, stats }) => ({ name, stats })),
+        .map(({ name, stats, isHomeTeam }) => ({ name, stats, isHomeTeam })),
     };
   });
 }
