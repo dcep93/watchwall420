@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import shaDetailsRaw from "../config/sha.json?raw";
+import { formatShaTooltip } from "../config/sha_x";
 import type { Category, Stream, StreamCategory, StreamSlug } from "../config/types";
 import Guide from "./Guide";
 import Options from "./Options";
@@ -19,7 +19,7 @@ export default function Menu(props: {
   onLogDelayMsChange: (value: number) => void;
   onClearCache: () => void;
 }) {
-  const shaTooltip = formatShaTooltip(shaDetailsRaw);
+  const shaTooltip = formatShaTooltip();
   const isMobile = useIsMobileMenu();
 
   return (
@@ -128,12 +128,4 @@ function useIsMobileMenu() {
   }, []);
 
   return isMobile;
-}
-
-function formatShaTooltip(raw: string) {
-  try {
-    return JSON.stringify(JSON.parse(raw), null, 2);
-  } catch {
-    return raw;
-  }
 }
