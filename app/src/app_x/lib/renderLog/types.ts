@@ -19,9 +19,16 @@ export type BoxScoreType = {
   players?: { name: string; stats: string[]; isHomeTeam?: boolean }[];
 };
 
+export type WinProbabilityType = {
+  team: string;
+  probability: number;
+  isHomeTeam: boolean;
+};
+
 export type LogType = {
   timestamp: number;
   teams: { name: string; statistics: Record<string, string> }[];
+  winProbability?: WinProbabilityType | null;
   playByPlay: DriveType[];
   boxScore: BoxScoreType[];
 };

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { BoxScoreType } from "./types";
+import type { BoxScoreType, WinProbabilityType } from "./types";
 
 type TeamSummary = {
   name: string;
@@ -71,6 +71,34 @@ export function findStatIndex(keys: string[], aliases: readonly string[]) {
 
 export function isHomeTeamBoxScoreTeam(teamIndex: number) {
   return teamIndex === 1;
+}
+
+export function buildWinProbability(summaryObj: any): WinProbabilityType | null {
+  const winProbabilities = ((summaryObj as any).winprobability as any[]) ?? [];
+  const latestProbability = winProbabilities[winProbabilities.length - 1];
+  const competitors = (((summaryObj as any).header?.competitions?.[0]?.competitors as any[]) ?? []);
+  const homeCompetitor = competitors.find((competitor) => competitor?.homeAway === "home");
+  const awayCompetitor = competitors.find((competitor) => competitor?.homeAway === "away");
+  const homeWinPercentage = Number(latestProbability?.homeWinPercentage);
+  const tiePercentage = Number(latestProbability?.tiePercentage || 0);
+
+  if (!Number.isFinite(homeWinPercentage) || !homeCompetitor || !awayCompetitor) {
+    return null;
+  }
+
+  const awayWinPercentage = 1 - homeWinPercentage - (Number.isFinite(tiePercentage) ? tiePercentage : 0);
+  const isHomeTeam = homeWinPercentage >= awayWinPercentage;
+  const teamCompetitor = isHomeTeam ? homeCompetitor : awayCompetitor;
+
+  return {
+    team:
+      teamCompetitor.team?.shortDisplayName ||
+      teamCompetitor.team?.displayName ||
+      teamCompetitor.team?.name ||
+      "",
+    probability: Math.max(homeWinPercentage, awayWinPercentage),
+    isHomeTeam,
+  };
 }
 
 function orderTeamSummariesByTitle(teamSummaries: TeamSummary[], streamTitle: string) {

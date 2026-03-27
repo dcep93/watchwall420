@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Stream } from "../../config/types";
-import { buildDefaultBoxScore, buildTeamSummaries, fetchJson } from "./shared";
+import { buildDefaultBoxScore, buildTeamSummaries, buildWinProbability, fetchJson } from "./shared";
 import type { DriveType, FootballLeagueConfig, LogType } from "./types";
 
 type FootballCoreDriveItem = {
@@ -135,6 +135,7 @@ export async function getFootballLog(
   return {
     timestamp,
     teams: buildTeamSummaries(summaryObj, stream.title),
+    winProbability: buildWinProbability(summaryObj),
     playByPlay,
     boxScore: buildDefaultBoxScore(summaryWithDrives.boxscore?.players ?? [], config.boxScoreKeys),
   };

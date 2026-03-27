@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Stream } from "../../config/types";
-import { buildTeamSummaries, fetchJson, findStatIndex, isHomeTeamBoxScoreTeam } from "./shared";
+import { buildTeamSummaries, buildWinProbability, fetchJson, findStatIndex, isHomeTeamBoxScoreTeam } from "./shared";
 import type { BoxScoreType, DriveType, HockeyLeagueConfig, LogType } from "./types";
 
 type HockeyRenderedPlay = {
@@ -40,6 +40,7 @@ export async function getHockeyLog(
   return {
     timestamp,
     teams: buildTeamSummaries(summaryObj, stream.title),
+    winProbability: buildWinProbability(summaryObj),
     playByPlay: buildHockeyPlayByPlay(plays, teamsById),
     boxScore: buildHockeyBoxScore((summaryObj as any).boxscore?.players ?? [], config.boxScoreKeys),
   };

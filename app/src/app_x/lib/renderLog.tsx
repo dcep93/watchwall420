@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } fro
 import type { Stream } from "../config/types";
 import Autoscroller from "./Autoscroller";
 import { fetchLeagueLog, leagueConfigs } from "./renderLog/leagues";
-import type { LogType } from "./renderLog/types";
+import type { LogType, WinProbabilityType } from "./renderLog/types";
 
 const POLL_INTERVAL_MS = 10 * 1000;
 
@@ -196,6 +196,7 @@ function LogView(props: {
       <div className="watchwall-log-content watchwall-log-top">
         <div className="watchwall-log-topbar">
           <span>{new Date(props.log.timestamp).toLocaleTimeString()}</span>
+          <LogWinProbability winProbability={props.log.winProbability} />
           <LogActions espnGameUrl={props.espnGameUrl} />
         </div>
         <div className="watchwall-log-team-summary-row">
@@ -309,6 +310,22 @@ function LogActions(props: { espnGameUrl: string | null }) {
     >
       open in espn
     </a>
+  );
+}
+
+function LogWinProbability(props: { winProbability?: WinProbabilityType | null }) {
+  if (!props.winProbability?.team || !Number.isFinite(props.winProbability.probability)) {
+    return <span className="watchwall-log-topbar-probability" />;
+  }
+
+  const probabilityLabel = `${Math.round(props.winProbability.probability * 100)}%`;
+
+  return (
+    <span className="watchwall-log-topbar-probability">
+      {props.winProbability.isHomeTeam
+        ? `${probabilityLabel} \u2192 ${props.winProbability.team}`
+        : `${props.winProbability.team} \u2190 ${probabilityLabel}`}
+    </span>
   );
 }
 

@@ -559,12 +559,20 @@
 }
 
 .watchwall-log-topbar {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
   gap: 0.75em;
   align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
   font-weight: 600;
+}
+
+.watchwall-log-topbar-probability {
+  min-width: 0;
+  text-align: center;
+  color: var(--ww-text-soft);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .watchwall-log-link {
