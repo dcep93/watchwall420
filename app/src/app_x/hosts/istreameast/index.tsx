@@ -93,12 +93,11 @@ export const istreameastHost: Host<IframeParams> = {
     if (!iframeParams._2_embedPageUrl) {
       throw new Error(
         `Unable to resolve an embed page URL for "${stream.title}".\n${JSON.stringify(
-          {
-            iframeParams,
-          },
+          iframeParams,
           null,
           2,
-        )}`,
+        )
+        } `,
       );
     }
 
