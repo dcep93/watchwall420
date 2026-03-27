@@ -322,9 +322,7 @@ function LogWinProbability(props: { winProbability?: WinProbabilityType | null }
 
   return (
     <span className="watchwall-log-topbar-probability">
-      {props.winProbability.isHomeTeam
-        ? `${probabilityLabel} \u2192 ${props.winProbability.team}`
-        : `${props.winProbability.team} \u2190 ${probabilityLabel}`}
+      {props.winProbability.isHomeTeam ? `${probabilityLabel} \u2192` : `\u2190 ${probabilityLabel}`}
     </span>
   );
 }
