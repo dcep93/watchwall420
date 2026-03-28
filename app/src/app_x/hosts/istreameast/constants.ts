@@ -1,5 +1,5 @@
 export const ISTREAMEAST_URL = "https://istreameast.is/";
-export const LOCAL_PROXY_CACHE_MAX_AGE_MS = 24 * 60 * 60 * 1000;
+export const LOCAL_PROXY_CACHE_MAX_AGE_MS = 5 * 60 * 1000;
 export const REMOTE_PROXY_CACHE_MAX_AGE_MS = 5 * 60 * 1000;
 export const UPCOMING_WINDOW_SECONDS = 60 * 60;
 export const LIVE_WINDOW_SECONDS = 10_600;
