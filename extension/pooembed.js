@@ -10,7 +10,9 @@
   let hasUserInteracted = false;
   let currentVideo = null;
   let requestedMutedState = true;
-  let didMute = null;
+  let lastKnownMutedState = null;
+  let didAppMuteCurrentVideo = false;
+  let detachVideoListener = null;
 
   if (!isDescendantOfWatchwallHost) {
     return;
@@ -46,7 +48,8 @@
 
     currentVideo.muted = !currentVideo.muted;
     requestedMutedState = currentVideo.muted;
-    didMute = false;
+    lastKnownMutedState = currentVideo.muted;
+    didAppMuteCurrentVideo = false;
   });
 
   waitForVideoElement();
@@ -74,8 +77,28 @@
   }
 
   function init(video) {
+    detachVideoListener?.();
     currentVideo = video;
-    didMute = null;
+    lastKnownMutedState = video.muted;
+    didAppMuteCurrentVideo = false;
+    const handleVolumeChange = () => {
+      if (!(currentVideo instanceof HTMLVideoElement)) {
+        return;
+      }
+
+      if (currentVideo.muted === lastKnownMutedState) {
+        return;
+      }
+
+      lastKnownMutedState = currentVideo.muted;
+      didAppMuteCurrentVideo = false;
+    };
+
+    video.addEventListener("volumechange", handleVolumeChange);
+    detachVideoListener = () => {
+      video.removeEventListener("volumechange", handleVolumeChange);
+      detachVideoListener = null;
+    };
     video.autoplay = true;
     video.playsInline = true;
     applyRequestedMutedState();
@@ -96,16 +119,20 @@
     }
 
     if (requestedMutedState) {
-      didMute = didMute ?? !currentVideo.muted;
-      currentVideo.muted = true;
+      if (!currentVideo.muted) {
+        currentVideo.muted = true;
+        lastKnownMutedState = true;
+        didAppMuteCurrentVideo = true;
+      }
       return;
     }
 
-    if (hasUserInteracted && didMute) {
+    if (didAppMuteCurrentVideo && currentVideo.muted) {
       currentVideo.muted = false;
+      lastKnownMutedState = false;
     }
 
-    didMute = false;
+    didAppMuteCurrentVideo = false;
   }
 
 })();
