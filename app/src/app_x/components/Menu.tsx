@@ -10,6 +10,7 @@ export default function Menu(props: {
   category: Category;
   categories: readonly StreamCategory[];
   streams: Stream[];
+  isLoadingStreams: boolean;
   selectedSlugs: StreamSlug[];
   onToggle: (streamSlug: StreamSlug) => void;
   onCategoryChange: (value: Category) => void;
@@ -42,6 +43,12 @@ export default function Menu(props: {
       </div>
 
       <div className="stream-list">
+        {props.isLoadingStreams ? (
+          <div className="stream-list-loading" aria-live="polite" aria-busy="true">
+            <span className="stream-list-loading-spinner" aria-hidden="true" />
+            <span className="stream-list-loading-label">Fetching links...</span>
+          </div>
+        ) : null}
         {props.streams.map((stream) => (
           <StreamToggle
             key={stream.slug}

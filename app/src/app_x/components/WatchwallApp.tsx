@@ -221,6 +221,7 @@ export default function WatchwallApp() {
         category={category}
         categories={hostCategories}
         displayLogs={displayLogs}
+        isLoadingStreams={allStreams === null}
         logDelayMs={logDelayMs}
         streams={streams ?? []}
         selectedSlugs={selectedSlugs}
