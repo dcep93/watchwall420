@@ -4,6 +4,7 @@ import type { BoxScoreType, WinProbabilityType } from "./types";
 type TeamSummary = {
   name: string;
   statistics: Record<string, string>;
+  isHomeTeam?: boolean;
 };
 
 export async function fetchJson(url: string) {
@@ -22,7 +23,7 @@ export async function fetchJson(url: string) {
 
 export function buildTeamSummaries(summaryObj: any, streamTitle = "") {
   const teamSummaries = ((((summaryObj as any).boxscore?.teams as any[]) ?? []).slice()).map(
-    (teamObj: any) => ({
+    (teamObj: any, teamIndex: number) => ({
       name: teamObj.team?.name ?? "",
       statistics: Object.fromEntries(
         ((teamObj.statistics as any[]) ?? []).flatMap((stat) => {
@@ -33,6 +34,7 @@ export function buildTeamSummaries(summaryObj: any, streamTitle = "") {
           return stat?.name ? [[stat.name, stat.displayValue]] : [];
         }),
       ),
+      isHomeTeam: isHomeTeamBoxScoreTeam(teamIndex),
     }),
   );
 

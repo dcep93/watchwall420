@@ -27,7 +27,7 @@ export type WinProbabilityType = {
 
 export type LogType = {
   timestamp: number;
-  teams: { name: string; statistics: Record<string, string> }[];
+  teams: { name: string; statistics: Record<string, string>; isHomeTeam?: boolean }[];
   winProbability?: WinProbabilityType | null;
   playByPlay: DriveType[];
   boxScore: BoxScoreType[];

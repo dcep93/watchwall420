@@ -646,6 +646,10 @@
   border-radius: 8px;
 }
 
+.watchwall-log-team-summary-card-home {
+  background: var(--ww-panel-soft-reflection);
+}
+
 .watchwall-log-team-summary-name {
   font-weight: 700;
 }

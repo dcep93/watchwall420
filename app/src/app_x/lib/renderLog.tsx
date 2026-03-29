@@ -203,7 +203,7 @@ function LogView(props: {
           {props.log.teams.map((team) => (
             <div
               key={team.name}
-              className="watchwall-log-team-summary-card"
+              className={team.isHomeTeam ? "watchwall-log-team-summary-card watchwall-log-team-summary-card-home" : "watchwall-log-team-summary-card"}
               title={JSON.stringify(team.statistics, null, 2)}
             >
               <div className="watchwall-log-team-summary-name">{team.name}</div>
