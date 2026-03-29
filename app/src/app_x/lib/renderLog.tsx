@@ -450,7 +450,7 @@ function getScoringRunLabels(playByPlay: LogType["playByPlay"], leagueCategory: 
       scoreDelta,
     };
 
-    const interestScore = scoreLatestRunInterest(candidate, scoringSnapshots);
+    const interestScore = scoreLatestRunInterest(candidate);
     if (interestScore === null) {
       continue;
     }
@@ -543,44 +543,23 @@ function getCandidateBaseScore(
   return startIndex > 0 ? scoringSnapshots[startIndex - 1].score : ([0, 0] as ParsedScoreType);
 }
 
-function scoreLatestRunInterest(
-  candidate: ScoringRunCandidate,
-  scoringSnapshots: { score: ParsedScoreType; clock: string }[],
-) {
+function scoreLatestRunInterest(candidate: ScoringRunCandidate) {
   const scoringTeamIndex = getScoringTeamIndex(candidate.scoreDelta);
   if (scoringTeamIndex === null) {
     return null;
   }
 
-  const differentialExcludingRecentTwoScores = getDifferentialExcludingRecentTwoScores(
-    candidate,
-    scoringSnapshots,
-    scoringTeamIndex,
-  );
-  if (differentialExcludingRecentTwoScores <= 0) {
+  const scoreDifferential =
+    candidate.scoreDelta[scoringTeamIndex] - candidate.scoreDelta[1 - scoringTeamIndex];
+  if (scoreDifferential <= 0) {
     return null;
   }
 
   if (candidate.durationSeconds === null) {
-    return differentialExcludingRecentTwoScores;
+    return scoreDifferential;
   }
 
-  return differentialExcludingRecentTwoScores / Math.pow(candidate.durationSeconds + 1, 1 / 1.5);
-}
-
-function getDifferentialExcludingRecentTwoScores(
-  candidate: ScoringRunCandidate,
-  scoringSnapshots: { score: ParsedScoreType; clock: string }[],
-  scoringTeamIndex: 0 | 1,
-) {
-  const baseScore = getCandidateBaseScore(candidate.startIndex, scoringSnapshots);
-  const truncatedEndIndex = candidate.latestIndex - 2;
-  const truncatedEndScore =
-    truncatedEndIndex >= candidate.startIndex
-      ? scoringSnapshots[truncatedEndIndex].score
-      : baseScore;
-  const truncatedDelta = subtractScores(truncatedEndScore, baseScore);
-  return truncatedDelta[scoringTeamIndex] - truncatedDelta[1 - scoringTeamIndex];
+  return scoreDifferential / Math.pow(candidate.durationSeconds + 1, 1 / 1.5);
 }
 
 function getScoringTeamIndex(scoreDelta: ParsedScoreType): 0 | 1 | null {
