@@ -270,19 +270,31 @@ function LogView(props: {
                       ))}
                     </tr>
                   </thead>
-                  <tbody>
-                    {(boxScore.players || []).map((player) => (
-                      <tr
-                        key={player.name}
-                        className={player.isHomeTeam ? "watchwall-log-box-score-row watchwall-log-box-score-row-home" : "watchwall-log-box-score-row"}
+                  {[false, true].map((isHomeTeam) => {
+                    const teamPlayers = (boxScore.players || []).filter(
+                      (player) => Boolean(player.isHomeTeam) === isHomeTeam,
+                    );
+
+                    if (teamPlayers.length === 0) {
+                      return null;
+                    }
+
+                    return (
+                      <tbody
+                        key={`${boxScore.key}-${isHomeTeam ? "home" : "away"}`}
+                        className={isHomeTeam ? "watchwall-log-box-score-team watchwall-log-box-score-team-home" : "watchwall-log-box-score-team"}
                       >
-                        <td className="watchwall-log-player-name">{player.name}</td>
-                        {player.stats.map((stat, index) => (
-                          <td key={`${player.name}-${index}`}>{stat}</td>
+                        {teamPlayers.map((player) => (
+                          <tr key={player.name} className="watchwall-log-box-score-row">
+                            <td className="watchwall-log-player-name">{player.name}</td>
+                            {player.stats.map((stat, index) => (
+                              <td key={`${player.name}-${index}`}>{stat}</td>
+                            ))}
+                          </tr>
                         ))}
-                      </tr>
-                    ))}
-                  </tbody>
+                      </tbody>
+                    );
+                  })}
                 </table>
               </div>
             ))}
